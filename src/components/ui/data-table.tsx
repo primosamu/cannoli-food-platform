@@ -15,12 +15,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export interface Column extends ColumnDef<any> {
-  header: string;
-}
-
 interface DataTableProps<TData, TValue> {
-  columns: Column[];
+  columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 

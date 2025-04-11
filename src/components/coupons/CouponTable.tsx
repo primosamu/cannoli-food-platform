@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Coupon } from "./CouponSchema";
+import { ColumnDef } from "@tanstack/react-table";
 
 interface CouponTableProps {
   data: Coupon[];
@@ -28,7 +29,7 @@ export const CouponTable: React.FC<CouponTableProps> = ({
       ? data.filter(coupon => !coupon.active)
       : [];
 
-  const columns = [
+  const columns: ColumnDef<Coupon>[] = [
     {
       accessorKey: "name",
       header: "Coupon Name",
@@ -112,6 +113,7 @@ export const CouponTable: React.FC<CouponTableProps> = ({
     },
     {
       id: "actions",
+      header: "Actions",
       cell: ({ row }) => {
         return (
           <DropdownMenu>
@@ -139,4 +141,4 @@ export const CouponTable: React.FC<CouponTableProps> = ({
   return (
     <DataTable columns={columns} data={filteredData} />
   );
-};
+}

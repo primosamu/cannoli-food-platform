@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { PlusCircle, TrashIcon, AlertCircle, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -48,7 +47,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 
-// Define the coupon form schema with zod
 const couponFormSchema = z.object({
   name: z.string().min(2, {
     message: "Coupon name must be at least 2 characters.",
@@ -80,7 +78,6 @@ const couponFormSchema = z.object({
 
 type CouponFormValues = z.infer<typeof couponFormSchema>;
 
-// Sample data for coupons
 const couponData = [
   {
     id: "1",
@@ -138,7 +135,6 @@ const couponData = [
   },
 ];
 
-// Define table columns
 const columns = [
   {
     accessorKey: "name",

@@ -1,11 +1,17 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, ListChecks, Utensils, Clipboard, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import { DeliveryPlatformIntegration } from "@/components/menu/DeliveryPlatformIntegration";
+import { MenuTypeSwitcher } from "@/components/menu/MenuTypeSwitcher";
 
 const MenuManagementPage = () => {
+  const [activeTab, setActiveTab] = useState("food");
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -20,12 +26,46 @@ const MenuManagementPage = () => {
         </Button>
       </div>
 
-      <Tabs defaultValue="food">
+      {/* Delivery Platform Integration Section */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle>Delivery Platform Integrations</CardTitle>
+          <CardDescription>
+            Connect with delivery platforms to sync your menus.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <DeliveryPlatformIntegration />
+        </CardContent>
+      </Card>
+
+      {/* Menu Type Settings */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle>Menu Types</CardTitle>
+          <CardDescription>
+            Configure different menu types with specific pricing.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <MenuTypeSwitcher />
+        </CardContent>
+      </Card>
+
+      <Tabs defaultValue="food" value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="food">Food Items</TabsTrigger>
-          <TabsTrigger value="drinks">Drinks</TabsTrigger>
-          <TabsTrigger value="specials">Specials</TabsTrigger>
-          <TabsTrigger value="categories">Categories</TabsTrigger>
+          <TabsTrigger value="food">
+            <Utensils className="mr-2 h-4 w-4" /> Food Items
+          </TabsTrigger>
+          <TabsTrigger value="drinks">
+            <ListChecks className="mr-2 h-4 w-4" /> Drinks
+          </TabsTrigger>
+          <TabsTrigger value="specials">
+            <Clipboard className="mr-2 h-4 w-4" /> Specials
+          </TabsTrigger>
+          <TabsTrigger value="categories">
+            <Layers className="mr-2 h-4 w-4" /> Categories
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="food" className="space-y-4 pt-4">
           <Card>

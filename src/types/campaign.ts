@@ -23,4 +23,16 @@ export type CampaignData = {
   audienceSize?: number;
   createdAt: Date;
   updatedAt: Date;
+  menuIds?: string[];  // Associated menu IDs for this campaign
+  deliveryPlatforms?: string[];  // Associated delivery platforms
 };
+
+export interface CampaignEvent {
+  id: string;
+  campaignId: string;
+  title: string;
+  description?: string;
+  startDate: Date;
+  endDate?: Date;
+  type: CampaignType;
+}

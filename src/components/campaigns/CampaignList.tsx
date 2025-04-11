@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { CampaignData, CampaignType } from "@/types/campaign";
 import { DataTable } from "@/components/ui/data-table";
@@ -30,7 +29,7 @@ import { format } from "date-fns";
 
 interface CampaignListProps {
   campaigns: CampaignData[];
-  type?: "active" | "scheduled" | "completed";
+  type?: "active" | "scheduled" | "completed" | "draft";
 }
 
 const CampaignList: React.FC<CampaignListProps> = ({
@@ -124,7 +123,6 @@ const CampaignList: React.FC<CampaignListProps> = ({
       id: "stats",
       header: "Statistics",
       cell: ({ row }) => {
-        // Placeholder for statistics
         return (
           <Button variant="outline" size="sm" className="h-8 gap-1">
             <BarChart className="h-4 w-4" />

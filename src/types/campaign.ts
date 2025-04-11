@@ -9,6 +9,7 @@ export type CampaignTemplate = {
   content: string;
   description: string;
   imageUrl?: string;
+  platform?: string; // For paid traffic (meta, google, etc)
 };
 
 export type CampaignData = {
@@ -25,6 +26,7 @@ export type CampaignData = {
   updatedAt: Date;
   menuIds?: string[];  // Associated menu IDs for this campaign
   deliveryPlatforms?: string[];  // Associated delivery platforms
+  platform?: string; // For paid traffic (meta, google, etc)
 };
 
 export interface CampaignEvent {

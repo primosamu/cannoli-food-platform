@@ -1,46 +1,83 @@
 
-import React from 'react';
+import React from "react";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-interface Column {
-  accessorKey?: string;
-  id?: string;
+export interface Column extends ColumnDef<any> {
   header: string;
-  cell?: ({ row }: { row: { getValue: (key: string) => any; original: any } }) => React.ReactNode;
 }
 
-interface DataTableProps {
+interface DataTableProps<TData, TValue> {
   columns: Column[];
-  data: any[];
+  data: TData[];
 }
 
-export function DataTable({ columns, data }: DataTableProps) {
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
   return (
     <div className="rounded-md border">
-      <table className="w-full text-sm">
-        <thead className="bg-gray-100 dark:bg-gray-800">
-          <tr>
-            {columns.map((column) => (
-              <th
-                key={column.accessorKey || column.id}
-                className="px-4 py-3 text-left"
-              >
-                {column.header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((row) => (
-            <tr key={row.id} className="border-t">
-              {columns.map((column) => (
-                <td key={column.accessorKey || column.id} className="px-4 py-3">
-                  {column.cell ? column.cell({ row: { getValue: (key) => row[key], original: row } }) : row[column.accessorKey]}
-                </td>
-              ))}
-            </tr>
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </div>
   );
 }

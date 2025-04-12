@@ -83,7 +83,7 @@ const PresetCampaigns: React.FC<PresetCampaignsProps> = ({ onSelect }) => {
                           e.stopPropagation();
                           onSelect(template);
                         }}>
-                          {translations.use || "Use"}
+                          {translations.use}
                         </Button>
                       </div>
                       <p className="text-xs text-muted-foreground line-clamp-2">

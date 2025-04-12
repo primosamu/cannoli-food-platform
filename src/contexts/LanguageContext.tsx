@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState } from 'react';
 
 export type Language = 'en' | 'pt' | 'es';
@@ -19,6 +18,7 @@ export interface Translations {
   hide: string;
   error: string;
   pleaseCompleteAllFields: string;
+  use: string;
   
   // Navigation
   dashboard: string;
@@ -97,8 +97,8 @@ export interface Translations {
   manageDeliveryTeam: string;
   availableCouriers: string;
   unavailableCouriers: string;
-  unavailable: string;
   available: string;
+  unavailable: string;
   noUnavailableCouriers: string;
   addNewCourier: string;
   enterCourierPhone: string;
@@ -127,6 +127,32 @@ export interface Translations {
   english: string;
   portuguese: string;
   spanish: string;
+
+  // Campaign related
+  presetCampaigns: string;
+  chooseTemplates: string;
+  viewAllCampaigns: string;
+  allCampaigns: string;
+  schedule: string;
+  analytics: string;
+  scheduled: string;
+  drafts: string;
+  marketingCampaigns: string;
+  createManageCampaigns: string;
+  presets: string;
+  createCampaign: string;
+  
+  // Campaign categories
+  'customer-recovery': string;
+  'loyalty': string;
+  'consumption-pattern': string;
+  'channel-migration': string;
+  
+  // Campaign category descriptions
+  'customer-recoveryDescription': string;
+  'loyaltyDescription': string;
+  'consumption-patternDescription': string;
+  'channel-migrationDescription': string;
 }
 
 // Define translations
@@ -147,6 +173,7 @@ const translations: Record<Language, Translations> = {
     hide: 'Hide',
     error: 'Error',
     pleaseCompleteAllFields: 'Please complete all fields',
+    use: 'Use',
     
     // Navigation
     dashboard: 'Dashboard',
@@ -254,7 +281,33 @@ const translations: Record<Language, Translations> = {
     // Language names
     english: 'English',
     portuguese: 'Portuguese',
-    spanish: 'Spanish'
+    spanish: 'Spanish',
+
+    // Campaign related
+    presetCampaigns: 'Preset Campaigns',
+    chooseTemplates: 'Choose from ready-to-use campaign templates',
+    viewAllCampaigns: 'View All Campaigns',
+    allCampaigns: 'All Campaigns',
+    schedule: 'Schedule',
+    analytics: 'Analytics',
+    scheduled: 'Scheduled',
+    drafts: 'Drafts',
+    marketingCampaigns: 'Marketing Campaigns',
+    createManageCampaigns: 'Create and manage marketing campaigns for your restaurant.',
+    presets: 'Presets',
+    createCampaign: 'Create Campaign',
+
+    // Campaign categories
+    'customer-recovery': 'Customer Recovery',
+    'loyalty': 'Customer Loyalty',
+    'consumption-pattern': 'Consumption Patterns',
+    'channel-migration': 'Channel Migration',
+
+    // Campaign category descriptions
+    'customer-recoveryDescription': 'Win back customers who haven\'t ordered in a while',
+    'loyaltyDescription': 'Reward and engage your loyal customers',
+    'consumption-patternDescription': 'Encourage new consumption behaviors',
+    'channel-migrationDescription': 'Move customers from marketplaces to direct ordering'
   },
   pt: {
     // General
@@ -272,6 +325,7 @@ const translations: Record<Language, Translations> = {
     hide: 'Ocultar',
     error: 'Erro',
     pleaseCompleteAllFields: 'Por favor, preencha todos os campos',
+    use: 'Usar',
     
     // Navigation
     dashboard: 'Painel',
@@ -379,7 +433,33 @@ const translations: Record<Language, Translations> = {
     // Language names
     english: 'Inglês',
     portuguese: 'Português',
-    spanish: 'Espanhol'
+    spanish: 'Espanhol',
+
+    // Campaign related
+    presetCampaigns: 'Campanhas Predefinidas',
+    chooseTemplates: 'Escolha entre modelos de campanhas prontos para uso',
+    viewAllCampaigns: 'Ver Todas as Campanhas',
+    allCampaigns: 'Todas as Campanhas',
+    schedule: 'Agendar',
+    analytics: 'Análises',
+    scheduled: 'Agendadas',
+    drafts: 'Rascunhos',
+    marketingCampaigns: 'Campanhas de Marketing',
+    createManageCampaigns: 'Crie e gerencie campanhas de marketing para seu restaurante.',
+    presets: 'Predefinidas',
+    createCampaign: 'Criar Campanha',
+
+    // Campaign categories
+    'customer-recovery': 'Recuperação de Clientes',
+    'loyalty': 'Fidelidade de Clientes',
+    'consumption-pattern': 'Padrões de Consumo',
+    'channel-migration': 'Migração de Canal',
+
+    // Campaign category descriptions
+    'customer-recoveryDescription': 'Recupere clientes que não fazem pedidos há algum tempo',
+    'loyaltyDescription': 'Recompense e engaje seus clientes fiéis',
+    'consumption-patternDescription': 'Incentive novos comportamentos de consumo',
+    'channel-migrationDescription': 'Mova clientes de marketplaces para pedidos diretos'
   },
   es: {
     // General
@@ -397,6 +477,7 @@ const translations: Record<Language, Translations> = {
     hide: 'Ocultar',
     error: 'Error',
     pleaseCompleteAllFields: 'Por favor complete todos los campos',
+    use: 'Usar',
     
     // Navigation
     dashboard: 'Panel',
@@ -504,7 +585,33 @@ const translations: Record<Language, Translations> = {
     // Language names
     english: 'Inglés',
     portuguese: 'Portugués',
-    spanish: 'Español'
+    spanish: 'Español',
+
+    // Campaign related
+    presetCampaigns: 'Campañas Preestablecidas',
+    chooseTemplates: 'Elija entre plantillas de campañas listas para usar',
+    viewAllCampaigns: 'Ver Todas las Campañas',
+    allCampaigns: 'Todas las Campañas',
+    schedule: 'Programar',
+    analytics: 'Análisis',
+    scheduled: 'Programadas',
+    drafts: 'Borradores',
+    marketingCampaigns: 'Campañas de Marketing',
+    createManageCampaigns: 'Cree y gestione campañas de marketing para su restaurante.',
+    presets: 'Preestablecidas',
+    createCampaign: 'Crear Campaña',
+
+    // Campaign categories
+    'customer-recovery': 'Recuperación de Clientes',
+    'loyalty': 'Fidelidad de Clientes',
+    'consumption-pattern': 'Patrones de Consumo',
+    'channel-migration': 'Migración de Canal',
+
+    // Campaign category descriptions
+    'customer-recoveryDescription': 'Recupere clientes que no han pedido en un tiempo',
+    'loyaltyDescription': 'Recompense y comprometa a sus clientes fieles',
+    'consumption-patternDescription': 'Fomente nuevos comportamientos de consumo',
+    'channel-migrationDescription': 'Traslade clientes de marketplaces a pedidos directos'
   }
 };
 
@@ -539,3 +646,5 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     </LanguageContext.Provider>
   );
 };
+
+export { LanguageProvider };

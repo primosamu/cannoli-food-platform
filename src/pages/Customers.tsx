@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -18,12 +17,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CustomerList from "@/components/customers/CustomerList";
 import { sampleCustomers } from "@/data/sampleCustomers";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 const CustomersPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
 
-  // Filter customers based on search term
+  const { toast } = useToast();
+
   const filteredCustomers = sampleCustomers.filter(
     (customer) =>
       customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -31,7 +32,6 @@ const CustomersPage = () => {
       customer.phone.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Filter by tag based on active tab
   const displayedCustomers = activeTab === "all" 
     ? filteredCustomers 
     : filteredCustomers.filter(customer => 

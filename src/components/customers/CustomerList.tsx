@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -22,6 +21,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
+import CustomerDetailDialog from "./CustomerDetailDialog";
+import { useToast } from "@/hooks/use-toast";
 
 export interface Customer {
   id: string;
@@ -40,6 +41,10 @@ interface CustomerListProps {
 }
 
 const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
+  const { toast } = useToast();
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
+
   // Function to get initials from name
   const getInitials = (name: string) => {
     return name
@@ -47,6 +52,21 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
       .map((n) => n[0])
       .join('')
       .toUpperCase();
+  };
+
+  const openCustomerDetails = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setIsDetailDialogOpen(true);
+  };
+
+  const handleQuickMessage = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setIsDetailDialogOpen(true);
+  };
+
+  const handleQuickEmail = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setIsDetailDialogOpen(true);
   };
 
   const columns: ColumnDef<Customer>[] = [
@@ -130,10 +150,22 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
         
         return (
           <div className="flex items-center justify-end gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8"
+              onClick={() => handleQuickMessage(customer)}
+              title="Send message"
+            >
               <MessageSquare className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8"
+              onClick={() => handleQuickEmail(customer)}
+              title="Send email"
+            >
               <Mail className="h-4 w-4" />
             </Button>
             <DropdownMenu>
@@ -146,10 +178,13 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => openCustomerDetails(customer)}>
+                  View customer details
+                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Edit className="mr-2 h-4 w-4" /> Edit customer
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleQuickEmail(customer)}>
                   <Mail className="mr-2 h-4 w-4" /> Send email
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -164,7 +199,16 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
     },
   ];
 
-  return <DataTable columns={columns} data={customers} />;
+  return (
+    <>
+      <DataTable columns={columns} data={customers} />
+      <CustomerDetailDialog 
+        customer={selectedCustomer}
+        isOpen={isDetailDialogOpen}
+        onClose={() => setIsDetailDialogOpen(false)}
+      />
+    </>
+  );
 };
 
 export default CustomerList;

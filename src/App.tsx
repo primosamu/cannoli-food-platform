@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -42,7 +43,6 @@ function App() {
               <Route path="/integrations" element={<Layout><IntegrationsPage /></Layout>} />
               <Route path="/settings" element={<Layout><SettingsPage /></Layout>} />
               <Route path="/data-insights" element={<DataInsightsPage />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </HashRouter>

@@ -12,12 +12,25 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
   const { language } = useLanguage();
   
-  // Force document title to update when language changes
+  // Force document language to update when language changes
   useEffect(() => {
-    // This effect ensures proper language propagation throughout the app
     document.documentElement.lang = language;
-    // You could also set page title here based on language
+    console.log("Language set to:", language);
   }, [language]);
+  
+  // Listen for language change events to force re-renders
+  useEffect(() => {
+    const handleLanguageEvent = (event: Event) => {
+      console.log("Language changed event detected");
+      // This is just to trigger a re-render
+    };
+    
+    document.addEventListener('language-changed', handleLanguageEvent);
+    
+    return () => {
+      document.removeEventListener('language-changed', handleLanguageEvent);
+    };
+  }, []);
   
   return (
     <div className="flex h-screen">

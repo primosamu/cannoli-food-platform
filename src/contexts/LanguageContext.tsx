@@ -17,6 +17,8 @@ export interface Translations {
   sort: string;
   show: string;
   hide: string;
+  error: string;
+  pleaseCompleteAllFields: string;
   
   // Navigation
   dashboard: string;
@@ -29,6 +31,9 @@ export interface Translations {
   loyalty: string;
   integrations: string;
   settings: string;
+  system: string;
+  profile: string;
+  logout: string;
   
   // Orders
   newOrders: string;
@@ -66,11 +71,38 @@ export interface Translations {
   deliveryAssigned: string;
   hasBeenAssignedToOrder: string;
   deliveryTypeChanged: string;
+  reassignCourier: string;
+  currentCourier: string;
+  deliveryMethod: string;
+  ownDelivery: string;
+  selfDelivery: string;
+  thirdPartyDelivery: string;
+  selectCourier: string;
+  noAvailableCouriers: string;
+  courierName: string;
+  enterCourierName: string;
+  deliveryCompany: string;
+  selectACompany: string;
+  deliveryAddress: string;
+  noAddress: string;
+  assign: string;
   
   // Couriers
   couriers: string;
   courierUpdated: string;
   courierStatusUpdated: string;
+  courierAdded: string;
+  courierAddedSuccessfully: string;
+  courierManagement: string;
+  manageDeliveryTeam: string;
+  availableCouriers: string;
+  unavailableCouriers: string;
+  unavailable: string;
+  available: string;
+  noUnavailableCouriers: string;
+  addNewCourier: string;
+  enterCourierPhone: string;
+  addCourier: string;
 
   // Reports
   reports: string;
@@ -82,6 +114,10 @@ export interface Translations {
   active: string;
   deliveries: string;
   noDeliveriesYet: string;
+  name: string;
+  phone: string;
+  status: string;
+  actions: string;
   
   // View options
   kanban: string;
@@ -109,6 +145,8 @@ const translations: Record<Language, Translations> = {
     sort: 'Sort',
     show: 'Show',
     hide: 'Hide',
+    error: 'Error',
+    pleaseCompleteAllFields: 'Please complete all fields',
     
     // Navigation
     dashboard: 'Dashboard',
@@ -121,6 +159,9 @@ const translations: Record<Language, Translations> = {
     loyalty: 'Loyalty',
     integrations: 'Integrations',
     settings: 'Settings',
+    system: 'System',
+    profile: 'Profile',
+    logout: 'Logout',
     
     // Orders
     newOrders: 'New',
@@ -158,11 +199,38 @@ const translations: Record<Language, Translations> = {
     deliveryAssigned: 'Delivery Assigned',
     hasBeenAssignedToOrder: 'has been assigned to order',
     deliveryTypeChanged: 'Delivery type has been changed',
+    reassignCourier: 'Reassign Courier',
+    currentCourier: 'Current Courier',
+    deliveryMethod: 'Delivery Method',
+    ownDelivery: 'Own Delivery',
+    selfDelivery: 'Self Delivery',
+    thirdPartyDelivery: 'Third Party',
+    selectCourier: 'Select Courier',
+    noAvailableCouriers: 'No available couriers',
+    courierName: 'Courier Name',
+    enterCourierName: 'Enter courier name',
+    deliveryCompany: 'Delivery Company',
+    selectACompany: 'Select a company',
+    deliveryAddress: 'Delivery Address',
+    noAddress: 'No address provided',
+    assign: 'Assign',
     
     // Couriers
     couriers: 'Couriers',
     courierUpdated: 'Courier Updated',
     courierStatusUpdated: 'Courier availability status has been updated',
+    courierAdded: 'Courier Added',
+    courierAddedSuccessfully: 'Courier has been added successfully',
+    courierManagement: 'Courier Management',
+    manageDeliveryTeam: 'Manage your delivery team',
+    availableCouriers: 'Available Couriers',
+    unavailableCouriers: 'Unavailable Couriers',
+    available: 'Available',
+    unavailable: 'Unavailable',
+    noUnavailableCouriers: 'No unavailable couriers',
+    addNewCourier: 'Add New Courier',
+    enterCourierPhone: 'Enter courier phone',
+    addCourier: 'Add Courier',
     
     // Reports
     reports: 'Reports',
@@ -174,6 +242,10 @@ const translations: Record<Language, Translations> = {
     active: 'Active',
     deliveries: 'Deliveries',
     noDeliveriesYet: 'No deliveries yet',
+    name: 'Name',
+    phone: 'Phone',
+    status: 'Status',
+    actions: 'Actions',
     
     // View options
     kanban: 'Kanban',
@@ -198,6 +270,8 @@ const translations: Record<Language, Translations> = {
     sort: 'Ordenar',
     show: 'Mostrar',
     hide: 'Ocultar',
+    error: 'Erro',
+    pleaseCompleteAllFields: 'Por favor, preencha todos os campos',
     
     // Navigation
     dashboard: 'Painel',
@@ -210,6 +284,9 @@ const translations: Record<Language, Translations> = {
     loyalty: 'Fidelidade',
     integrations: 'Integrações',
     settings: 'Configurações',
+    system: 'Sistema',
+    profile: 'Perfil',
+    logout: 'Sair',
     
     // Orders
     newOrders: 'Novo',
@@ -247,11 +324,38 @@ const translations: Record<Language, Translations> = {
     deliveryAssigned: 'Entrega Atribuída',
     hasBeenAssignedToOrder: 'foi atribuído ao pedido',
     deliveryTypeChanged: 'Tipo de entrega foi alterado',
+    reassignCourier: 'Reatribuir Entregador',
+    currentCourier: 'Entregador Atual',
+    deliveryMethod: 'Método de Entrega',
+    ownDelivery: 'Entrega Própria',
+    selfDelivery: 'Entrega pelo Cliente',
+    thirdPartyDelivery: 'Terceirizado',
+    selectCourier: 'Selecionar Entregador',
+    noAvailableCouriers: 'Sem entregadores disponíveis',
+    courierName: 'Nome do Entregador',
+    enterCourierName: 'Digite o nome do entregador',
+    deliveryCompany: 'Empresa de Entrega',
+    selectACompany: 'Selecione uma empresa',
+    deliveryAddress: 'Endereço de Entrega',
+    noAddress: 'Nenhum endereço fornecido',
+    assign: 'Atribuir',
     
     // Couriers
     couriers: 'Entregadores',
     courierUpdated: 'Entregador Atualizado',
     courierStatusUpdated: 'Status de disponibilidade do entregador foi atualizado',
+    courierAdded: 'Entregador Adicionado',
+    courierAddedSuccessfully: 'Entregador foi adicionado com sucesso',
+    courierManagement: 'Gestão de Entregadores',
+    manageDeliveryTeam: 'Gerenciar equipe de entrega',
+    availableCouriers: 'Entregadores Disponíveis',
+    unavailableCouriers: 'Entregadores Indisponíveis',
+    available: 'Disponível',
+    unavailable: 'Indisponível',
+    noUnavailableCouriers: 'Sem entregadores indisponíveis',
+    addNewCourier: 'Adicionar Novo Entregador',
+    enterCourierPhone: 'Digite o telefone do entregador',
+    addCourier: 'Adicionar Entregador',
     
     // Reports
     reports: 'Relatórios',
@@ -263,6 +367,10 @@ const translations: Record<Language, Translations> = {
     active: 'Ativo',
     deliveries: 'Entregas',
     noDeliveriesYet: 'Nenhuma entrega ainda',
+    name: 'Nome',
+    phone: 'Telefone',
+    status: 'Status',
+    actions: 'Ações',
     
     // View options
     kanban: 'Kanban',
@@ -287,6 +395,8 @@ const translations: Record<Language, Translations> = {
     sort: 'Ordenar',
     show: 'Mostrar',
     hide: 'Ocultar',
+    error: 'Error',
+    pleaseCompleteAllFields: 'Por favor complete todos los campos',
     
     // Navigation
     dashboard: 'Panel',
@@ -299,6 +409,9 @@ const translations: Record<Language, Translations> = {
     loyalty: 'Fidelidad',
     integrations: 'Integraciones',
     settings: 'Configuración',
+    system: 'Sistema',
+    profile: 'Perfil',
+    logout: 'Cerrar sesión',
     
     // Orders
     newOrders: 'Nuevo',
@@ -336,11 +449,38 @@ const translations: Record<Language, Translations> = {
     deliveryAssigned: 'Entrega Asignada',
     hasBeenAssignedToOrder: 'ha sido asignado al pedido',
     deliveryTypeChanged: 'El tipo de entrega ha sido cambiado',
+    reassignCourier: 'Reasignar Repartidor',
+    currentCourier: 'Repartidor Actual',
+    deliveryMethod: 'Método de Entrega',
+    ownDelivery: 'Entrega Propia',
+    selfDelivery: 'Entrega por Cliente',
+    thirdPartyDelivery: 'Tercero',
+    selectCourier: 'Seleccionar Repartidor',
+    noAvailableCouriers: 'No hay repartidores disponibles',
+    courierName: 'Nombre del Repartidor',
+    enterCourierName: 'Ingrese nombre del repartidor',
+    deliveryCompany: 'Empresa de Entrega',
+    selectACompany: 'Seleccione una empresa',
+    deliveryAddress: 'Dirección de Entrega',
+    noAddress: 'No se proporcionó dirección',
+    assign: 'Asignar',
     
     // Couriers
     couriers: 'Repartidores',
     courierUpdated: 'Repartidor Actualizado',
     courierStatusUpdated: 'El estado de disponibilidad del repartidor ha sido actualizado',
+    courierAdded: 'Repartidor Añadido',
+    courierAddedSuccessfully: 'El repartidor ha sido añadido con éxito',
+    courierManagement: 'Gestión de Repartidores',
+    manageDeliveryTeam: 'Gestionar equipo de entrega',
+    availableCouriers: 'Repartidores Disponibles',
+    unavailableCouriers: 'Repartidores No Disponibles',
+    available: 'Disponible',
+    unavailable: 'No Disponible',
+    noUnavailableCouriers: 'No hay repartidores no disponibles',
+    addNewCourier: 'Añadir Nuevo Repartidor',
+    enterCourierPhone: 'Ingrese teléfono del repartidor',
+    addCourier: 'Añadir Repartidor',
     
     // Reports
     reports: 'Informes',
@@ -352,6 +492,10 @@ const translations: Record<Language, Translations> = {
     active: 'Activo',
     deliveries: 'Entregas',
     noDeliveriesYet: 'Aún no hay entregas',
+    name: 'Nombre',
+    phone: 'Teléfono',
+    status: 'Estado',
+    actions: 'Acciones',
     
     // View options
     kanban: 'Kanban',

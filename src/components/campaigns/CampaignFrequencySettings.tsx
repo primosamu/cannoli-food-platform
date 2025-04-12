@@ -98,7 +98,7 @@ export const CampaignFrequencySettings = () => {
                     </li>
                     <li className="flex justify-between">
                       <span>Automatic customer segmentation:</span>
-                      <Badge variant={automaticSegmentation ? "success" : "outline"}>
+                      <Badge variant={automaticSegmentation ? "secondary" : "outline"}>
                         {automaticSegmentation ? "Enabled" : "Disabled"}
                       </Badge>
                     </li>
@@ -163,7 +163,7 @@ export const CampaignFrequencySettings = () => {
                     </li>
                     <li className="flex justify-between">
                       <span>Automatic customer segmentation:</span>
-                      <Badge variant={automaticSegmentation ? "success" : "outline"}>
+                      <Badge variant={automaticSegmentation ? "secondary" : "outline"}>
                         {automaticSegmentation ? "Enabled" : "Disabled"}
                       </Badge>
                     </li>

@@ -2,6 +2,7 @@
 export type OrderChannel = 'mobile' | 'totem' | 'whatsapp' | 'app' | 'ifood' | 'rappi' | 'other';
 export type OrderStatus = 'new' | 'preparing' | 'ready' | 'delivering' | 'completed' | 'cancelled';
 export type DeliveryType = 'self' | 'own' | 'marketplace' | 'thirdparty' | 'pickup';
+export type DeliveryCompany = 'loggi' | 'rapiddo' | 'uber' | 'other';
 
 export interface OrderItem {
   id: string;
@@ -13,6 +14,14 @@ export interface OrderItem {
     name: string;
     price: number;
   }[];
+}
+
+export interface Courier {
+  id: string;
+  name: string;
+  phone: string;
+  isAvailable: boolean;
+  deliveryCount: number;
 }
 
 export interface Order {
@@ -36,9 +45,12 @@ export interface Order {
   delivery: {
     type: DeliveryType;
     courier?: string;
+    courierId?: string;
+    company?: DeliveryCompany;
     trackingCode?: string;
     notes?: string;
     fee?: number;
   };
   notes?: string;
 }
+

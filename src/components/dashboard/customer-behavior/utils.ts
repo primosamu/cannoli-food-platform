@@ -1,6 +1,7 @@
 
 import { CampaignType } from "@/types/campaign";
 import { MessageSquare, Mail, PercentCircle } from "lucide-react";
+import React from "react";
 
 // Helper function to determine campaign category from segment
 export const getCategoryFromSegment = (segmentType?: string, segmentName?: string): string => {
@@ -40,13 +41,13 @@ export const getCategoryFromSegment = (segmentType?: string, segmentName?: strin
 export const getTemplateIcon = (type: CampaignType) => {
   switch (type) {
     case "whatsapp":
-      return <MessageSquare className="h-5 w-5 text-green-600" />;
+      return React.createElement(MessageSquare, { className: "h-5 w-5 text-green-600" });
     case "sms":
-      return <MessageSquare className="h-5 w-5 text-blue-600" />;
+      return React.createElement(MessageSquare, { className: "h-5 w-5 text-blue-600" });
     case "email":
-      return <Mail className="h-5 w-5 text-orange-600" />;
+      return React.createElement(Mail, { className: "h-5 w-5 text-orange-600" });
     case "paid":
-      return <PercentCircle className="h-5 w-5 text-purple-600" />;
+      return React.createElement(PercentCircle, { className: "h-5 w-5 text-purple-600" });
     default:
       return null;
   }

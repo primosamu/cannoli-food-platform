@@ -15,6 +15,9 @@ export function Layout({ children }: LayoutProps) {
   // Force document language to update when language changes
   useEffect(() => {
     document.documentElement.lang = language;
+    document.title = language === 'pt' ? 'Cannoli Food Tech - Sistema' : 
+                     language === 'es' ? 'Cannoli Food Tech - Sistema' : 
+                     'Cannoli Food Tech - System';
     console.log("Language set to:", language);
   }, [language]);
   

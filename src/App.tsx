@@ -42,7 +42,7 @@ function App() {
               <Route path="/orders" element={<Layout><OrderManagement /></Layout>} />
               <Route path="/integrations" element={<Layout><IntegrationsPage /></Layout>} />
               <Route path="/settings" element={<Layout><SettingsPage /></Layout>} />
-              <Route path="/data-insights" element={<DataInsightsPage />} />
+              <Route path="/data-insights" element={<Layout><DataInsightsPage /></Layout>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </HashRouter>

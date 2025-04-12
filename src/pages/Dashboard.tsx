@@ -26,47 +26,48 @@ import { OrderSummarySection } from "@/components/dashboard/OrderSummarySection"
 import { CustomerBehaviorSection } from "@/components/dashboard/customer-behavior/CustomerBehaviorSection";
 import { StoreSelector, Store as StoreType } from "@/components/dashboard/StoreSelector";
 import { Separator } from "@/components/ui/separator";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Sample store data
 const stores: StoreType[] = [
-  { id: "store-1", name: "Downtown Location" },
-  { id: "store-2", name: "Uptown Location" },
-  { id: "store-3", name: "Westside Branch" },
+  { id: "store-1", name: "Localização Centro" },
+  { id: "store-2", name: "Localização Norte" },
+  { id: "store-3", name: "Filial Oeste" },
 ];
 
 // Customer segment data
 const customerSegmentData = [
-  { name: "Champions", value: 200 },
-  { name: "Loyal", value: 350 },
-  { name: "Promising", value: 125 },
-  { name: "Needs Attention", value: 180 },
-  { name: "At Risk", value: 95 },
+  { name: "Campeões", value: 200 },
+  { name: "Fiéis", value: 350 },
+  { name: "Promissores", value: 125 },
+  { name: "Atenção Necessária", value: 180 },
+  { name: "Em Risco", value: 95 },
 ];
 
 // Sales data by store
 const salesDataByStore = {
   "store-1": [
     { name: "Jan", delivery: 4000, dineIn: 2400 },
-    { name: "Feb", delivery: 3000, dineIn: 1398 },
+    { name: "Fev", delivery: 3000, dineIn: 1398 },
     { name: "Mar", delivery: 2000, dineIn: 9800 },
-    { name: "Apr", delivery: 2780, dineIn: 3908 },
-    { name: "May", delivery: 1890, dineIn: 4800 },
+    { name: "Abr", delivery: 2780, dineIn: 3908 },
+    { name: "Mai", delivery: 1890, dineIn: 4800 },
     { name: "Jun", delivery: 2390, dineIn: 3800 },
   ],
   "store-2": [
     { name: "Jan", delivery: 3200, dineIn: 1800 },
-    { name: "Feb", delivery: 2500, dineIn: 1200 },
+    { name: "Fev", delivery: 2500, dineIn: 1200 },
     { name: "Mar", delivery: 3100, dineIn: 7500 },
-    { name: "Apr", delivery: 1900, dineIn: 2800 },
-    { name: "May", delivery: 2300, dineIn: 3900 },
+    { name: "Abr", delivery: 1900, dineIn: 2800 },
+    { name: "Mai", delivery: 2300, dineIn: 3900 },
     { name: "Jun", delivery: 2800, dineIn: 3100 },
   ],
   "store-3": [
     { name: "Jan", delivery: 2800, dineIn: 1600 },
-    { name: "Feb", delivery: 2200, dineIn: 1100 },
+    { name: "Fev", delivery: 2200, dineIn: 1100 },
     { name: "Mar", delivery: 2700, dineIn: 6500 },
-    { name: "Apr", delivery: 1700, dineIn: 2500 },
-    { name: "May", delivery: 2000, dineIn: 3500 },
+    { name: "Abr", delivery: 1700, dineIn: 2500 },
+    { name: "Mai", delivery: 2000, dineIn: 3500 },
     { name: "Jun", delivery: 2500, dineIn: 2800 },
   ],
 };
@@ -74,25 +75,25 @@ const salesDataByStore = {
 // Weekly menu popularity
 const weeklyMenuPopularityByStore = {
   "store-1": [
-    { name: "Cannoli Classic", value: 245 },
+    { name: "Cannoli Clássico", value: 245 },
     { name: "Tiramisu", value: 190 },
-    { name: "Strawberry Delight", value: 175 },
-    { name: "Chocolate Fusion", value: 140 },
-    { name: "Vanilla Bean", value: 120 },
+    { name: "Delícia de Morango", value: 175 },
+    { name: "Fusão de Chocolate", value: 140 },
+    { name: "Baunilha Pura", value: 120 },
   ],
   "store-2": [
     { name: "Tiramisu", value: 210 },
-    { name: "Cannoli Classic", value: 180 },
-    { name: "Chocolate Fusion", value: 170 },
-    { name: "Vanilla Bean", value: 150 },
-    { name: "Strawberry Delight", value: 130 },
+    { name: "Cannoli Clássico", value: 180 },
+    { name: "Fusão de Chocolate", value: 170 },
+    { name: "Baunilha Pura", value: 150 },
+    { name: "Delícia de Morango", value: 130 },
   ],
   "store-3": [
-    { name: "Chocolate Fusion", value: 220 },
-    { name: "Cannoli Classic", value: 195 },
+    { name: "Fusão de Chocolate", value: 220 },
+    { name: "Cannoli Clássico", value: 195 },
     { name: "Tiramisu", value: 175 },
-    { name: "Strawberry Delight", value: 155 },
-    { name: "Vanilla Bean", value: 125 },
+    { name: "Delícia de Morango", value: 155 },
+    { name: "Baunilha Pura", value: 125 },
   ],
 };
 
@@ -134,6 +135,7 @@ const Dashboard = () => {
   const [activeDetailedTab, setActiveDetailedTab] = useState<string>("orders-summary");
   const [selectedStores, setSelectedStores] = useState<string[]>(stores.map(store => store.id));
   const [salesPeriod, setSalesPeriod] = useState("monthly");
+  const { translations } = useLanguage();
 
   // Get combined data based on selected stores
   const salesData = combineData(selectedStores, salesDataByStore);
@@ -151,9 +153,11 @@ const Dashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{translations.dashboard}</h2>
           <p className="text-muted-foreground">
-            Overview of your restaurant's performance and customer data.
+            {translations.language === 'Portuguese' ? 
+              'Visão geral do desempenho do seu restaurante e dados de clientes.' : 
+              'Overview of your restaurant\'s performance and customer data.'}
           </p>
         </div>
         <StoreSelector 
@@ -165,61 +169,61 @@ const Dashboard = () => {
 
       <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="detailed">Detailed Analytics</TabsTrigger>
+          <TabsTrigger value="overview">{translations.language === 'Portuguese' ? 'Visão Geral' : 'Overview'}</TabsTrigger>
+          <TabsTrigger value="detailed">{translations.language === 'Portuguese' ? 'Análise Detalhada' : 'Detailed Analytics'}</TabsTrigger>
         </TabsList>
         
         <TabsContent value="overview" className="space-y-6">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                <CardTitle className="text-sm font-medium">{translations.language === 'Portuguese' ? 'Receita Total' : 'Total Revenue'}</CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">$45,231.89</div>
+                <div className="text-2xl font-bold">R$ 45.231,89</div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <ArrowUp className="mr-1 h-4 w-4 text-green-500" />
-                  <span className="text-green-500">+20.1%</span> from last month
+                  <span className="text-green-500">+20,1%</span> {translations.language === 'Portuguese' ? 'em relação ao mês passado' : 'from last month'}
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Customers</CardTitle>
+                <CardTitle className="text-sm font-medium">{translations.language === 'Portuguese' ? 'Clientes Ativos' : 'Active Customers'}</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+2,350</div>
+                <div className="text-2xl font-bold">+2.350</div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <ArrowUp className="mr-1 h-4 w-4 text-green-500" />
-                  <span className="text-green-500">+180</span> new this month
+                  <span className="text-green-500">+180</span> {translations.language === 'Portuguese' ? 'novos este mês' : 'new this month'}
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Orders</CardTitle>
+                <CardTitle className="text-sm font-medium">{translations.orders}</CardTitle>
                 <ShoppingCart className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+12,234</div>
+                <div className="text-2xl font-bold">+12.234</div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <ArrowUp className="mr-1 h-4 w-4 text-green-500" />
-                  <span className="text-green-500">+19%</span> from last month
+                  <span className="text-green-500">+19%</span> {translations.language === 'Portuguese' ? 'em relação ao mês passado' : 'from last month'}
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Campaigns</CardTitle>
+                <CardTitle className="text-sm font-medium">{translations.language === 'Portuguese' ? 'Campanhas Ativas' : 'Active Campaigns'}</CardTitle>
                 <Package className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">7 campaigns</div>
+                <div className="text-2xl font-bold">{translations.language === 'Portuguese' ? '7 campanhas' : '7 campaigns'}</div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <Calendar className="mr-1 h-4 w-4" />
-                  <span>Next campaign in 3 days</span>
+                  <span>{translations.language === 'Portuguese' ? 'Próxima campanha em 3 dias' : 'Next campaign in 3 days'}</span>
                 </div>
               </CardContent>
             </Card>
@@ -230,19 +234,25 @@ const Dashboard = () => {
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle>Sales Overview</CardTitle>
+                    <CardTitle>{translations.language === 'Portuguese' ? 'Visão Geral de Vendas' : 'Sales Overview'}</CardTitle>
                     <CardDescription>
                       {selectedStores.length === 1 
-                        ? `Sales performance for ${stores.find(s => s.id === selectedStores[0])?.name}`
-                        : `Combined sales across ${selectedStores.length} stores`}
+                        ? translations.language === 'Portuguese' 
+                          ? `Desempenho de vendas para ${stores.find(s => s.id === selectedStores[0])?.name}`
+                          : `Sales performance for ${stores.find(s => s.id === selectedStores[0])?.name}`
+                        : translations.language === 'Portuguese'
+                          ? `Vendas combinadas de ${selectedStores.length} lojas`
+                          : `Combined sales across ${selectedStores.length} stores`}
                     </CardDescription>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Store className="h-4 w-4 text-muted-foreground mr-1" />
                     <span className="text-xs text-muted-foreground">
                       {selectedStores.length === stores.length 
-                        ? "All Stores" 
-                        : `${selectedStores.length} of ${stores.length} Stores`}
+                        ? translations.language === 'Portuguese' ? "Todas as Lojas" : "All Stores" 
+                        : translations.language === 'Portuguese' 
+                          ? `${selectedStores.length} de ${stores.length} Lojas`
+                          : `${selectedStores.length} of ${stores.length} Stores`}
                     </span>
                   </div>
                 </div>
@@ -251,8 +261,8 @@ const Dashboard = () => {
                 <Tabs defaultValue="monthly" onValueChange={setSalesPeriod}>
                   <div className="flex justify-between items-center">
                     <TabsList>
-                      <TabsTrigger value="monthly">Monthly</TabsTrigger>
-                      <TabsTrigger value="total">Total</TabsTrigger>
+                      <TabsTrigger value="monthly">{translations.language === 'Portuguese' ? 'Mensal' : 'Monthly'}</TabsTrigger>
+                      <TabsTrigger value="total">{translations.language === 'Portuguese' ? 'Total' : 'Total'}</TabsTrigger>
                     </TabsList>
                     <RefreshCcw className="h-4 w-4 text-muted-foreground cursor-pointer" />
                   </div>
@@ -272,9 +282,15 @@ const Dashboard = () => {
                           <XAxis dataKey="name" />
                           <YAxis />
                           <Tooltip />
-                          <Legend />
-                          <Bar dataKey="delivery" fill="#26A69A" radius={[4, 4, 0, 0]} />
-                          <Bar dataKey="dineIn" fill="#5C6BC0" radius={[4, 4, 0, 0]} />
+                          <Legend 
+                            formatter={(value) => 
+                              value === "delivery" 
+                                ? translations.language === 'Portuguese' ? "Entrega" : "Delivery" 
+                                : translations.language === 'Portuguese' ? "No Local" : "Dine In"
+                            }
+                          />
+                          <Bar dataKey="delivery" name={translations.language === 'Portuguese' ? "Entrega" : "Delivery"} fill="#26A69A" radius={[4, 4, 0, 0]} />
+                          <Bar dataKey="dineIn" name={translations.language === 'Portuguese' ? "No Local" : "Dine In"} fill="#5C6BC0" radius={[4, 4, 0, 0]} />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
@@ -296,7 +312,14 @@ const Dashboard = () => {
                           <YAxis />
                           <Tooltip />
                           <Legend />
-                          <Line type="monotone" dataKey="total" stroke="#EC407A" strokeWidth={2} dot={{ r: 4 }} />
+                          <Line 
+                            type="monotone" 
+                            dataKey="total" 
+                            name={translations.language === 'Portuguese' ? "Total" : "Total"}
+                            stroke="#EC407A" 
+                            strokeWidth={2} 
+                            dot={{ r: 4 }} 
+                          />
                         </LineChart>
                       </ResponsiveContainer>
                     </div>
@@ -306,9 +329,9 @@ const Dashboard = () => {
             </Card>
             <Card className="col-span-3">
               <CardHeader>
-                <CardTitle>Customer Segmentation</CardTitle>
+                <CardTitle>{translations.language === 'Portuguese' ? 'Segmentação de Clientes' : 'Customer Segmentation'}</CardTitle>
                 <CardDescription>
-                  Distribution across customer segments
+                  {translations.language === 'Portuguese' ? 'Distribuição entre segmentos de clientes' : 'Distribution across customer segments'}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -446,11 +469,11 @@ const Dashboard = () => {
                 <TabsList>
                   <TabsTrigger value="orders-summary" className="flex items-center gap-2">
                     <BarChartIcon className="h-4 w-4" />
-                    Order Summary
+                    {translations.language === 'Portuguese' ? 'Resumo de Pedidos' : 'Order Summary'}
                   </TabsTrigger>
                   <TabsTrigger value="customer-behavior" className="flex items-center gap-2">
                     <PieChartIcon className="h-4 w-4" />
-                    Customer Behavior
+                    {translations.language === 'Portuguese' ? 'Comportamento do Cliente' : 'Customer Behavior'}
                   </TabsTrigger>
                 </TabsList>
                 
@@ -463,7 +486,7 @@ const Dashboard = () => {
                   />
                   <Button variant="outline" size="sm">
                     <RefreshCcw className="h-4 w-4 mr-2" />
-                    Refresh Data
+                    {translations.language === 'Portuguese' ? 'Atualizar Dados' : 'Refresh Data'}
                   </Button>
                 </div>
               </div>

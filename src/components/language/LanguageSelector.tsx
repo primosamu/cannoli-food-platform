@@ -23,7 +23,7 @@ export const LanguageSelector = () => {
 
   return (
     <Select onValueChange={handleLanguageChange} value={language}>
-      <SelectTrigger className="w-[130px]">
+      <SelectTrigger className="w-[180px]">
         <Globe className="h-4 w-4 mr-2" />
         <SelectValue placeholder={translations.language} />
       </SelectTrigger>

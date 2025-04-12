@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 import {
   BarChart as BarChartIcon,
   PieChart as PieChartIcon,
@@ -17,7 +19,11 @@ import {
   Sun,
 } from "lucide-react";
 import { DollarSign } from "./DollarSign";
-import { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, ComposedChart, Area, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts";
+import { 
+  PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, 
+  Legend, ResponsiveContainer, BarChart, Bar, ComposedChart, Area, Radar, 
+  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Treemap
+} from "recharts";
 
 // RFM Data
 const recencyData = [
@@ -46,17 +52,17 @@ const monetaryData = [
 
 // RFM Segments
 const rfmSegmentsData = [
-  { name: "Champions", value: 95, description: "Best customers, highly engaged" },
-  { name: "Loyal", value: 120, description: "Consistent spenders, frequent" },
-  { name: "Potential Loyalist", value: 140, description: "Recent and promising" },
-  { name: "New Customers", value: 180, description: "Spent well, first-timers" },
-  { name: "Promising", value: 110, description: "Recent, not frequent yet" },
-  { name: "Needs Attention", value: 90, description: "Above average, declining" },
-  { name: "At Risk", value: 80, description: "Once valuable, slipping away" },
-  { name: "Can't Lose", value: 30, description: "Past high value, inactive" },
-  { name: "Hibernating", value: 60, description: "Past customers, low value" },
-  { name: "Lost", value: 85, description: "Lowest value, not engaged" },
-  { name: "Others", value: 50, description: "Miscellaneous patterns" }
+  { name: "Champions", value: 95, description: "Best customers, highly engaged", fill: "#4CAF50" },
+  { name: "Loyal", value: 120, description: "Consistent spenders, frequent", fill: "#8BC34A" },
+  { name: "Potential Loyalist", value: 140, description: "Recent and promising", fill: "#CDDC39" },
+  { name: "New Customers", value: 180, description: "Spent well, first-timers", fill: "#FFEB3B" },
+  { name: "Promising", value: 110, description: "Recent, not frequent yet", fill: "#FFC107" },
+  { name: "Needs Attention", value: 90, description: "Above average, declining", fill: "#FF9800" },
+  { name: "At Risk", value: 80, description: "Once valuable, slipping away", fill: "#FF5722" },
+  { name: "Can't Lose", value: 30, description: "Past high value, inactive", fill: "#F44336" },
+  { name: "Hibernating", value: 60, description: "Past customers, low value", fill: "#E91E63" },
+  { name: "Lost", value: 85, description: "Lowest value, not engaged", fill: "#9C27B0" },
+  { name: "Others", value: 50, description: "Miscellaneous patterns", fill: "#673AB7" }
 ];
 
 // Meal Preference
@@ -112,16 +118,79 @@ const weatherData = [
 
 const COLORS = ["#FFA726", "#FB8C00", "#F57C00", "#EF6C00", "#E65100", "#FFB74D", "#FFCC80", "#4CAF50", "#2196F3", "#9C27B0", "#F44336"];
 
+const CustomizedTreemapContent = (props: any) => {
+  const { root, depth, x, y, width, height, index, name, value, description, fill } = props;
+
+  return (
+    <g>
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        style={{
+          fill,
+          stroke: '#fff',
+          strokeWidth: 2,
+          fillOpacity: depth < 2 ? 0.9 : 0.8,
+        }}
+      />
+      {width > 60 && height > 30 && (
+        <text
+          x={x + width / 2}
+          y={y + height / 2 - 10}
+          textAnchor="middle"
+          fill="#fff"
+          fontSize={12}
+          fontWeight="bold"
+        >
+          {name}
+        </text>
+      )}
+      {width > 60 && height > 50 && (
+        <text
+          x={x + width / 2}
+          y={y + height / 2 + 10}
+          textAnchor="middle"
+          fill="#fff"
+          fontSize={10}
+        >
+          {value} customers
+        </text>
+      )}
+    </g>
+  );
+};
+
 export const CustomerBehaviorSection = () => {
   const [selectedChart, setSelectedChart] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedSegment, setSelectedSegment] = useState<any>(null);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleChartClick = (chartId: string, data?: any) => {
     setSelectedChart(chartId);
     setSelectedSegment(data);
     setIsDialogOpen(true);
   };
+
+  const redirectToCampaign = useCallback((segmentName?: string, segmentType?: string) => {
+    toast({
+      title: "Redirecting to Campaigns",
+      description: `Creating campaign for ${segmentName || "this segment"}`,
+    });
+    
+    navigate("/campaigns", { 
+      state: { 
+        createCampaign: true, 
+        segmentName: segmentName || (selectedSegment?.name || selectedSegment?.group),
+        segmentType: segmentType || selectedChart
+      } 
+    });
+    
+    setIsDialogOpen(false);
+  }, [navigate, selectedSegment, selectedChart, toast]);
 
   return (
     <div className="space-y-6">
@@ -266,38 +335,34 @@ export const CustomerBehaviorSection = () => {
           </CardHeader>
           <CardContent className="h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart
+              <Treemap
                 data={rfmSegmentsData}
-                margin={{ top: 20, right: 30, left: 20, bottom: 70 }}
-                layout="vertical"
+                dataKey="value"
+                nameKey="name"
+                aspectRatio={4/3}
+                stroke="#fff"
+                onClick={(data) => handleChartClick('rfm-segments', data)}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" />
-                <YAxis type="category" dataKey="name" width={120} />
-                <Tooltip content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
-                    return (
-                      <div className="bg-white border p-2 shadow-md">
-                        <p className="font-medium">{payload[0].payload.name}</p>
-                        <p>{payload[0].payload.description}</p>
-                        <p>Customers: {payload[0].payload.value}</p>
-                        <p>Percentage: {(payload[0].payload.value / rfmSegmentsData.reduce((sum, item) => sum + item.value, 0) * 100).toFixed(1)}%</p>
-                      </div>
-                    );
-                  }
-                  return null;
-                }} />
-                <Legend />
-                <Bar 
-                  dataKey="value" 
-                  fill="#8884d8"
-                  onClick={(data) => handleChartClick('rfm-segments', data)}
-                >
-                  {rfmSegmentsData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Bar>
-              </BarChart>
+                <Tooltip 
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      const data = payload[0].payload;
+                      return (
+                        <div className="bg-white border p-2 shadow-md">
+                          <p className="font-medium">{data.name}</p>
+                          <p>{data.description}</p>
+                          <p>Customers: {data.value}</p>
+                          <p>Percentage: {(data.value / rfmSegmentsData.reduce((sum, item) => sum + item.value, 0) * 100).toFixed(1)}%</p>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                {rfmSegmentsData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.fill} content={<CustomizedTreemapContent />} />
+                ))}
+              </Treemap>
             </ResponsiveContainer>
           </CardContent>
         </Card>
@@ -307,7 +372,6 @@ export const CustomerBehaviorSection = () => {
       <div>
         <h3 className="text-lg font-medium mb-4">Customer Behavior Patterns</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Preferred Meal */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -345,7 +409,6 @@ export const CustomerBehaviorSection = () => {
             </CardContent>
           </Card>
 
-          {/* Day Preference */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -377,7 +440,6 @@ export const CustomerBehaviorSection = () => {
             </CardContent>
           </Card>
 
-          {/* Repurchase Category */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -409,7 +471,6 @@ export const CustomerBehaviorSection = () => {
             </CardContent>
           </Card>
 
-          {/* Beverage Included */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -447,7 +508,6 @@ export const CustomerBehaviorSection = () => {
             </CardContent>
           </Card>
 
-          {/* Dessert Preference */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -485,7 +545,6 @@ export const CustomerBehaviorSection = () => {
             </CardContent>
           </Card>
 
-          {/* Weather Preference */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -560,7 +619,16 @@ export const CustomerBehaviorSection = () => {
                       <td className="px-4 py-2">2025-04-{Math.floor(Math.random() * 12) + 1}</td>
                       <td className="px-4 py-2">${((Math.random() * 500) + 50).toFixed(2)}</td>
                       <td className="px-4 py-2">
-                        <Button variant="outline" size="sm">Add to Campaign</Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => redirectToCampaign(
+                            `Customer ${i + 1}`, 
+                            selectedSegment?.name || selectedSegment?.group || selectedChart
+                          )}
+                        >
+                          Add to Campaign
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -576,7 +644,14 @@ export const CustomerBehaviorSection = () => {
               </div>
               <div className="space-x-2">
                 <Button variant="outline">View All</Button>
-                <Button>Create Campaign for This Group</Button>
+                <Button 
+                  onClick={() => redirectToCampaign(
+                    selectedSegment?.name || selectedSegment?.group, 
+                    selectedChart
+                  )}
+                >
+                  Create Campaign for This Group
+                </Button>
               </div>
             </div>
           </div>

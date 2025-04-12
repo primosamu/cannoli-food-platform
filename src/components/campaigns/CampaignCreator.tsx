@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -81,12 +80,10 @@ const CampaignCreator = ({
     },
   });
 
-  // When a segment type is provided, update recommended templates
   useEffect(() => {
     if (segmentType) {
       let category = "";
       
-      // Check segment type and set appropriate category
       if (segmentType.includes('recency') && segmentName?.includes('>60 days')) {
         category = "customer-recovery";
       } else if (segmentType === 'rfm-segments' && (segmentName?.includes('Lost') || segmentName?.includes('At Risk'))) {
@@ -101,7 +98,6 @@ const CampaignCreator = ({
         setSelectedCategory(category);
         const templates = getTemplatesByCategory(category);
         setRecommendedTemplates(templates);
-        // Automatically switch to templates tab if we have recommendations
         if (templates.length > 0) {
           setActiveTab("templates");
         }
@@ -109,10 +105,8 @@ const CampaignCreator = ({
     }
   }, [segmentType, segmentName]);
 
-  // Apply initial template when provided
   useEffect(() => {
     if (initialTemplate) {
-      // Generate a sensible name based on the template
       const suggestedName = initialTemplate.name ? 
         `${initialTemplate.name} Campaign` : 
         "New Campaign";
@@ -142,7 +136,6 @@ const CampaignCreator = ({
         type: initialTemplate.type,
       });
       
-      // Auto-personalize content with today's date + 30 days for offers
       const today = new Date();
       const expiryDate = new Date(today);
       expiryDate.setDate(today.getDate() + 30);
@@ -191,7 +184,6 @@ const CampaignCreator = ({
       description: "Seu conteúdo está sendo otimizado com IA...",
     });
     
-    // Simulate AI optimization
     setTimeout(() => {
       const currentContent = form.getValues("content");
       const optimizedContent = `${currentContent} [Otimizado com IA]`;
@@ -328,7 +320,7 @@ const CampaignCreator = ({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="">Todas as categorias</SelectItem>
+                        <SelectItem value="all">Todas as categorias</SelectItem>
                         {allCategories.map((category) => (
                           <SelectItem key={category} value={category}>
                             {category === 'customer-recovery' && 'Recuperação de Clientes'}

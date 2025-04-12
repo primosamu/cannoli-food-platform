@@ -11,6 +11,7 @@ export type CampaignTemplate = {
   imageUrl?: string;
   platform?: string; // For paid traffic (meta, google, etc)
   category?: string; // Added category field
+  inactiveDays?: string; // New field: for customer recovery campaigns
 };
 
 export type CampaignData = {
@@ -34,6 +35,7 @@ export type CampaignData = {
   audienceType?: 'all' | 'segment' | 'custom';
   audienceSegmentId?: string;
   channels: CampaignType[];
+  inactiveDays?: string; // New field: for customer recovery campaigns
 };
 
 export interface CampaignEvent {

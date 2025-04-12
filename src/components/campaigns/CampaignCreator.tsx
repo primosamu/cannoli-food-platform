@@ -27,7 +27,7 @@ import {
 import { CampaignTemplate, CampaignType } from "@/types/campaign";
 import CampaignPreview from "./CampaignPreview";
 import TemplateSelector from "./TemplateSelector";
-import { Wand2, Tag } from "lucide-react";
+import { Wand2, Tag, Clock } from "lucide-react";
 import { 
   getTemplatesByCategory, 
   getAllCategories 
@@ -67,6 +67,7 @@ const CampaignCreator = ({
   const [activeTab, setActiveTab] = useState("editor");
   const [recommendedTemplates, setRecommendedTemplates] = useState<CampaignTemplate[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [campaignName, setCampaignName] = useState<string>("");
   
   const { toast } = useToast();
 
@@ -111,6 +112,13 @@ const CampaignCreator = ({
   // Apply initial template when provided
   useEffect(() => {
     if (initialTemplate) {
+      // Generate a sensible name based on the template
+      const suggestedName = initialTemplate.name ? 
+        `${initialTemplate.name} Campaign` : 
+        "New Campaign";
+      
+      setCampaignName(suggestedName);
+      form.setValue("name", suggestedName);
       form.setValue("content", initialTemplate.content);
       form.setValue("type", initialTemplate.type);
       
@@ -122,14 +130,37 @@ const CampaignCreator = ({
         form.setValue("imageUrl", initialTemplate.imageUrl);
       }
       
+      if (initialTemplate.category) {
+        form.setValue("category", initialTemplate.category);
+        setSelectedCategory(initialTemplate.category);
+      }
+      
       setPreviewData({
         content: initialTemplate.content,
         subject: initialTemplate.subject,
         imageUrl: initialTemplate.imageUrl,
         type: initialTemplate.type,
       });
+      
+      // Auto-personalize content with today's date + 30 days for offers
+      const today = new Date();
+      const expiryDate = new Date(today);
+      expiryDate.setDate(today.getDate() + 30);
+      
+      const expiryDateStr = expiryDate.toLocaleDateString('pt-BR');
+      
+      let personalizedContent = initialTemplate.content
+        .replace(/{{date}}/g, expiryDateStr)
+        .replace(/{{discount}}/g, "15")
+        .replace(/{{code}}/g, "WELCOME15");
+      
+      form.setValue("content", personalizedContent);
+      setPreviewData(prev => ({
+        ...prev,
+        content: personalizedContent
+      }));
     }
-  }, [initialTemplate]);
+  }, [initialTemplate, form]);
 
   const campaignType = form.watch("type");
 
@@ -229,6 +260,27 @@ const CampaignCreator = ({
               )}
             />
 
+            {initialTemplate && (
+              <div className="bg-muted/30 p-3 rounded-md border border-muted">
+                <div className="flex justify-between items-start">
+                  <div className="flex items-center gap-2">
+                    <Tag className="h-4 w-4 text-primary" />
+                    <span className="font-medium">Template: {initialTemplate.name}</span>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    {initialTemplate.type}
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">{initialTemplate.description}</p>
+                <div className="flex items-center gap-1 mt-2">
+                  <Clock className="h-3 w-3 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">
+                    Default expiry: 30 days from today
+                  </span>
+                </div>
+              </div>
+            )}
+
             <div className="flex flex-col md:flex-row gap-4">
               <FormField
                 control={form.control}
@@ -239,6 +291,7 @@ const CampaignCreator = ({
                     <Select 
                       onValueChange={(value) => handleTypeChange(value as CampaignType)} 
                       defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -362,15 +415,19 @@ const CampaignCreator = ({
                                   handleContentChange(e);
                                 }}
                               />
-                              <Button 
-                                type="button" 
-                                variant="secondary"
-                                onClick={handleOptimizeWithAI}
-                                className="w-full"
-                              >
-                                <Wand2 className="mr-2 h-4 w-4" />
-                                Otimizar com IA
-                              </Button>
+                              <div className="grid grid-cols-2 gap-2">
+                                <Button 
+                                  type="button" 
+                                  variant="secondary"
+                                  onClick={handleOptimizeWithAI}
+                                >
+                                  <Wand2 className="mr-2 h-4 w-4" />
+                                  Otimizar com IA
+                                </Button>
+                                <Button type="button" variant="outline">
+                                  Variáveis personalizadas
+                                </Button>
+                              </div>
                             </div>
                           </FormControl>
                           <FormMessage />

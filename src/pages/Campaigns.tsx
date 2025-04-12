@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -46,22 +45,18 @@ const CampaignsPage = () => {
   const location = useLocation();
   const { toast } = useToast();
 
-  // Get the campaigns for each tab
   const activeCampaigns = getActiveCampaigns();
   const scheduledCampaigns = getScheduledCampaigns();
   const completedCampaigns = getCompletedCampaigns();
   const draftCampaigns = getDraftCampaigns();
 
-  // Handle navigation from other parts of the app
   useEffect(() => {
     if (location.state && location.state.createCampaign) {
       setShowCreator(true);
       setShowPresets(false);
       setShowSettings(false);
 
-      // Check if we have a category to select a template
       if (location.state.category) {
-        // Find a template that matches the category
         const templates = getTemplatesByCategory(location.state.category);
         if (templates && templates.length > 0) {
           setSelectedTemplate(templates[0]);
@@ -148,7 +143,9 @@ const CampaignsPage = () => {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Create New Campaign</CardTitle>
+                <CardTitle>
+                  {selectedTemplate ? `Create Campaign: ${selectedTemplate.name}` : 'Create New Campaign'}
+                </CardTitle>
                 <CardDescription>
                   Design your marketing campaign for WhatsApp, SMS, Email or Paid Traffic
                 </CardDescription>
@@ -320,7 +317,6 @@ const CampaignsPage = () => {
 
       {renderContent()}
 
-      {/* Floating help button with templates info */}
       <Dialog>
         <DialogTrigger asChild>
           <Button 

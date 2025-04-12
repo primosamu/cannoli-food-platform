@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -49,8 +49,22 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
   const [incentiveType, setIncentiveType] = useState<string>("none");
   const [scheduledDate, setScheduledDate] = useState<string>("");
   const [scheduledTime, setScheduledTime] = useState<string>("");
+  const [inactiveDays, setInactiveDays] = useState<string>("60");
   
   const { toast } = useToast();
+  
+  // Set default audience type based on template category
+  useEffect(() => {
+    if (template?.category) {
+      if (template.category === 'customer-recovery') {
+        setAudienceType('segment');
+      } else if (template.category === 'loyalty') {
+        setAudienceType('custom');
+      } else if (template.category === 'consumption-pattern') {
+        setAudienceType('custom');
+      }
+    }
+  }, [template]);
 
   const handleChannelToggle = (channelId: string) => {
     setSelectedChannels(prevChannels => {
@@ -79,9 +93,24 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
 
     onContinue();
   };
+  
+  const getEstimatedAudience = () => {
+    if (audienceType === 'all') return '235';
+    if (audienceType === 'segment' && template?.category === 'customer-recovery') return '45';
+    if (audienceType === 'custom' && template?.category === 'loyalty') return '78';
+    if (audienceType === 'custom' && template?.category === 'consumption-pattern') return '112';
+    return '120';
+  };
 
   return (
     <div className="space-y-6">
+      {template && (
+        <div className="bg-muted/50 p-4 rounded-lg mb-6">
+          <h3 className="text-xl font-semibold">{template.name}</h3>
+          <p className="text-muted-foreground mt-1">{template.description}</p>
+        </div>
+      )}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Audience Selection Card */}
         <Card>
@@ -96,7 +125,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
           </CardHeader>
           <CardContent>
             <RadioGroup 
-              defaultValue={audienceType}
+              value={audienceType}
               onValueChange={setAudienceType}
               className="space-y-4"
             >
@@ -112,19 +141,33 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
               
               {audienceType === "segment" && (
                 <div className="pl-6 space-y-3">
-                  <Select>
+                  <Select defaultValue={template?.category === 'customer-recovery' ? "inactive" : undefined}>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select a customer segment" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="inactive">Inactive Customers (60+ days)</SelectItem>
+                        <SelectItem value="inactive">Inactive Customers ({inactiveDays}+ days)</SelectItem>
                         <SelectItem value="loyal">Loyal Customers (5+ orders)</SelectItem>
                         <SelectItem value="new">New Customers (1-2 orders)</SelectItem>
                         <SelectItem value="high-value">High-Value Customers ($100+)</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
+                  
+                  {template?.category === 'customer-recovery' && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <Label htmlFor="inactive-days">Inactive for at least:</Label>
+                      <Input 
+                        id="inactive-days" 
+                        type="number" 
+                        className="w-20" 
+                        value={inactiveDays}
+                        onChange={(e) => setInactiveDays(e.target.value)}
+                      />
+                      <span className="text-sm">days</span>
+                    </div>
+                  )}
                 </div>
               )}
               
@@ -135,7 +178,11 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
               
               {audienceType === "custom" && (
                 <div className="pl-6 space-y-3">
-                  <Select>
+                  <Select defaultValue={
+                    template?.category === 'loyalty' ? "order-count" : 
+                    template?.category === 'consumption-pattern' ? "food-preference" : 
+                    undefined
+                  }>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select criteria type" />
                     </SelectTrigger>
@@ -154,7 +201,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
             
             <div className="mt-4">
               <Badge variant="secondary" className="bg-muted/60 hover:bg-muted text-muted-foreground">
-                Estimated audience: 235 customers
+                Estimated audience: {getEstimatedAudience()} customers
               </Badge>
             </div>
           </CardContent>
@@ -277,7 +324,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
               
               {incentiveType === "coupon" && (
                 <div className="pl-6 space-y-3">
-                  <Select>
+                  <Select defaultValue={template?.category === 'customer-recovery' ? "welcome-back-10" : undefined}>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select existing coupon" />
                     </SelectTrigger>

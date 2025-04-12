@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Dialog,
   DialogContent,
@@ -49,15 +49,15 @@ export const AssignCourierDialog: React.FC<AssignCourierDialogProps> = ({
   const [deliveryCompany, setDeliveryCompany] = useState<DeliveryCompany>('loggi');
   const { translations } = useLanguage();
 
-  // Reset form when order changes
-  React.useEffect(() => {
+  // Reset form when order changes or dialog opens
+  useEffect(() => {
     if (order) {
       setDeliveryType(order.delivery.type);
-      setSelectedCourierId('');
-      setCustomCourierName('');
-      setDeliveryCompany('loggi');
+      setSelectedCourierId(order.delivery.courierId || '');
+      setCustomCourierName(order.delivery.type === 'self' ? (order.delivery.courier || '') : '');
+      setDeliveryCompany(order.delivery.company || 'loggi');
     }
-  }, [order]);
+  }, [order, open]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,72 +94,88 @@ export const AssignCourierDialog: React.FC<AssignCourierDialogProps> = ({
   if (!order) return null;
 
   const availableCouriers = couriers.filter(c => c.isAvailable);
-
+  const isReassignment = order.delivery.courier || order.delivery.company;
+  
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent className="sm:max-w-[500px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{translations.assignDelivery}</DialogTitle>
+            <DialogTitle>
+              {isReassignment ? translations.reassignCourier : translations.assignDelivery}
+            </DialogTitle>
             <DialogDescription>
-              {translations.assignDelivery} {order.orderNumber}
+              {isReassignment ? translations.changeCourier : translations.assignDelivery} {order.orderNumber}
             </DialogDescription>
           </DialogHeader>
           
           <div className="grid gap-6 py-4">
-            <div className="grid gap-2">
-              <Label>{translations.deliveryMethod}</Label>
-              <RadioGroup
-                value={deliveryType}
-                onValueChange={(value) => setDeliveryType(value as DeliveryType)}
-                className="grid grid-cols-3 gap-2"
-              >
-                <div>
-                  <RadioGroupItem
-                    value="own"
-                    id="own"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="own"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                  >
-                    <Truck className="mb-3 h-6 w-6" />
-                    {translations.ownDelivery}
-                  </Label>
+            {/* Show current courier info if this is a reassignment */}
+            {isReassignment && order.delivery.courier && (
+              <div className="grid gap-2">
+                <Label>{translations.currentCourier}</Label>
+                <div className="text-sm font-medium bg-muted p-2 rounded-md">
+                  {order.delivery.courier}
                 </div>
-                
-                <div>
-                  <RadioGroupItem
-                    value="self"
-                    id="self"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="self"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                  >
-                    <Building className="mb-3 h-6 w-6" />
-                    {translations.selfDelivery}
-                  </Label>
-                </div>
-                
-                <div>
-                  <RadioGroupItem
-                    value="thirdparty"
-                    id="thirdparty"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="thirdparty"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                  >
-                    <Store className="mb-3 h-6 w-6" />
-                    {translations.thirdPartyDelivery}
-                  </Label>
-                </div>
-              </RadioGroup>
-            </div>
+              </div>
+            )}
+            
+            {/* Only allow changing delivery method if it's not a marketplace order */}
+            {order.channel !== 'ifood' && order.channel !== 'rappi' && (
+              <div className="grid gap-2">
+                <Label>{translations.deliveryMethod}</Label>
+                <RadioGroup
+                  value={deliveryType}
+                  onValueChange={(value) => setDeliveryType(value as DeliveryType)}
+                  className="grid grid-cols-3 gap-2"
+                >
+                  <div>
+                    <RadioGroupItem
+                      value="own"
+                      id="own"
+                      className="peer sr-only"
+                    />
+                    <Label
+                      htmlFor="own"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                    >
+                      <Truck className="mb-3 h-6 w-6" />
+                      {translations.ownDelivery}
+                    </Label>
+                  </div>
+                  
+                  <div>
+                    <RadioGroupItem
+                      value="self"
+                      id="self"
+                      className="peer sr-only"
+                    />
+                    <Label
+                      htmlFor="self"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                    >
+                      <Building className="mb-3 h-6 w-6" />
+                      {translations.selfDelivery}
+                    </Label>
+                  </div>
+                  
+                  <div>
+                    <RadioGroupItem
+                      value="thirdparty"
+                      id="thirdparty"
+                      className="peer sr-only"
+                    />
+                    <Label
+                      htmlFor="thirdparty"
+                      className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                    >
+                      <Store className="mb-3 h-6 w-6" />
+                      {translations.thirdPartyDelivery}
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            )}
 
             {/* Select courier for own delivery */}
             {deliveryType === 'own' && (
@@ -235,7 +251,7 @@ export const AssignCourierDialog: React.FC<AssignCourierDialogProps> = ({
               disabled={(deliveryType === 'own' && !selectedCourierId) || 
                       (deliveryType === 'self' && !customCourierName.trim())}
             >
-              {translations.assign}
+              {isReassignment ? translations.changeCourier : translations.assign}
             </Button>
           </DialogFooter>
         </form>
@@ -243,4 +259,3 @@ export const AssignCourierDialog: React.FC<AssignCourierDialogProps> = ({
     </Dialog>
   );
 };
-

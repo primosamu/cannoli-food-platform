@@ -20,8 +20,10 @@ import {
   X,
   ChefHat,
   ShoppingCart,
+  UserCog
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface OrderCardProps {
   order: Order;
@@ -34,6 +36,8 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   onStatusChange,
   onAssignDelivery,
 }) => {
+  const { translations } = useLanguage();
+  
   // Helper function to determine the next status
   const getNextStatus = (currentStatus: Order['status']): Order['status'] | null => {
     switch (currentStatus) {
@@ -64,17 +68,17 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   const getStatusBadge = () => {
     switch (order.status) {
       case 'new': 
-        return <Badge className="bg-blue-500 text-white">New</Badge>;
+        return <Badge className="bg-blue-500 text-white">{translations.newOrders}</Badge>;
       case 'preparing': 
-        return <Badge className="bg-amber-500 text-white">Preparing</Badge>;
+        return <Badge className="bg-amber-500 text-white">{translations.preparing}</Badge>;
       case 'ready': 
-        return <Badge className="bg-green-500 text-white">Ready</Badge>;
+        return <Badge className="bg-green-500 text-white">{translations.ready}</Badge>;
       case 'delivering': 
-        return <Badge className="bg-purple-500 text-white">Delivering</Badge>;
+        return <Badge className="bg-purple-500 text-white">{translations.delivering}</Badge>;
       case 'completed': 
-        return <Badge className="bg-gray-500 text-white">Completed</Badge>;
+        return <Badge className="bg-gray-500 text-white">{translations.completed}</Badge>;
       case 'cancelled': 
-        return <Badge variant="destructive">Cancelled</Badge>;
+        return <Badge variant="destructive">{translations.cancel}</Badge>;
       default: 
         return null;
     }
@@ -94,7 +98,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             className="gap-1"
           >
             <ChefHat className="h-4 w-4" />
-            Start Preparing
+            {translations.preparing}
           </Button>
         );
       case 'ready':
@@ -105,7 +109,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             className="gap-1"
           >
             <Check className="h-4 w-4" />
-            Mark Ready
+            {translations.ready}
           </Button>
         );
       case 'delivering':
@@ -116,7 +120,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             className="gap-1"
           >
             <Truck className="h-4 w-4" />
-            Start Delivery
+            {translations.delivering}
           </Button>
         ) : (
           <Button 
@@ -125,7 +129,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             className="gap-1"
           >
             <Truck className="h-4 w-4" />
-            Assign Courier
+            {translations.assignDelivery}
           </Button>
         );
       case 'completed':
@@ -136,7 +140,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
             className="gap-1"
           >
             <Check className="h-4 w-4" />
-            Complete Order
+            {translations.completed}
           </Button>
         );
       default:
@@ -186,12 +190,28 @@ export const OrderCard: React.FC<OrderCardProps> = ({
                 <Truck className="h-3 w-3" />
                 <span>
                   {order.delivery.type === 'own' 
-                    ? (order.delivery.courier || 'Unassigned') 
+                    ? (order.delivery.courier || translations.selectACourier) 
                     : order.delivery.type.charAt(0).toUpperCase() + order.delivery.type.slice(1)}
                 </span>
               </div>
             )}
           </div>
+          
+          {/* Add Change Courier button if courier is assigned */}
+          {(order.status === 'ready' || order.status === 'delivering') && 
+           order.delivery.courier && (
+            <div className="pt-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="w-full text-xs" 
+                onClick={() => onAssignDelivery(order)}
+              >
+                <UserCog className="h-3 w-3 mr-1" />
+                {translations.changeCourier}
+              </Button>
+            </div>
+          )}
         </div>
       </CardContent>
       
@@ -207,7 +227,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
               onClick={() => onStatusChange(order.id, 'cancelled')}
             >
               <X className="h-4 w-4 mr-1" />
-              Cancel
+              {translations.cancel}
             </Button>
           )}
         </div>

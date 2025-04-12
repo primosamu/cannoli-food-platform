@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Order } from '@/types/order';
 import { DataTable } from '@/components/ui/data-table';
@@ -14,6 +13,7 @@ import {
   User,
   ReceiptText,
   MonitorSmartphone,
+  UserCog,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,6 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface OrderListProps {
   orders: Order[];
@@ -36,6 +37,8 @@ export const OrderList: React.FC<OrderListProps> = ({
   onStatusChange,
   onAssignDelivery,
 }) => {
+  const { translations } = useLanguage();
+  
   // Helper function to get channel icon
   const getChannelIcon = (channel: Order['channel']) => {
     switch (channel) {
@@ -62,17 +65,17 @@ export const OrderList: React.FC<OrderListProps> = ({
   const getStatusBadge = (status: Order['status']) => {
     switch (status) {
       case 'new': 
-        return <Badge className="bg-blue-500 text-white">New</Badge>;
+        return <Badge className="bg-blue-500 text-white">{translations.newOrders}</Badge>;
       case 'preparing': 
-        return <Badge className="bg-amber-500 text-white">Preparing</Badge>;
+        return <Badge className="bg-amber-500 text-white">{translations.preparing}</Badge>;
       case 'ready': 
-        return <Badge className="bg-green-500 text-white">Ready</Badge>;
+        return <Badge className="bg-green-500 text-white">{translations.ready}</Badge>;
       case 'delivering': 
-        return <Badge className="bg-purple-500 text-white">Delivering</Badge>;
+        return <Badge className="bg-purple-500 text-white">{translations.delivering}</Badge>;
       case 'completed': 
-        return <Badge className="bg-gray-500 text-white">Completed</Badge>;
+        return <Badge className="bg-gray-500 text-white">{translations.completed}</Badge>;
       case 'cancelled': 
-        return <Badge variant="destructive">Cancelled</Badge>;
+        return <Badge variant="destructive">{translations.cancel}</Badge>;
       default: 
         return null;
     }
@@ -100,7 +103,7 @@ export const OrderList: React.FC<OrderListProps> = ({
     // Order number and channel
     {
       accessorKey: 'orderNumber',
-      header: 'Order',
+      header: translations.orderNumber,
       cell: ({ row }) => {
         const order = row.original;
         return (
@@ -119,7 +122,7 @@ export const OrderList: React.FC<OrderListProps> = ({
     // Customer
     {
       accessorKey: 'customer.name',
-      header: 'Customer',
+      header: translations.name,
       cell: ({ row }) => {
         const order = row.original;
         return (
@@ -136,7 +139,7 @@ export const OrderList: React.FC<OrderListProps> = ({
     // Items
     {
       accessorKey: 'items',
-      header: 'Items',
+      header: translations.orders,
       cell: ({ row }) => {
         const order = row.original;
         const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
@@ -145,7 +148,7 @@ export const OrderList: React.FC<OrderListProps> = ({
           <div className="flex items-center space-x-2">
             <ReceiptText className="h-4 w-4 text-muted-foreground" />
             <div>
-              <p className="font-medium">{totalItems} items</p>
+              <p className="font-medium">{totalItems} {translations.orders.toLowerCase()}</p>
               <p className="text-xs text-muted-foreground">
                 {order.items.map(item => `${item.quantity}x ${item.name}`).join(', ').substring(0, 20)}
                 {order.items.map(item => `${item.quantity}x ${item.name}`).join(', ').length > 20 ? '...' : ''}
@@ -194,26 +197,41 @@ export const OrderList: React.FC<OrderListProps> = ({
         }
         
         return (
-          <div className="flex items-center space-x-2">
-            <Truck className="h-4 w-4 text-muted-foreground" />
-            <div>
-              {order.delivery.type === 'own' ? (
-                order.delivery.courier ? (
-                  <p className="text-sm">{order.delivery.courier}</p>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center space-x-2">
+              <Truck className="h-4 w-4 text-muted-foreground" />
+              <div>
+                {order.delivery.type === 'own' ? (
+                  order.delivery.courier ? (
+                    <p className="text-sm">{order.delivery.courier}</p>
+                  ) : (
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="h-8 px-2 text-xs"
+                      onClick={() => onAssignDelivery(order)}
+                    >
+                      {translations.assignDelivery}
+                    </Button>
+                  )
                 ) : (
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    className="h-8 px-2 text-xs"
-                    onClick={() => onAssignDelivery(order)}
-                  >
-                    Assign courier
-                  </Button>
-                )
-              ) : (
-                <p className="text-sm capitalize">{order.delivery.type}</p>
-              )}
+                  <p className="text-sm capitalize">{order.delivery.type}</p>
+                )}
+              </div>
             </div>
+            
+            {(order.status === 'ready' || order.status === 'delivering') && 
+             order.delivery.courier && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="h-7 px-2 text-xs flex items-center"
+                onClick={() => onAssignDelivery(order)}
+              >
+                <UserCog className="h-3 w-3 mr-1" />
+                {translations.changeCourier}
+              </Button>
+            )}
           </div>
         );
       },
@@ -221,7 +239,7 @@ export const OrderList: React.FC<OrderListProps> = ({
     // Status
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: translations.status,
       cell: ({ row }) => {
         return getStatusBadge(row.original.status);
       },
@@ -245,34 +263,42 @@ export const OrderList: React.FC<OrderListProps> = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuLabel>{translations.actions}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {nextStatuses.includes('preparing') && (
                 <DropdownMenuItem onClick={() => onStatusChange(order.id, 'preparing')}>
-                  Start Preparing
+                  {translations.preparing}
                 </DropdownMenuItem>
               )}
               {nextStatuses.includes('ready') && (
                 <DropdownMenuItem onClick={() => onStatusChange(order.id, 'ready')}>
-                  Mark as Ready
+                  {translations.ready}
                 </DropdownMenuItem>
               )}
               {nextStatuses.includes('delivering') && order.delivery.type !== 'pickup' && (
                 order.delivery.courier ? (
                   <DropdownMenuItem onClick={() => onStatusChange(order.id, 'delivering')}>
-                    Start Delivery
+                    {translations.delivering}
                   </DropdownMenuItem>
                 ) : (
                   <DropdownMenuItem onClick={() => onAssignDelivery(order)}>
-                    Assign Courier
+                    {translations.assignDelivery}
                   </DropdownMenuItem>
                 )
               )}
               {nextStatuses.includes('completed') && (
                 <DropdownMenuItem onClick={() => onStatusChange(order.id, 'completed')}>
-                  Complete Order
+                  {translations.completed}
                 </DropdownMenuItem>
               )}
+              
+              {(order.status === 'ready' || order.status === 'delivering') && 
+                order.delivery.courier && (
+                <DropdownMenuItem onClick={() => onAssignDelivery(order)}>
+                  {translations.changeCourier}
+                </DropdownMenuItem>
+              )}
+              
               {nextStatuses.includes('cancelled') && (
                 <>
                   <DropdownMenuSeparator />
@@ -280,7 +306,7 @@ export const OrderList: React.FC<OrderListProps> = ({
                     className="text-red-600"
                     onClick={() => onStatusChange(order.id, 'cancelled')}
                   >
-                    Cancel Order
+                    {translations.cancel}
                   </DropdownMenuItem>
                 </>
               )}

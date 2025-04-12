@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -32,6 +33,7 @@ import {
   CreditCard as CreditCardIcon
 } from "lucide-react";
 import { StoreSelector, Store as StoreType } from "@/components/dashboard/StoreSelector"; 
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface TeamMember {
   id: string;
@@ -51,6 +53,7 @@ interface StoreLocation {
 
 const SettingsPage = () => {
   const { toast } = useToast();
+  const { translations } = useLanguage();
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([
     { 
       id: '1', 
@@ -204,6 +207,20 @@ const SettingsPage = () => {
       title: "Store Removed",
       description: "The store location has been removed."
     });
+  };
+
+  const handleSelectAllStores = () => {
+    if (newTeamMember.stores.length === stores.length) {
+      setNewTeamMember({
+        ...newTeamMember,
+        stores: []
+      });
+    } else {
+      setNewTeamMember({
+        ...newTeamMember,
+        stores: stores.map(store => store.id)
+      });
+    }
   };
 
   return (
@@ -451,31 +468,46 @@ const SettingsPage = () => {
                         </select>
                       </div>
                       <div className="grid gap-2">
-                        <Label>Accessible Stores</Label>
-                        {stores.map((store) => (
-                          <div key={store.id} className="flex items-center space-x-2">
-                            <input
-                              type="checkbox"
-                              id={`store-${store.id}`}
-                              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                              checked={newTeamMember.stores.includes(store.id)}
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  setNewTeamMember({
-                                    ...newTeamMember,
-                                    stores: [...newTeamMember.stores, store.id]
-                                  });
-                                } else {
-                                  setNewTeamMember({
-                                    ...newTeamMember,
-                                    stores: newTeamMember.stores.filter(id => id !== store.id)
-                                  });
-                                }
-                              }}
-                            />
-                            <Label htmlFor={`store-${store.id}`}>{store.name}</Label>
-                          </div>
-                        ))}
+                        <div className="flex justify-between items-center">
+                          <Label>Accessible Stores</Label>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={handleSelectAllStores}
+                            className="mb-2"
+                          >
+                            {newTeamMember.stores.length === stores.length ? "Deselect All" : "Select All"}
+                          </Button>
+                        </div>
+                        <div className="max-h-40 overflow-y-auto border rounded-md p-2 space-y-2">
+                          {stores.map((store) => (
+                            <div key={store.id} className="flex items-center space-x-2">
+                              <Checkbox
+                                id={`store-${store.id}`}
+                                checked={newTeamMember.stores.includes(store.id)}
+                                onCheckedChange={(checked) => {
+                                  if (checked) {
+                                    setNewTeamMember({
+                                      ...newTeamMember,
+                                      stores: [...newTeamMember.stores, store.id]
+                                    });
+                                  } else {
+                                    setNewTeamMember({
+                                      ...newTeamMember,
+                                      stores: newTeamMember.stores.filter(id => id !== store.id)
+                                    });
+                                  }
+                                }}
+                              />
+                              <Label 
+                                htmlFor={`store-${store.id}`}
+                                className="text-sm cursor-pointer"
+                              >
+                                {store.name}
+                              </Label>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                     <DialogFooter>

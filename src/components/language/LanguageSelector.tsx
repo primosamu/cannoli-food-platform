@@ -16,19 +16,20 @@ export const LanguageSelector = () => {
 
   const handleLanguageChange = (value: string) => {
     setLanguage(value as Language);
+    // Force a re-render of the entire app by triggering a small state update
+    document.dispatchEvent(new CustomEvent('language-changed'));
   };
 
   // Force a re-render when language changes to ensure UI updates
   useEffect(() => {
     // This effect ensures that the component re-renders when language changes
-    // The empty dependency array means this effect runs once when the component mounts
   }, [language]);
 
   return (
     <Select onValueChange={handleLanguageChange} value={language} defaultValue={language}>
       <SelectTrigger className="w-[130px]">
         <Globe className="h-4 w-4 mr-2" />
-        <SelectValue placeholder="Language" />
+        <SelectValue placeholder={translations.language || "Language"} />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="en">{translations.english}</SelectItem>

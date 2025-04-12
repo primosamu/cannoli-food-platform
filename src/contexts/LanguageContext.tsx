@@ -20,6 +20,7 @@ export interface Translations {
   error: string;
   pleaseCompleteAllFields: string;
   use: string;
+  language: string;
   
   // Navigation
   dashboard: string;
@@ -153,6 +154,24 @@ export interface Translations {
   'loyaltyDescription': string;
   'consumption-patternDescription': string;
   'channel-migrationDescription': string;
+
+  // Image optimizer
+  imageOptimizer: string;
+  upload: string;
+  uploadImage: string;
+  basic: string;
+  filters: string;
+  brightness: string;
+  contrast: string;
+  saturation: string;
+  sharpness: string;
+  reset: string;
+  optimizeWithAI: string;
+  optimizing: string;
+  apply: string;
+  normal: string;
+  imageOptimized: string;
+  imageOptimizedDesc: string;
 }
 
 // Define translations
@@ -174,6 +193,7 @@ const translations: Record<Language, Translations> = {
     error: 'Error',
     pleaseCompleteAllFields: 'Please complete all fields',
     use: 'Use',
+    language: 'Language',
     
     // Navigation
     dashboard: 'Dashboard',
@@ -306,7 +326,25 @@ const translations: Record<Language, Translations> = {
     'customer-recoveryDescription': 'Win back customers who haven\'t ordered in a while',
     'loyaltyDescription': 'Reward and engage your loyal customers',
     'consumption-patternDescription': 'Encourage new consumption behaviors',
-    'channel-migrationDescription': 'Move customers from marketplaces to direct ordering'
+    'channel-migrationDescription': 'Move customers from marketplaces to direct ordering',
+
+    // Image optimizer
+    imageOptimizer: 'Image Optimizer',
+    upload: 'Upload',
+    uploadImage: 'Upload an image to start',
+    basic: 'Basic',
+    filters: 'Filters',
+    brightness: 'Brightness',
+    contrast: 'Contrast',
+    saturation: 'Saturation',
+    sharpness: 'Sharpness',
+    reset: 'Reset',
+    optimizeWithAI: 'Optimize with AI',
+    optimizing: 'Optimizing...',
+    apply: 'Apply',
+    normal: 'Normal',
+    imageOptimized: 'Image optimized',
+    imageOptimizedDesc: 'Your image has been optimized successfully'
   },
   pt: {
     // General
@@ -325,6 +363,7 @@ const translations: Record<Language, Translations> = {
     error: 'Erro',
     pleaseCompleteAllFields: 'Por favor, preencha todos os campos',
     use: 'Usar',
+    language: 'Idioma',
     
     // Navigation
     dashboard: 'Painel',
@@ -457,7 +496,25 @@ const translations: Record<Language, Translations> = {
     'customer-recoveryDescription': 'Recupere clientes que não fazem pedidos há algum tempo',
     'loyaltyDescription': 'Recompense e engaje seus clientes fiéis',
     'consumption-patternDescription': 'Incentive novos comportamentos de consumo',
-    'channel-migrationDescription': 'Mova clientes de marketplaces para pedidos diretos'
+    'channel-migrationDescription': 'Mova clientes de marketplaces para pedidos diretos',
+
+    // Image optimizer
+    imageOptimizer: 'Otimizador de Imagem',
+    upload: 'Enviar',
+    uploadImage: 'Carregue uma imagem para começar',
+    basic: 'Básico',
+    filters: 'Filtros',
+    brightness: 'Brilho',
+    contrast: 'Contraste',
+    saturation: 'Saturação',
+    sharpness: 'Nitidez',
+    reset: 'Redefinir',
+    optimizeWithAI: 'Otimizar com IA',
+    optimizing: 'Otimizando...',
+    apply: 'Aplicar',
+    normal: 'Normal',
+    imageOptimized: 'Imagem otimizada',
+    imageOptimizedDesc: 'Sua imagem foi otimizada com sucesso'
   },
   es: {
     // General
@@ -476,6 +533,7 @@ const translations: Record<Language, Translations> = {
     error: 'Error',
     pleaseCompleteAllFields: 'Por favor complete todos los campos',
     use: 'Usar',
+    language: 'Idioma',
     
     // Navigation
     dashboard: 'Panel',
@@ -608,7 +666,25 @@ const translations: Record<Language, Translations> = {
     'customer-recoveryDescription': 'Recupere clientes que no han pedido en un tiempo',
     'loyaltyDescription': 'Recompense y comprometa a sus clientes fieles',
     'consumption-patternDescription': 'Fomente nuevos comportamientos de consumo',
-    'channel-migrationDescription': 'Traslade clientes de marketplaces a pedidos directos'
+    'channel-migrationDescription': 'Traslade clientes de marketplaces a pedidos directos',
+
+    // Image optimizer
+    imageOptimizer: 'Optimizador de Imagen',
+    upload: 'Subir',
+    uploadImage: 'Sube una imagen para comenzar',
+    basic: 'Básico',
+    filters: 'Filtros',
+    brightness: 'Brillo',
+    contrast: 'Contraste',
+    saturation: 'Saturación',
+    sharpness: 'Nitidez',
+    reset: 'Reiniciar',
+    optimizeWithAI: 'Optimizar con IA',
+    optimizing: 'Optimizando...',
+    apply: 'Aplicar',
+    normal: 'Normal',
+    imageOptimized: 'Imagen optimizada',
+    imageOptimizedDesc: 'Tu imagen ha sido optimizada con éxito'
   }
 };
 

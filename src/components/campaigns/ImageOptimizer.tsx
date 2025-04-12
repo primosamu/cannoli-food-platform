@@ -21,6 +21,7 @@ import {
   Filter
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ImageOptimizerProps {
   onImageOptimized?: (imageUrl: string) => void;
@@ -38,9 +39,77 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
   const [hasImage, setHasImage] = useState(false);
   
   const { toast } = useToast();
+  const { translations, language } = useLanguage();
   
+  // Define text translations based on context
+  const texts = {
+    imageOptimizer: language === 'en' ? 'Image Optimizer' : 
+                   language === 'pt' ? 'Otimizador de Imagem' : 
+                   'Optimizador de Imagen',
+    upload: language === 'en' ? 'Upload' : 
+           language === 'pt' ? 'Enviar' : 
+           'Subir',
+    uploadImage: language === 'en' ? 'Upload an image to start' : 
+                language === 'pt' ? 'Carregue uma imagem para começar' : 
+                'Sube una imagen para comenzar',
+    basic: language === 'en' ? 'Basic' : 
+          language === 'pt' ? 'Básico' : 
+          'Básico',
+    filters: language === 'en' ? 'Filters' : 
+            language === 'pt' ? 'Filtros' : 
+            'Filtros',
+    presets: language === 'en' ? 'Presets' : 
+            language === 'pt' ? 'Predefinições' : 
+            'Preajustes',
+    brightness: language === 'en' ? 'Brightness' : 
+               language === 'pt' ? 'Brilho' : 
+               'Brillo',
+    contrast: language === 'en' ? 'Contrast' : 
+             language === 'pt' ? 'Contraste' : 
+             'Contraste',
+    saturation: language === 'en' ? 'Saturation' : 
+               language === 'pt' ? 'Saturação' : 
+               'Saturación',
+    sharpness: language === 'en' ? 'Sharpness' : 
+              language === 'pt' ? 'Nitidez' : 
+              'Nitidez',
+    reset: language === 'en' ? 'Reset' : 
+          language === 'pt' ? 'Redefinir' : 
+          'Reiniciar',
+    save: language === 'en' ? 'Save' : 
+         language === 'pt' ? 'Salvar' : 
+         'Guardar',
+    optimizeWithAI: language === 'en' ? 'Optimize with AI' : 
+                   language === 'pt' ? 'Otimizar com IA' : 
+                   'Optimizar con IA',
+    optimizing: language === 'en' ? 'Optimizing...' : 
+               language === 'pt' ? 'Otimizando...' : 
+               'Optimizando...',
+    apply: language === 'en' ? 'Apply' : 
+          language === 'pt' ? 'Aplicar' : 
+          'Aplicar',
+    normal: language === 'en' ? 'Normal' : 
+           language === 'pt' ? 'Normal' : 
+           'Normal',
+    imageSaved: language === 'en' ? 'Image saved' :
+               language === 'pt' ? 'Imagem salva' :
+               'Imagen guardada',
+    imageSavedDesc: language === 'en' ? 'Your image has been saved successfully' :
+                   language === 'pt' ? 'Sua imagem foi salva com sucesso' :
+                   'Tu imagen se ha guardado con éxito',
+    imageOptimizingDesc: language === 'en' ? 'Your image is being optimized with AI...' :
+                        language === 'pt' ? 'Sua imagem está sendo otimizada com IA...' :
+                        'Tu imagen se está optimizando con IA...',
+    imageOptimized: language === 'en' ? 'Image optimized' :
+                   language === 'pt' ? 'Imagem otimizada' :
+                   'Imagen optimizada',
+    imageOptimizedDesc: language === 'en' ? 'Your image has been optimized successfully' :
+                       language === 'pt' ? 'Sua imagem foi otimizada com sucesso' :
+                       'Tu imagen ha sido optimizada con éxito'
+  };
+
   const filters = [
-    { id: "none", name: "Normal", className: "" },
+    { id: "none", name: texts.normal, className: "" },
     { id: "vivid", name: "Vivid", className: "brightness-110 saturate-125" },
     { id: "warm", name: "Warm", className: "brightness-105 saturate-110 sepia-30" },
     { id: "cool", name: "Cool", className: "brightness-100 saturate-90 hue-rotate-15" },
@@ -50,8 +119,10 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
 
   const presets = [
     { 
-      name: "Vivid Food", 
-      description: "Makes food photos pop",
+      name: language === 'en' ? "Vivid Food" : language === 'pt' ? "Comida Vibrante" : "Comida Vibrante",
+      description: language === 'en' ? "Makes food photos pop" : 
+                  language === 'pt' ? "Faz as fotos de comida se destacarem" : 
+                  "Hace que las fotos de comida resalten",
       values: {
         brightness: 110,
         contrast: 115,
@@ -62,8 +133,10 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
       }
     },
     { 
-      name: "Menu Ready", 
-      description: "Perfect for menu photos",
+      name: language === 'en' ? "Menu Ready" : language === 'pt' ? "Pronto para Menu" : "Listo para Menú",
+      description: language === 'en' ? "Perfect for menu photos" : 
+                  language === 'pt' ? "Perfeito para fotos de cardápio" : 
+                  "Perfecto para fotos de menú",
       values: {
         brightness: 105,
         contrast: 110,
@@ -74,8 +147,10 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
       }
     },
     { 
-      name: "Professional", 
-      description: "Clean, professional look",
+      name: language === 'en' ? "Professional" : language === 'pt' ? "Profissional" : "Profesional",
+      description: language === 'en' ? "Clean, professional look" : 
+                  language === 'pt' ? "Visual limpo e profissional" : 
+                  "Aspecto limpio y profesional",
       values: {
         brightness: 100,
         contrast: 105,
@@ -91,8 +166,8 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
     setIsOptimizing(true);
     
     toast({
-      title: "Otimizando imagem",
-      description: "Sua imagem está sendo otimizada com IA...",
+      title: texts.imageOptimizing,
+      description: texts.imageOptimizingDesc,
     });
     
     // Simulate AI processing
@@ -108,8 +183,8 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
       setHasImage(true);
       
       toast({
-        title: "Imagem otimizada",
-        description: "Sua imagem foi otimizada com sucesso",
+        title: texts.imageOptimized,
+        description: texts.imageOptimizedDesc,
       });
       
       if (onImageOptimized) {
@@ -121,8 +196,10 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
   const handleUploadClick = () => {
     // Simulate file upload
     toast({
-      title: "Upload completo",
-      description: "Sua imagem foi carregada com sucesso",
+      title: language === 'en' ? "Upload complete" : language === 'pt' ? "Upload completo" : "Subida completa",
+      description: language === 'en' ? "Your image has been uploaded successfully" : 
+                  language === 'pt' ? "Sua imagem foi carregada com sucesso" : 
+                  "Tu imagen ha sido subida con éxito",
     });
     setHasImage(true);
   };
@@ -136,7 +213,9 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
     setCurrentFilter(preset.values.filter);
     
     toast({
-      title: `Preset ${preset.name} aplicado`,
+      title: language === 'en' ? `Preset ${preset.name} applied` : 
+             language === 'pt' ? `Predefinição ${preset.name} aplicada` : 
+             `Preajuste ${preset.name} aplicado`,
       description: preset.description,
     });
   };
@@ -145,10 +224,10 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
     <Card className="overflow-hidden">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium">Otimizador de Imagem</h3>
+          <h3 className="text-lg font-medium">{texts.imageOptimizer}</h3>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={handleUploadClick}>
-              <Upload className="h-4 w-4 mr-1" /> Enviar
+              <Upload className="h-4 w-4 mr-1" /> {texts.upload}
             </Button>
             <Button variant="ghost" size="sm" onClick={() => {
               if (hasImage) {
@@ -179,13 +258,13 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
           ) : (
             <div className="flex flex-col items-center text-muted-foreground">
               <ImageIcon className="h-8 w-8 mb-2" />
-              <p>Carregue uma imagem para começar</p>
+              <p>{texts.uploadImage}</p>
             </div>
           )}
           
           {hasImage && (
             <Badge className="absolute top-2 left-2 bg-background/80 text-foreground">
-              {filters.find(f => f.id === currentFilter)?.name || "Normal"}
+              {filters.find(f => f.id === currentFilter)?.name || texts.normal}
             </Badge>
           )}
         </div>
@@ -195,15 +274,15 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
             <TabsList className="w-full grid grid-cols-3">
               <TabsTrigger value="basic">
                 <SunMedium className="h-4 w-4 mr-2" />
-                Básico
+                {texts.basic}
               </TabsTrigger>
               <TabsTrigger value="filters">
                 <Filter className="h-4 w-4 mr-2" />
-                Filtros
+                {texts.filters}
               </TabsTrigger>
               <TabsTrigger value="presets">
                 <Sparkles className="h-4 w-4 mr-2" />
-                Presets
+                {texts.presets}
               </TabsTrigger>
             </TabsList>
             
@@ -213,7 +292,7 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                       <SunMedium className="h-4 w-4 text-primary" />
-                      <Label htmlFor="brightness">Brilho</Label>
+                      <Label htmlFor="brightness">{texts.brightness}</Label>
                     </div>
                     <div className="flex items-center gap-1">
                       <Button 
@@ -249,7 +328,7 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                       <Contrast className="h-4 w-4 text-primary" />
-                      <Label htmlFor="contrast">Contraste</Label>
+                      <Label htmlFor="contrast">{texts.contrast}</Label>
                     </div>
                     <div className="flex items-center gap-1">
                       <Button 
@@ -285,7 +364,7 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                       <Palette className="h-4 w-4 text-primary" />
-                      <Label htmlFor="saturation">Saturação</Label>
+                      <Label htmlFor="saturation">{texts.saturation}</Label>
                     </div>
                     <div className="flex items-center gap-1">
                       <Button 
@@ -321,7 +400,7 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                       <Filter className="h-4 w-4 text-primary" />
-                      <Label htmlFor="sharpness">Nitidez</Label>
+                      <Label htmlFor="sharpness">{texts.sharpness}</Label>
                     </div>
                     <div className="flex items-center gap-1">
                       <Button 
@@ -389,7 +468,7 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
                       <p className="text-xs text-muted-foreground">{preset.description}</p>
                     </div>
                     <Button size="sm" variant="ghost" className="flex-shrink-0">
-                      Apply
+                      {texts.apply}
                     </Button>
                   </div>
                 ))}
@@ -411,7 +490,7 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
           }}
           disabled={!hasImage}
         >
-          <RotateCw className="mr-2 h-4 w-4" /> Redefinir
+          <RotateCw className="mr-2 h-4 w-4" /> {texts.reset}
         </Button>
         <div className="flex gap-2">
           <Button 
@@ -419,12 +498,12 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
             disabled={!hasImage}
             onClick={() => {
               toast({
-                title: "Imagem salva",
-                description: "Sua imagem foi salva com sucesso",
+                title: texts.imageSaved,
+                description: texts.imageSavedDesc,
               });
             }}
           >
-            <SaveIcon className="mr-2 h-4 w-4" /> Salvar
+            <SaveIcon className="mr-2 h-4 w-4" /> {texts.save}
           </Button>
           <Button 
             onClick={handleOptimizeWithAI} 
@@ -433,11 +512,11 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
           >
             {isOptimizing ? (
               <>
-                <span className="animate-spin mr-2">⌛</span> Otimizando...
+                <span className="animate-spin mr-2">⌛</span> {texts.optimizing}
               </>
             ) : (
               <>
-                <Wand2 className="mr-2 h-4 w-4" /> Otimizar com IA
+                <Wand2 className="mr-2 h-4 w-4" /> {texts.optimizeWithAI}
                 <div className="absolute top-0 right-0 h-full w-12 bg-gradient-to-l from-primary/10 to-transparent" />
               </>
             )}

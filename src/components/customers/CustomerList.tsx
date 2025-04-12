@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,7 +12,7 @@ import {
   Mail,
   Calendar,
   Phone,
-  Database, // Replaced DatabaseSearch with Database
+  Database,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -293,38 +293,8 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
         </Button>
       </div>
 
-      <div className="rounded-md border">
-        <table className="w-full">
-          <thead className="bg-muted/50">
-            <tr>
-              {columns.map((column) => (
-                <th key={column.id || String(column.accessorKey)} className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
-                  {column.header as React.ReactNode}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {customers.map((customer) => (
-              <tr 
-                key={customer.id} 
-                className="border-t hover:bg-muted/50 cursor-pointer"
-                onClick={() => openCustomerDetails(customer)}
-              >
-                {columns.map((column) => {
-                  return (
-                    <td key={column.id || String(column.accessorKey)} className="p-4 align-middle">
-                      {column.cell && typeof column.cell === 'function' 
-                        ? column.cell({ row: { original: customer } })
-                        : null}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {/* Using DataTable component instead of custom table implementation */}
+      <DataTable columns={columns} data={customers} />
       
       {/* Customer Details Dialog */}
       <CustomerDetailDialog 

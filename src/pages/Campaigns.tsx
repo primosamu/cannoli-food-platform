@@ -52,14 +52,15 @@ const CampaignsPage = () => {
 
   useEffect(() => {
     if (location.state && location.state.createCampaign) {
-      setShowCreator(true);
-      setShowPresets(false);
+      setShowCreator(false);
+      setShowPresets(true);
       setShowSettings(false);
 
       if (location.state.category) {
         const templates = getTemplatesByCategory(location.state.category);
         if (templates && templates.length > 0) {
           setSelectedTemplate(templates[0]);
+          handlePresetSelect(templates[0]);
         }
       }
     }
@@ -111,7 +112,7 @@ const CampaignsPage = () => {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Campaign Settings</CardTitle>
+                <CardTitle>{selectedTemplate ? `Campaign Settings: ${selectedTemplate.name}` : 'Campaign Settings'}</CardTitle>
                 <CardDescription>
                   Configure your campaign audience, channels and delivery options
                 </CardDescription>

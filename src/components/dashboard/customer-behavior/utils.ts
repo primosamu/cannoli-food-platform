@@ -5,39 +5,39 @@ import React from "react";
 
 // Helper function to determine campaign category from segment
 export const getCategoryFromSegment = (segmentType?: string, segmentName?: string): string => {
-  // RFM segments
+  if (!segmentType || !segmentName) return "";
+  
+  // Check segment type and set appropriate category
+  if (segmentType.includes('recency') && segmentName.includes('>60 days')) {
+    return "customer-recovery";
+  } 
+  
   if (segmentType === 'rfm-segments') {
-    if (segmentName === 'Champions' || segmentName === 'Loyal' || segmentName === 'Potential Loyalist') {
-      return 'loyalty';
-    } else if (segmentName === 'At Risk' || segmentName === "Can't Lose" || segmentName === 'Hibernating' || segmentName === 'Lost') {
-      return 'customer-recovery';
+    if (segmentName.includes('Lost') || segmentName.includes('At Risk')) {
+      return "customer-recovery";
+    }
+    
+    if (segmentName.includes('Champion') || segmentName.includes('Loyal')) {
+      return "loyalty";
     }
   }
   
-  // Recency - people who haven't purchased in a while
-  if (segmentType === 'recency' && (segmentName?.includes(">60 days") || segmentName?.includes("45-60 days"))) {
-    return 'customer-recovery';
+  if (segmentType.includes('frequency') && segmentName.includes('orders')) {
+    return "loyalty";
+  } 
+  
+  if (segmentType === 'meal-preference' || segmentType === 'day-preference') {
+    return "consumption-pattern";
   }
   
-  // Frequency - loyal customers
-  if (segmentType === 'frequency' && (segmentName?.includes(">10 orders") || segmentName?.includes("6-10 orders"))) {
-    return 'loyalty';
+  if (segmentType === 'beverage-preference' || segmentType === 'dessert-preference') {
+    return "consumption-pattern";
   }
   
-  // Meal preference - change consumption patterns
-  if (segmentType === 'meal-preference') {
-    return 'consumption-pattern';
-  }
-  
-  // Day preference - weekday vs weekend
-  if (segmentType === 'day-preference') {
-    return 'consumption-pattern';
-  }
-  
-  // Default to generic template
-  return '';
+  return "";
 };
 
+// Get template icon based on campaign type
 export const getTemplateIcon = (type: CampaignType) => {
   switch (type) {
     case "whatsapp":
@@ -50,20 +50,5 @@ export const getTemplateIcon = (type: CampaignType) => {
       return React.createElement(PercentCircle, { className: "h-5 w-5 text-purple-600" });
     default:
       return null;
-  }
-};
-
-export const getTemplateTypeName = (type: CampaignType) => {
-  switch (type) {
-    case "whatsapp":
-      return "WhatsApp";
-    case "sms":
-      return "SMS";
-    case "email":
-      return "Email";
-    case "paid":
-      return "Tráfego Pago";
-    default:
-      return "Desconhecido";
   }
 };

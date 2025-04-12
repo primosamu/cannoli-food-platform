@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -28,7 +27,7 @@ import { Button } from "@/components/ui/button";
 import { sampleOrders } from "@/data/sampleOrders";
 import { sampleCustomers } from "@/data/sampleCustomers";
 import { OrderSummarySection } from "@/components/dashboard/OrderSummarySection";
-import { CustomerBehaviorSection } from "@/components/dashboard/CustomerBehaviorSection";
+import { CustomerBehaviorSection } from "@/components/dashboard/customer-behavior/CustomerBehaviorSection";
 
 const customerSegmentData = [
   { name: "Champions", value: 200 },

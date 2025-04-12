@@ -15,6 +15,7 @@ import {
   Store,
   Users,
   X,
+  ShoppingBag,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -23,6 +24,7 @@ const menuItems = [
   { path: '/menus', label: 'Menu Management', icon: <BookOpen className="h-5 w-5" /> },
   { path: '/customers', label: 'Customers', icon: <Users className="h-5 w-5" /> },
   { path: '/campaigns', label: 'Campaigns', icon: <MessageSquare className="h-5 w-5" /> },
+  { path: '/orders', label: 'Order Management', icon: <ShoppingBag className="h-5 w-5" /> },
   { path: '/calendar', label: 'Calendar', icon: <Calendar className="h-5 w-5" /> },
   { path: '/coupons', label: 'Coupons', icon: <PercentCircle className="h-5 w-5" /> },
   { path: '/loyalty', label: 'Loyalty & Points', icon: <CreditCard className="h-5 w-5" /> },

@@ -1,12 +1,11 @@
-
 import { sampleCustomers, getVipCustomers, getRegularCustomers, getNewCustomers } from "@/data/sampleCustomers";
 import { sampleOrders, getOrdersByCustomer, getOrdersByStatus } from "@/data/sampleOrders";
 import { sampleMenuItems, sampleCategories } from "@/data/sampleMenuData";
 import { sampleCampaigns } from "@/data/sampleCampaigns";
 import { sampleCouponData, getActiveCoupons } from "@/components/coupons/CouponSchema";
 import { sampleLoyaltyMembers, sampleLoyaltyRewards, samplePointTransactions, getTransactionsByCustomer } from "@/data/sampleLoyaltyData";
-import { MenuItem, MenuCategory } from "@/types/menu";
-import { Order } from "@/types/order";
+import { MenuItem, MenuCategory, MenuType } from "@/types/menu";
+import { Order, OrderStatus } from "@/types/order";
 import { Customer } from "@/components/customers/CustomerList";
 import { CampaignData } from "@/types/campaign";
 import { Coupon } from "@/components/coupons/CouponSchema";
@@ -114,7 +113,12 @@ export const DataConnector = {
     getPopularItems: (limit: number = 5): MenuItem[] => {
       // Sort by a popularity score (in a real app, this would be based on order data)
       return [...sampleMenuItems]
-        .sort((a, b) => (b.prices.regular || 0) - (a.prices.regular || 0))
+        .sort((a, b) => {
+          // Fix: Use 'delivery' price as the default for sorting instead of 'regular'
+          const priceA = a.prices.delivery || 0;
+          const priceB = b.prices.delivery || 0;
+          return priceB - priceA;
+        })
         .slice(0, limit);
     },
     getMostOrderedItems: (limit: number = 5) => {
@@ -145,7 +149,7 @@ export const DataConnector = {
   orders: {
     getAll: (): Order[] => sampleOrders,
     getById: (id: string): Order | undefined => sampleOrders.find(order => order.id === id),
-    getByStatus: (status: string) => getOrdersByStatus(status),
+    getByStatus: (status: OrderStatus) => getOrdersByStatus(status),
     getByCustomer: (customerId: string) => getOrdersByCustomer(customerId),
     getOrderWithMenuDetails: (orderId: string) => {
       const order = sampleOrders.find(o => o.id === orderId);

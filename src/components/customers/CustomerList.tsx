@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { ColumnDef, Row } from "@tanstack/react-table";
@@ -35,11 +34,14 @@ export interface Customer {
   email: string;
   phone: string;
   orderCount: number;
-  lastOrderDate: Date;
+  lastOrderDate?: Date;
   totalSpent: number;
   tags: string[];
   joinDate: Date;
-  cpf: string; // Added CPF (Brazilian customer ID)
+  cpf: string; // Brazilian personal ID
+  address?: string;
+  birthDate?: Date;
+  notes?: string;
 }
 
 interface CustomerListProps {
@@ -58,7 +60,6 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
   const [isPhoneEnrichmentOpen, setIsPhoneEnrichmentOpen] = useState(false);
   const [selectedCustomersForEnrichment, setSelectedCustomersForEnrichment] = useState<Customer[]>([]);
 
-  // Function to get initials from name
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -125,7 +126,6 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
   const confirmPhoneEnrichment = () => {
     if (selectedCustomersForEnrichment.length === 0) return;
 
-    // This would be replaced with an actual API call
     toast({
       title: "Phone enrichment complete",
       description: `Successfully enriched ${selectedCustomersForEnrichment.length} customer phone numbers.`,
@@ -293,17 +293,14 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
         </Button>
       </div>
 
-      {/* Using DataTable component instead of custom table implementation */}
       <DataTable columns={columns} data={customers} />
       
-      {/* Customer Details Dialog */}
       <CustomerDetailDialog 
         customer={selectedCustomer}
         isOpen={isDetailDialogOpen}
         onClose={() => setIsDetailDialogOpen(false)}
       />
 
-      {/* Quick Message Dialog */}
       <Dialog open={isMessageDialogOpen} onOpenChange={setIsMessageDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
@@ -341,7 +338,6 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
         </DialogContent>
       </Dialog>
 
-      {/* Quick Email Dialog */}
       <Dialog open={isEmailDialogOpen} onOpenChange={setIsEmailDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
@@ -376,7 +372,6 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
         </DialogContent>
       </Dialog>
 
-      {/* Phone Enrichment Dialog */}
       <Dialog open={isPhoneEnrichmentOpen} onOpenChange={setIsPhoneEnrichmentOpen}>
         <DialogContent>
           <DialogHeader>

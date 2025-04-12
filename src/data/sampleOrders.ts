@@ -109,6 +109,8 @@ const generateOrder = (
     courierId = `courier_${courier.split(" ")[0].toLowerCase()}`;
   }
   
+  const deliveryAddress = deliveryType !== "pickup" ? customer.address || "Av. Paulista, 1000, São Paulo" : undefined;
+  
   return {
     id,
     orderNumber,
@@ -116,7 +118,7 @@ const generateOrder = (
       id: customer.id,
       name: customer.name,
       phone: customer.phone,
-      address: deliveryType !== "pickup" ? (customer.address || "Av. Paulista, 1000, São Paulo") : undefined,
+      address: deliveryAddress,
     },
     items: selectedItems,
     channel,

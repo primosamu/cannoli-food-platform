@@ -1,5 +1,5 @@
 
-import { CampaignData, CampaignType, CampaignReportData } from "@/types/campaign";
+import { CampaignData, CampaignType, CampaignReportData, CustomerEngagement } from "@/types/campaign";
 import { sampleCustomers } from "./sampleCustomers";
 import { sampleMenuItems } from "./sampleMenuData";
 import { sampleCouponData } from "@/components/coupons/CouponSchema";
@@ -56,7 +56,7 @@ const generateCampaignReportData = (recipientCount: number): CampaignReportData 
   ] : [];
   
   // Generate sample customer engagements
-  const customerEngagements = sampleCustomers
+  const customerEngagements: CustomerEngagement[] = sampleCustomers
     .slice(0, openedCount)
     .map((customer, index) => {
       // First few customers clicked, others just opened or were delivered to

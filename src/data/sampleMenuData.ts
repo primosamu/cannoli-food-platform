@@ -1,6 +1,6 @@
 
 import { MenuItem, MenuCategory, MenuType, DeliveryPlatform } from "@/types/menu";
-import { randomBool, randomInt } from "@/utils/dataGenerationUtils";
+import { randomBool, randomInt, randomItem } from "@/utils/dataGenerationUtils";
 
 // Generate a more comprehensive menu dataset
 export const generateMenuCategories = (): MenuCategory[] => {

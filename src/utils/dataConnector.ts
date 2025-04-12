@@ -1,4 +1,3 @@
-
 import { sampleCustomers, getVipCustomers, getRegularCustomers, getNewCustomers } from "@/data/sampleCustomers";
 import { sampleOrders, getOrdersByCustomer, getOrdersByStatus } from "@/data/sampleOrders";
 import { sampleMenuItems, sampleCategories } from "@/data/sampleMenuData";
@@ -199,7 +198,7 @@ export const DataConnector = {
           audienceSize: campaign.audienceSize || 0,
           deliveredCount: campaign.deliveredCount || 0,
           openedCount: campaign.openedCount || 0,
-          clickedCount,
+          clickedCount: clickCount,
           estimatedConversions,
           estimatedRevenue,
           roi: campaign.reportData ? 

@@ -12,7 +12,7 @@ import {
   Mail,
   Calendar,
   Phone,
-  DatabaseSearch,
+  Database, // Replaced DatabaseSearch with Database
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -288,7 +288,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
           </p>
         </div>
         <Button variant="outline" onClick={handlePhoneEnrichment}>
-          <DatabaseSearch className="mr-2 h-4 w-4" />
+          <Database className="mr-2 h-4 w-4" />
           Complete Missing Phone Numbers
         </Button>
       </div>
@@ -299,7 +299,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
             <tr>
               {columns.map((column) => (
                 <th key={column.id || String(column.accessorKey)} className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
-                  {typeof column.header === 'function' ? column.header({}) : column.header}
+                  {column.header}
                 </th>
               ))}
             </tr>

@@ -6,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { getTemplateIcon } from "@/components/dashboard/customer-behavior/utils";
 import { CampaignTemplate } from "@/types/campaign";
+import { campaignTemplates } from "@/data/campaignTemplates";
 
 interface PresetCampaignsProps {
   onSelect: (template: CampaignTemplate) => void;
@@ -39,10 +40,12 @@ const presetCategories = [
   }
 ];
 
-const PresetCampaigns: React.FC<PresetCampaignsProps> = ({ onSelect }) => {
-  // Import the campaign templates from our data file
-  const { campaignTemplates, getTemplatesByCategory } = require("@/data/campaignTemplates");
+// Helper function to get templates by category
+const getTemplatesByCategory = (category: string): CampaignTemplate[] => {
+  return campaignTemplates.filter(template => template.category === category);
+};
 
+const PresetCampaigns: React.FC<PresetCampaignsProps> = ({ onSelect }) => {
   return (
     <div className="space-y-6">
       <div>
@@ -70,7 +73,7 @@ const PresetCampaigns: React.FC<PresetCampaignsProps> = ({ onSelect }) => {
               <CardContent className="p-0">
                 <ScrollArea className="h-64 px-6">
                   <div className="space-y-3 pb-6">
-                    {templates.map((template: CampaignTemplate) => (
+                    {templates.map((template) => (
                       <div 
                         key={template.id}
                         className="border rounded-md p-3 hover:bg-muted/50 cursor-pointer"

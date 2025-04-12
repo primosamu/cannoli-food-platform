@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -32,6 +31,7 @@ import {
   Receipt,
   CreditCard as CreditCardIcon
 } from "lucide-react";
+import { StoreSelector, Store as StoreType } from "@/components/dashboard/StoreSelector"; 
 
 interface TeamMember {
   id: string;
@@ -78,11 +78,16 @@ const SettingsPage = () => {
     }
   ]);
   
-  const [newTeamMember, setNewTeamMember] = useState({
+  const [newTeamMember, setNewTeamMember] = useState<{
+    name: string;
+    email: string;
+    role: 'admin' | 'manager' | 'staff';
+    stores: string[];
+  }>({
     name: '',
     email: '',
-    role: 'staff' as const,
-    stores: [] as string[]
+    role: 'staff',
+    stores: []
   });
 
   const [newStore, setNewStore] = useState({
@@ -99,6 +104,12 @@ const SettingsPage = () => {
 
   const [isTeamDialogOpen, setIsTeamDialogOpen] = useState(false);
   const [isStoreDialogOpen, setIsStoreDialogOpen] = useState(false);
+  
+  const [selectedStores, setSelectedStores] = useState<string[]>([]);
+  const storeOptions: StoreType[] = stores.map((store) => ({
+    id: store.id,
+    name: store.name
+  }));
 
   const handleSaveAccountDetails = () => {
     toast({
@@ -203,6 +214,14 @@ const SettingsPage = () => {
           <p className="text-muted-foreground">
             Manage your account, stores, and application preferences.
           </p>
+        </div>
+        
+        <div className="flex items-center">
+          <StoreSelector
+            stores={storeOptions}
+            selectedStores={selectedStores}
+            onStoreChange={setSelectedStores}
+          />
         </div>
       </div>
 

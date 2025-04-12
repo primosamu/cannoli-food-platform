@@ -8,18 +8,18 @@ export const getCategoryFromSegment = (segmentType?: string, segmentName?: strin
   if (segmentType === 'rfm-segments') {
     if (segmentName === 'Champions' || segmentName === 'Loyal' || segmentName === 'Potential Loyalist') {
       return 'loyalty';
-    } else if (segmentName === 'At Risk' || segmentName === 'Can\'t Lose' || segmentName === 'Hibernating' || segmentName === 'Lost') {
+    } else if (segmentName === 'At Risk' || segmentName === "Can't Lose" || segmentName === 'Hibernating' || segmentName === 'Lost') {
       return 'customer-recovery';
     }
   }
   
   // Recency - people who haven't purchased in a while
-  if (segmentType === 'recency' && (segmentName?.includes('>60 days') || segmentName?.includes('45-60 days'))) {
+  if (segmentType === 'recency' && (segmentName?.includes(">60 days") || segmentName?.includes("45-60 days"))) {
     return 'customer-recovery';
   }
   
   // Frequency - loyal customers
-  if (segmentType === 'frequency' && (segmentName?.includes('>10 orders') || segmentName?.includes('6-10 orders'))) {
+  if (segmentType === 'frequency' && (segmentName?.includes(">10 orders") || segmentName?.includes("6-10 orders"))) {
     return 'loyalty';
   }
   

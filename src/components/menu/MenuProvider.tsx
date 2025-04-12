@@ -1,75 +1,7 @@
-
 import React, { createContext, useContext, useState, ReactNode, useCallback } from "react";
 import { MenuItem, MenuCategory, MenuType, DeliveryPlatform } from "@/types/menu";
 import { toast } from "sonner";
-
-// Sample menu data
-const sampleCategories: MenuCategory[] = [
-  { id: "1", name: "Appetizers", description: "Start your meal right", active: true, order: 1 },
-  { id: "2", name: "Main Courses", description: "Our signature dishes", active: true, order: 2 },
-  { id: "3", name: "Pastas", description: "Italian specialties", active: true, order: 3 },
-  { id: "4", name: "Pizzas", description: "Hand-crafted pizzas", active: true, order: 4 },
-  { id: "5", name: "Desserts", description: "Sweet endings", active: true, order: 5 },
-  { id: "6", name: "Beverages", description: "Drinks and refreshments", active: true, order: 6 },
-];
-
-const sampleItems: MenuItem[] = [
-  {
-    id: "1",
-    name: "Garlic Bread",
-    description: "Toasted bread with garlic butter and herbs",
-    category: "1",
-    imageUrl: "https://images.unsplash.com/photo-1619096252214-ef06c45683e3?q=80&w=250",
-    prices: { delivery: 12.90, qr_table: 10.90, in_person: 10.90, self_service: 10.90 },
-    active: true,
-    status: "available",
-    platforms: { ifood: true, rappi: true, internal: true }
-  },
-  {
-    id: "2",
-    name: "Caesar Salad",
-    description: "Fresh romaine lettuce with Caesar dressing, croutons, and parmesan",
-    category: "1",
-    imageUrl: "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?q=80&w=250",
-    prices: { delivery: 24.90, qr_table: 22.90, in_person: 22.90 },
-    active: true,
-    status: "available",
-    platforms: { ifood: true, rappi: true, internal: true }
-  },
-  {
-    id: "3",
-    name: "Margherita Pizza",
-    description: "Classic pizza with tomato sauce, mozzarella, and fresh basil",
-    category: "4",
-    imageUrl: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?q=80&w=250",
-    prices: { delivery: 39.90, qr_table: 36.90, in_person: 36.90 },
-    active: true,
-    status: "available",
-    platforms: { ifood: true, rappi: true, internal: true }
-  },
-  {
-    id: "4",
-    name: "Pepperoni Pizza",
-    description: "Pizza with tomato sauce, mozzarella, and pepperoni",
-    category: "4",
-    imageUrl: "https://images.unsplash.com/photo-1628840042765-356cda07504e?q=80&w=250",
-    prices: { delivery: 45.90, qr_table: 42.90, in_person: 42.90 },
-    active: true,
-    status: "available",
-    platforms: { ifood: true, internal: true }
-  },
-  {
-    id: "5",
-    name: "Spaghetti Carbonara",
-    description: "Spaghetti with creamy sauce, bacon, and parmesan",
-    category: "3",
-    imageUrl: "https://images.unsplash.com/photo-1612874742237-6526221588e3?q=80&w=250",
-    prices: { delivery: 36.90, qr_table: 33.90, in_person: 33.90 },
-    active: true,
-    status: "available",
-    platforms: { ifood: true, rappi: true, internal: true }
-  }
-];
+import { sampleCategories, sampleMenuItems } from "@/data/sampleMenuData";
 
 interface MenuContextType {
   // Menu data
@@ -132,7 +64,7 @@ export const useMenu = () => {
 export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Menu data state
   const [categories, setCategories] = useState<MenuCategory[]>(sampleCategories);
-  const [menuItems, setMenuItems] = useState<MenuItem[]>(sampleItems);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(sampleMenuItems);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   

@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { MenuCatalog } from "@/components/menu/MenuCatalog";
 import { MenuSidePanel } from "@/components/menu/MenuSidePanel";
 import { MenuHeader } from "@/components/menu/MenuHeader";

@@ -1,77 +1,65 @@
 
 import { Customer } from "@/components/customers/CustomerList";
+import { randomItem, randomInt, randomBool, randomPastDate, generateCPF, generatePhoneNumber, generateEmail, generateAddress } from "@/utils/dataGenerationUtils";
 
-export const sampleCustomers: Customer[] = [
-  {
-    id: "cust-1",
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "(555) 123-4567",
-    orderCount: 12,
-    lastOrderDate: new Date("2025-04-02"),
-    totalSpent: 246.80,
-    tags: ["regular", "delivery"],
-    joinDate: new Date("2024-10-15"),
-    cpf: "123.456.789-00"
-  },
-  {
-    id: "cust-2",
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    phone: "(555) 987-6543",
-    orderCount: 8,
-    lastOrderDate: new Date("2025-03-28"),
-    totalSpent: 187.25,
-    tags: ["vip", "dine-in"],
-    joinDate: new Date("2024-11-03"),
-    cpf: "987.654.321-00"
-  },
-  {
-    id: "cust-3",
-    name: "Michael Johnson",
-    email: "michael.j@example.com",
-    phone: "",
-    orderCount: 15,
-    lastOrderDate: new Date("2025-04-05"),
-    totalSpent: 325.50,
-    tags: ["regular", "pickup"],
-    joinDate: new Date("2024-09-22"),
-    cpf: "111.222.333-44"
-  },
-  {
-    id: "cust-4",
-    name: "Emily Williams",
-    email: "emily.w@example.com",
-    phone: "",
-    orderCount: 6,
-    lastOrderDate: new Date("2025-03-15"),
-    totalSpent: 98.75,
-    tags: ["new", "delivery"],
-    joinDate: new Date("2025-01-10"),
-    cpf: "444.555.666-77"
-  },
-  {
-    id: "cust-5",
-    name: "Robert Brown",
-    email: "robert.b@example.com",
-    phone: "(555) 876-5432",
-    orderCount: 20,
-    lastOrderDate: new Date("2025-04-01"),
-    totalSpent: 487.30,
-    tags: ["vip", "catering"],
-    joinDate: new Date("2024-08-05"),
-    cpf: "777.888.999-00"
-  },
-  {
-    id: "cust-6",
-    name: "Sarah Davis",
-    email: "sarah.d@example.com",
-    phone: "(555) 345-6789",
-    orderCount: 9,
-    lastOrderDate: new Date("2025-03-25"),
-    totalSpent: 162.40,
-    tags: ["regular", "dine-in"],
-    joinDate: new Date("2024-12-12"),
-    cpf: "222.333.444-55"
-  }
+// First names and last names for generating customer data
+const firstNames = [
+  "João", "Maria", "Pedro", "Ana", "Lucas", "Juliana", "Gabriel", "Fernanda", "Rafael", "Mariana",
+  "Carlos", "Patricia", "Paulo", "Amanda", "Bruno", "Camila", "Daniel", "Aline", "Eduardo", "Bianca",
+  "Felipe", "Carla", "Gustavo", "Débora", "Henrique", "Elisa", "Igor", "Flávia", "José", "Gabriela",
+  "Leandro", "Helena", "Marcelo", "Isabela", "Nicolas", "Jéssica", "Otávio", "Karina", "Rodrigo", "Laura"
 ];
+
+const lastNames = [
+  "Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Ferreira", "Alves", "Lima", "Pereira", "Costa",
+  "Gomes", "Ribeiro", "Martins", "Carvalho", "Almeida", "Lopes", "Soares", "Fernandes", "Vieira", "Barbosa",
+  "Rocha", "Dias", "Nascimento", "Andrade", "Moreira", "Nunes", "Marques", "Machado", "Mendes", "Freitas",
+  "Cardoso", "Ramos", "Gonçalves", "Santana", "Teixeira", "Araújo", "Cavalcanti", "Pinto", "Correia", "Peixoto"
+];
+
+// Customer tags for segmentation
+const customerTags = ["regular", "vip", "new", "delivery", "dine-in", "pickup", "catering", "vegetarian", "family", "business"];
+
+// Generate a single customer
+const generateCustomer = (id: string): Customer => {
+  const firstName = randomItem(firstNames);
+  const lastName = randomItem(lastNames);
+  const name = `${firstName} ${lastName}`;
+  const joinDate = randomPastDate(500);
+  const orderCount = randomInt(0, 50);
+  const lastOrderDate = orderCount > 0 ? randomPastDate(60) : undefined;
+  const tags = Array.from(
+    { length: randomInt(1, 3) }, 
+    () => randomItem(customerTags)
+  ).filter((value, index, self) => self.indexOf(value) === index); // Remove duplicates
+  
+  return {
+    id,
+    name,
+    email: generateEmail(name),
+    phone: randomBool(0.9) ? generatePhoneNumber() : "",
+    orderCount,
+    lastOrderDate: lastOrderDate as Date | undefined,
+    totalSpent: Number((orderCount * randomInt(15, 80)).toFixed(2)),
+    tags,
+    joinDate,
+    cpf: generateCPF(),
+    address: randomBool(0.7) ? generateAddress() : undefined,
+    birthDate: randomBool(0.6) ? randomPastDate(10000) : undefined,
+    notes: randomBool(0.3) ? `Customer prefers ${randomItem(['quiet seating', 'window tables', 'quick service', 'extra attention'])}` : undefined
+  };
+};
+
+// Generate a larger sample of customers
+const generateManyCustomers = (count: number): Customer[] => {
+  return Array.from({ length: count }, (_, i) => generateCustomer(`cust-${i+1}`));
+};
+
+// Export a reasonable number of sample customers (100 for demo purposes)
+export const sampleCustomers: Customer[] = generateManyCustomers(100);
+
+// Helper functions for customer segments
+export const getVipCustomers = () => sampleCustomers.filter(c => c.tags.includes("vip"));
+export const getRegularCustomers = () => sampleCustomers.filter(c => c.tags.includes("regular"));
+export const getNewCustomers = () => sampleCustomers.filter(c => c.tags.includes("new"));
+export const getCustomersByTag = (tag: string) => sampleCustomers.filter(c => c.tags.includes(tag));

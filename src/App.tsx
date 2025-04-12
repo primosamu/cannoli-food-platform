@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +17,7 @@ import OrderManagement from "./pages/OrderManagement";
 import NotFound from "./pages/NotFound";
 import React from "react";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import DataInsightsPage from "./pages/DataInsights";
 
 function App() {
   // Create a client
@@ -41,6 +41,7 @@ function App() {
               <Route path="/orders" element={<Layout><OrderManagement /></Layout>} />
               <Route path="/integrations" element={<Layout><IntegrationsPage /></Layout>} />
               <Route path="/settings" element={<Layout><SettingsPage /></Layout>} />
+              <Route path="/data-insights" element={<DataInsightsPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

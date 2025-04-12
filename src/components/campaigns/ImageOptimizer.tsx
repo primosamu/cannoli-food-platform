@@ -43,54 +43,22 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
   
   // Define text translations based on context
   const texts = {
-    imageOptimizer: language === 'en' ? 'Image Optimizer' : 
-                   language === 'pt' ? 'Otimizador de Imagem' : 
-                   'Optimizador de Imagen',
-    upload: language === 'en' ? 'Upload' : 
-           language === 'pt' ? 'Enviar' : 
-           'Subir',
-    uploadImage: language === 'en' ? 'Upload an image to start' : 
-                language === 'pt' ? 'Carregue uma imagem para começar' : 
-                'Sube una imagen para comenzar',
-    basic: language === 'en' ? 'Basic' : 
-          language === 'pt' ? 'Básico' : 
-          'Básico',
-    filters: language === 'en' ? 'Filters' : 
-            language === 'pt' ? 'Filtros' : 
-            'Filtros',
-    presets: language === 'en' ? 'Presets' : 
-            language === 'pt' ? 'Predefinições' : 
-            'Preajustes',
-    brightness: language === 'en' ? 'Brightness' : 
-               language === 'pt' ? 'Brilho' : 
-               'Brillo',
-    contrast: language === 'en' ? 'Contrast' : 
-             language === 'pt' ? 'Contraste' : 
-             'Contraste',
-    saturation: language === 'en' ? 'Saturation' : 
-               language === 'pt' ? 'Saturação' : 
-               'Saturación',
-    sharpness: language === 'en' ? 'Sharpness' : 
-              language === 'pt' ? 'Nitidez' : 
-              'Nitidez',
-    reset: language === 'en' ? 'Reset' : 
-          language === 'pt' ? 'Redefinir' : 
-          'Reiniciar',
-    save: language === 'en' ? 'Save' : 
-         language === 'pt' ? 'Salvar' : 
-         'Guardar',
-    optimizeWithAI: language === 'en' ? 'Optimize with AI' : 
-                   language === 'pt' ? 'Otimizar com IA' : 
-                   'Optimizar con IA',
-    optimizing: language === 'en' ? 'Optimizing...' : 
-               language === 'pt' ? 'Otimizando...' : 
-               'Optimizando...',
-    apply: language === 'en' ? 'Apply' : 
-          language === 'pt' ? 'Aplicar' : 
-          'Aplicar',
-    normal: language === 'en' ? 'Normal' : 
-           language === 'pt' ? 'Normal' : 
-           'Normal',
+    imageOptimizer: translations.imageOptimizer,
+    upload: translations.upload,
+    uploadImage: translations.uploadImage,
+    basic: translations.basic,
+    filters: translations.filters,
+    presets: translations.presets,
+    brightness: translations.brightness,
+    contrast: translations.contrast,
+    saturation: translations.saturation,
+    sharpness: translations.sharpness,
+    reset: translations.reset,
+    save: translations.save,
+    optimizeWithAI: translations.optimizeWithAI,
+    optimizing: translations.optimizing,
+    apply: translations.apply,
+    normal: translations.normal,
     imageSaved: language === 'en' ? 'Image saved' :
                language === 'pt' ? 'Imagem salva' :
                'Imagen guardada',
@@ -100,12 +68,8 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
     imageOptimizingDesc: language === 'en' ? 'Your image is being optimized with AI...' :
                         language === 'pt' ? 'Sua imagem está sendo otimizada com IA...' :
                         'Tu imagen se está optimizando con IA...',
-    imageOptimized: language === 'en' ? 'Image optimized' :
-                   language === 'pt' ? 'Imagem otimizada' :
-                   'Imagen optimizada',
-    imageOptimizedDesc: language === 'en' ? 'Your image has been optimized successfully' :
-                       language === 'pt' ? 'Sua imagem foi otimizada com sucesso' :
-                       'Tu imagen ha sido optimizada con éxito'
+    imageOptimized: translations.imageOptimized,
+    imageOptimizedDesc: translations.imageOptimizedDesc
   };
 
   const filters = [
@@ -166,7 +130,7 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
     setIsOptimizing(true);
     
     toast({
-      title: texts.imageOptimizing,
+      title: texts.optimizing,
       description: texts.imageOptimizingDesc,
     });
     

@@ -23,6 +23,16 @@ export const LanguageSelector = () => {
   // Force a re-render when language changes to ensure UI updates
   useEffect(() => {
     // This effect ensures that the component re-renders when language changes
+    const handleLanguageEvent = () => {
+      // This is just to force a re-render when the language-changed event is dispatched
+      console.log("Language changed to:", language);
+    };
+    
+    document.addEventListener('language-changed', handleLanguageEvent);
+    
+    return () => {
+      document.removeEventListener('language-changed', handleLanguageEvent);
+    };
   }, [language]);
 
   return (

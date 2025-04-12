@@ -9,13 +9,15 @@ import {
   Image, 
   BarChart, 
   Calendar, 
-  Filter 
+  Filter,
+  Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "react-router-dom";
 import CampaignCreator from "@/components/campaigns/CampaignCreator";
 import CampaignList from "@/components/campaigns/CampaignList";
 import ImageOptimizer from "@/components/campaigns/ImageOptimizer";
+import PresetCampaigns from "@/components/campaigns/PresetCampaigns";
 import {
   getActiveCampaigns,
   getCompletedCampaigns,
@@ -32,12 +34,15 @@ import {
 } from "@/components/ui/dialog";
 import { getTemplatesByCategory } from "@/data/campaignTemplates";
 import { CampaignTemplate } from "@/types/campaign";
+import { useToast } from "@/components/ui/use-toast";
 
 const CampaignsPage = () => {
   const [activeTab, setActiveTab] = useState("active");
   const [showCreator, setShowCreator] = useState(false);
+  const [showPresets, setShowPresets] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<CampaignTemplate | null>(null);
   const location = useLocation();
+  const { toast } = useToast();
 
   // Get the campaigns for each tab
   const activeCampaigns = getActiveCampaigns();
@@ -61,27 +66,43 @@ const CampaignsPage = () => {
     }
   }, [location]);
 
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">Marketing Campaigns</h2>
-          <p className="text-muted-foreground">
-            Create and manage marketing campaigns for your restaurant.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" className="hidden md:flex items-center gap-2">
-            <Filter className="h-4 w-4" />
-            Filter
-          </Button>
-          <Button onClick={() => setShowCreator(true)}>
-            <PlusCircle className="mr-2 h-4 w-4" /> Create Campaign
-          </Button>
-        </div>
-      </div>
+  const handlePresetSelect = (template: CampaignTemplate) => {
+    setSelectedTemplate(template);
+    setShowCreator(true);
+    setShowPresets(false);
+    
+    toast({
+      title: "Template selected",
+      description: `${template.name} template loaded successfully.`,
+    });
+  };
 
-      {showCreator ? (
+  const renderContent = () => {
+    if (showPresets) {
+      return (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Preset Campaigns</CardTitle>
+                <CardDescription>
+                  Choose from ready-to-use campaign templates
+                </CardDescription>
+              </div>
+              <Button variant="outline" onClick={() => setShowPresets(false)}>
+                Back to List
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <PresetCampaigns onSelect={handlePresetSelect} />
+          </CardContent>
+        </Card>
+      );
+    }
+    
+    if (showCreator) {
+      return (
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -143,67 +164,108 @@ const CampaignsPage = () => {
             </Tabs>
           </CardContent>
         </Card>
-      ) : (
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle>All Campaigns</CardTitle>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" className="hidden md:flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  Schedule
-                </Button>
-                <Button variant="outline" size="sm" className="hidden md:flex items-center gap-2">
-                  <BarChart className="h-4 w-4" />
-                  Analytics
-                </Button>
-              </div>
+      );
+    }
+    
+    return (
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle>All Campaigns</CardTitle>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" className="hidden md:flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                Schedule
+              </Button>
+              <Button variant="outline" size="sm" className="hidden md:flex items-center gap-2">
+                <BarChart className="h-4 w-4" />
+                Analytics
+              </Button>
             </div>
-          </CardHeader>
-          <CardContent className="p-0">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="p-0">
-              <TabsList className="grid w-full grid-cols-4 rounded-none border-b bg-transparent p-0">
-                <TabsTrigger 
-                  value="active" 
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
-                >
-                  Active
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="scheduled" 
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
-                >
-                  Scheduled
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="completed" 
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
-                >
-                  Completed
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="drafts" 
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
-                >
-                  Drafts
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="active" className="p-6">
-                <CampaignList campaigns={activeCampaigns} type="active" />
-              </TabsContent>
-              <TabsContent value="scheduled" className="p-6">
-                <CampaignList campaigns={scheduledCampaigns} type="scheduled" />
-              </TabsContent>
-              <TabsContent value="completed" className="p-6">
-                <CampaignList campaigns={completedCampaigns} type="completed" />
-              </TabsContent>
-              <TabsContent value="drafts" className="p-6">
-                <CampaignList campaigns={draftCampaigns} type="draft" />
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-      )}
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="p-0">
+            <TabsList className="grid w-full grid-cols-4 rounded-none border-b bg-transparent p-0">
+              <TabsTrigger 
+                value="active" 
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
+              >
+                Active
+              </TabsTrigger>
+              <TabsTrigger 
+                value="scheduled" 
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
+              >
+                Scheduled
+              </TabsTrigger>
+              <TabsTrigger 
+                value="completed" 
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
+              >
+                Completed
+              </TabsTrigger>
+              <TabsTrigger 
+                value="drafts" 
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
+              >
+                Drafts
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="active" className="p-6">
+              <CampaignList campaigns={activeCampaigns} type="active" />
+            </TabsContent>
+            <TabsContent value="scheduled" className="p-6">
+              <CampaignList campaigns={scheduledCampaigns} type="scheduled" />
+            </TabsContent>
+            <TabsContent value="completed" className="p-6">
+              <CampaignList campaigns={completedCampaigns} type="completed" />
+            </TabsContent>
+            <TabsContent value="drafts" className="p-6">
+              <CampaignList campaigns={draftCampaigns} type="draft" />
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight">Marketing Campaigns</h2>
+          <p className="text-muted-foreground">
+            Create and manage marketing campaigns for your restaurant.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            className="items-center gap-2"
+            onClick={() => {
+              setShowPresets(true);
+              setShowCreator(false);
+            }}
+          >
+            <Sparkles className="h-4 w-4" />
+            <span className="hidden md:inline">Preset Campaigns</span>
+            <span className="inline md:hidden">Presets</span>
+          </Button>
+          <Button variant="outline" className="hidden md:flex items-center gap-2">
+            <Filter className="h-4 w-4" />
+            Filter
+          </Button>
+          <Button onClick={() => {
+            setShowCreator(true);
+            setShowPresets(false);
+          }}>
+            <PlusCircle className="mr-2 h-4 w-4" /> Create Campaign
+          </Button>
+        </div>
+      </div>
+
+      {renderContent()}
 
       {/* Floating help button with templates info */}
       <Dialog>
@@ -245,7 +307,7 @@ const CampaignsPage = () => {
               </ul>
             </div>
             <p className="text-sm text-muted-foreground">
-              Click on "Create Campaign" and select a template to get started quickly.
+              Click on "Preset Campaigns" to quickly select a pre-configured campaign for common marketing needs.
             </p>
           </div>
         </DialogContent>

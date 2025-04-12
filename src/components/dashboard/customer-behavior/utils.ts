@@ -52,3 +52,19 @@ export const getTemplateIcon = (type: CampaignType) => {
       return null;
   }
 };
+
+// Added back for use in TemplateSelector
+export const getTemplateTypeName = (type: CampaignType) => {
+  switch (type) {
+    case "whatsapp":
+      return "WhatsApp";
+    case "sms":
+      return "SMS";
+    case "email":
+      return "Email";
+    case "paid":
+      return "Tráfego Pago";
+    default:
+      return "Desconhecido";
+  }
+};

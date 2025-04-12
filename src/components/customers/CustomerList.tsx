@@ -182,10 +182,15 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
       accessorKey: "lastOrderDate",
       header: "Last Order",
       cell: ({ row }) => {
+        const lastOrderDate = row.original.lastOrderDate;
         return (
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span>{format(row.original.lastOrderDate, "MMM dd, yyyy")}</span>
+            <span>
+              {lastOrderDate instanceof Date && !isNaN(lastOrderDate.getTime())
+                ? format(lastOrderDate, "MMM dd, yyyy")
+                : "No orders yet"}
+            </span>
           </div>
         );
       },

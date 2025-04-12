@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -452,7 +451,7 @@ export const CustomerBehaviorSection = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Dessert className="h-5 w-5" />
+                <Utensils className="h-5 w-5" />
                 Customers per Dessert
               </CardTitle>
               <CardDescription>

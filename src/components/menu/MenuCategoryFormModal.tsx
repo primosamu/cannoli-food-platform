@@ -82,11 +82,11 @@ export const MenuCategoryFormModal = () => {
         ...values,
       });
     } else {
-      // Ensure required fields are present
+      // Ensure all required fields are present
       addCategory({
-        name: values.name,
+        name: values.name, // This is required
         description: values.description || "",
-        active: values.active,
+        active: values.active, // This is required
         order: values.order || categories.length + 1,
       });
     }

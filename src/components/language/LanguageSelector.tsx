@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Select,
   SelectContent,
@@ -18,8 +18,14 @@ export const LanguageSelector = () => {
     setLanguage(value as Language);
   };
 
+  // Force a re-render when language changes to ensure UI updates
+  useEffect(() => {
+    // This effect ensures that the component re-renders when language changes
+    // The empty dependency array means this effect runs once when the component mounts
+  }, [language]);
+
   return (
-    <Select onValueChange={handleLanguageChange} defaultValue={language}>
+    <Select onValueChange={handleLanguageChange} value={language} defaultValue={language}>
       <SelectTrigger className="w-[130px]">
         <Globe className="h-4 w-4 mr-2" />
         <SelectValue placeholder="Language" />

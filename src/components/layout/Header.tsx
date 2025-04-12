@@ -39,7 +39,7 @@ export function Header() {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
             <Input
               type="search"
-              placeholder="Search..."
+              placeholder={translations.search}
               className="w-64 pl-8 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:ring-cannoli-500"
             />
           </form>

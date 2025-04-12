@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { sampleOrders } from '@/data/sampleOrders';
 import { sampleCouriers } from '@/data/sampleCouriers';
-import { Order, Courier, DeliveryType } from '@/types/order';
+import { Order, Courier, DeliveryType, DeliveryCompany } from '@/types/order';
 import { Button } from '@/components/ui/button';
 import { OrderKanban } from '@/components/orders/OrderKanban';
 import { OrderList } from '@/components/orders/OrderList';
@@ -113,7 +113,7 @@ const OrderManagement = () => {
     type: DeliveryType,
     courier?: string,
     courierId?: string,
-    company?: string
+    company?: DeliveryCompany
   }) => {
     setOrders(prevOrders => prevOrders.map(order => {
       if (order.id === orderId) {
@@ -209,190 +209,193 @@ const OrderManagement = () => {
           </div>
         </div>
 
-        <TabsContent value="orders" className="mt-0">
-          <div className="flex justify-end items-center gap-2 mb-4">
-            {/* View toggle */}
-            <div className="flex border rounded-md overflow-hidden">
+        {/* Wrap all content in a single Tabs component */}
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className="mt-0">
+          <TabsContent value="orders" className="mt-0">
+            <div className="flex justify-end items-center gap-2 mb-4">
+              {/* View toggle */}
+              <div className="flex border rounded-md overflow-hidden">
+                <Button 
+                  variant={view === 'kanban' ? 'default' : 'ghost'} 
+                  size="sm"
+                  className={`rounded-none ${view === 'kanban' ? '' : 'text-gray-500'}`}
+                  onClick={() => setView('kanban')}
+                >
+                  <LayoutGrid className="h-4 w-4 mr-1" />
+                  {translations.kanban}
+                </Button>
+                <Button 
+                  variant={view === 'list' ? 'default' : 'ghost'} 
+                  size="sm"
+                  className={`rounded-none ${view === 'list' ? '' : 'text-gray-500'}`}
+                  onClick={() => setView('list')}
+                >
+                  <List className="h-4 w-4 mr-1" />
+                  {translations.list}
+                </Button>
+              </div>
+              
+              {/* Show completed/cancelled toggle */}
               <Button 
-                variant={view === 'kanban' ? 'default' : 'ghost'} 
+                variant={showCompleted ? 'default' : 'outline'} 
                 size="sm"
-                className={`rounded-none ${view === 'kanban' ? '' : 'text-gray-500'}`}
-                onClick={() => setView('kanban')}
+                onClick={() => setShowCompleted(!showCompleted)}
               >
-                <LayoutGrid className="h-4 w-4 mr-1" />
-                {translations.kanban}
+                {showCompleted ? translations.hide : translations.show} {translations.completed}
               </Button>
-              <Button 
-                variant={view === 'list' ? 'default' : 'ghost'} 
-                size="sm"
-                className={`rounded-none ${view === 'list' ? '' : 'text-gray-500'}`}
-                onClick={() => setView('list')}
-              >
-                <List className="h-4 w-4 mr-1" />
-                {translations.list}
-              </Button>
+              
+              {/* Channel filter dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Filter className="h-4 w-4 mr-1" />
+                    {translations.channels}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuCheckboxItem
+                    checked={selectedChannels.mobile}
+                    onCheckedChange={() => toggleChannel('mobile')}
+                  >
+                    <Phone className="h-4 w-4 mr-2 text-blue-500" />
+                    {translations.mobile}
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    checked={selectedChannels.totem}
+                    onCheckedChange={() => toggleChannel('totem')}
+                  >
+                    <MonitorSmartphone className="h-4 w-4 mr-2 text-amber-500" />
+                    {translations.totem}
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    checked={selectedChannels.whatsapp}
+                    onCheckedChange={() => toggleChannel('whatsapp')}
+                  >
+                    <Phone className="h-4 w-4 mr-2 text-green-500" />
+                    {translations.whatsapp}
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    checked={selectedChannels.app}
+                    onCheckedChange={() => toggleChannel('app')}
+                  >
+                    <ShoppingBag className="h-4 w-4 mr-2 text-purple-500" />
+                    {translations.app}
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    checked={selectedChannels.ifood}
+                    onCheckedChange={() => toggleChannel('ifood')}
+                  >
+                    <Store className="h-4 w-4 mr-2 text-red-500" />
+                    {translations.ifood}
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    checked={selectedChannels.rappi}
+                    onCheckedChange={() => toggleChannel('rappi')}
+                  >
+                    <Store className="h-4 w-4 mr-2 text-orange-500" />
+                    {translations.rappi}
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    checked={selectedChannels.other}
+                    onCheckedChange={() => toggleChannel('other')}
+                  >
+                    <Store className="h-4 w-4 mr-2 text-gray-500" />
+                    {translations.other}
+                  </DropdownMenuCheckboxItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Order statistics */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+              <Card>
+                <CardHeader className="py-3">
+                  <CardTitle className="text-sm font-medium">{translations.newOrders}</CardTitle>
+                </CardHeader>
+                <CardContent className="py-0">
+                  <div className="text-2xl font-bold">
+                    {orders.filter(o => o.status === 'new').length}
+                  </div>
+                </CardContent>
+                <CardFooter className="py-3 text-xs text-muted-foreground">
+                  {translations.waitingToBePrepared}
+                </CardFooter>
+              </Card>
+              
+              <Card>
+                <CardHeader className="py-3">
+                  <CardTitle className="text-sm font-medium">{translations.preparing}</CardTitle>
+                </CardHeader>
+                <CardContent className="py-0">
+                  <div className="text-2xl font-bold">
+                    {orders.filter(o => o.status === 'preparing').length}
+                  </div>
+                </CardContent>
+                <CardFooter className="py-3 text-xs text-muted-foreground">
+                  {translations.currentlyInPreparation}
+                </CardFooter>
+              </Card>
+              
+              <Card>
+                <CardHeader className="py-3">
+                  <CardTitle className="text-sm font-medium">{translations.ready}</CardTitle>
+                </CardHeader>
+                <CardContent className="py-0">
+                  <div className="text-2xl font-bold">
+                    {orders.filter(o => o.status === 'ready').length}
+                  </div>
+                </CardContent>
+                <CardFooter className="py-3 text-xs text-muted-foreground">
+                  {translations.readyForPickupDelivery}
+                </CardFooter>
+              </Card>
+              
+              <Card>
+                <CardHeader className="py-3">
+                  <CardTitle className="text-sm font-medium">{translations.delivering}</CardTitle>
+                </CardHeader>
+                <CardContent className="py-0">
+                  <div className="text-2xl font-bold">
+                    {orders.filter(o => o.status === 'delivering').length}
+                  </div>
+                </CardContent>
+                <CardFooter className="py-3 text-xs text-muted-foreground">
+                  {translations.outForDelivery}
+                </CardFooter>
+              </Card>
             </div>
             
-            {/* Show completed/cancelled toggle */}
-            <Button 
-              variant={showCompleted ? 'default' : 'outline'} 
-              size="sm"
-              onClick={() => setShowCompleted(!showCompleted)}
-            >
-              {showCompleted ? translations.hide : translations.show} {translations.completed}
-            </Button>
-            
-            {/* Channel filter dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <Filter className="h-4 w-4 mr-1" />
-                  {translations.channels}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuCheckboxItem
-                  checked={selectedChannels.mobile}
-                  onCheckedChange={() => toggleChannel('mobile')}
-                >
-                  <Phone className="h-4 w-4 mr-2 text-blue-500" />
-                  {translations.mobile}
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={selectedChannels.totem}
-                  onCheckedChange={() => toggleChannel('totem')}
-                >
-                  <MonitorSmartphone className="h-4 w-4 mr-2 text-amber-500" />
-                  {translations.totem}
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={selectedChannels.whatsapp}
-                  onCheckedChange={() => toggleChannel('whatsapp')}
-                >
-                  <Phone className="h-4 w-4 mr-2 text-green-500" />
-                  {translations.whatsapp}
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={selectedChannels.app}
-                  onCheckedChange={() => toggleChannel('app')}
-                >
-                  <ShoppingBag className="h-4 w-4 mr-2 text-purple-500" />
-                  {translations.app}
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={selectedChannels.ifood}
-                  onCheckedChange={() => toggleChannel('ifood')}
-                >
-                  <Store className="h-4 w-4 mr-2 text-red-500" />
-                  {translations.ifood}
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={selectedChannels.rappi}
-                  onCheckedChange={() => toggleChannel('rappi')}
-                >
-                  <Store className="h-4 w-4 mr-2 text-orange-500" />
-                  {translations.rappi}
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={selectedChannels.other}
-                  onCheckedChange={() => toggleChannel('other')}
-                >
-                  <Store className="h-4 w-4 mr-2 text-gray-500" />
-                  {translations.other}
-                </DropdownMenuCheckboxItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          {/* Order statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-            <Card>
-              <CardHeader className="py-3">
-                <CardTitle className="text-sm font-medium">{translations.newOrders}</CardTitle>
-              </CardHeader>
-              <CardContent className="py-0">
-                <div className="text-2xl font-bold">
-                  {orders.filter(o => o.status === 'new').length}
-                </div>
-              </CardContent>
-              <CardFooter className="py-3 text-xs text-muted-foreground">
-                {translations.waitingToBePrepared}
-              </CardFooter>
-            </Card>
-            
-            <Card>
-              <CardHeader className="py-3">
-                <CardTitle className="text-sm font-medium">{translations.preparing}</CardTitle>
-              </CardHeader>
-              <CardContent className="py-0">
-                <div className="text-2xl font-bold">
-                  {orders.filter(o => o.status === 'preparing').length}
-                </div>
-              </CardContent>
-              <CardFooter className="py-3 text-xs text-muted-foreground">
-                {translations.currentlyInPreparation}
-              </CardFooter>
-            </Card>
-            
-            <Card>
-              <CardHeader className="py-3">
-                <CardTitle className="text-sm font-medium">{translations.ready}</CardTitle>
-              </CardHeader>
-              <CardContent className="py-0">
-                <div className="text-2xl font-bold">
-                  {orders.filter(o => o.status === 'ready').length}
-                </div>
-              </CardContent>
-              <CardFooter className="py-3 text-xs text-muted-foreground">
-                {translations.readyForPickupDelivery}
-              </CardFooter>
-            </Card>
-            
-            <Card>
-              <CardHeader className="py-3">
-                <CardTitle className="text-sm font-medium">{translations.delivering}</CardTitle>
-              </CardHeader>
-              <CardContent className="py-0">
-                <div className="text-2xl font-bold">
-                  {orders.filter(o => o.status === 'delivering').length}
-                </div>
-              </CardContent>
-              <CardFooter className="py-3 text-xs text-muted-foreground">
-                {translations.outForDelivery}
-              </CardFooter>
-            </Card>
-          </div>
+            {/* Orders view (kanban or list) */}
+            {view === 'kanban' ? (
+              <OrderKanban 
+                orders={filteredOrders} 
+                onStatusChange={handleStatusChange}
+                onAssignDelivery={handleAssignDelivery}
+                showCompleted={showCompleted}
+              />
+            ) : (
+              <OrderList 
+                orders={filteredOrders} 
+                onStatusChange={handleStatusChange}
+                onAssignDelivery={handleAssignDelivery}
+              />
+            )}
+          </TabsContent>
           
-          {/* Orders view (kanban or list) */}
-          {view === 'kanban' ? (
-            <OrderKanban 
-              orders={filteredOrders} 
-              onStatusChange={handleStatusChange}
-              onAssignDelivery={handleAssignDelivery}
-              showCompleted={showCompleted}
+          {/* Couriers tab */}
+          <TabsContent value="couriers" className="mt-0">
+            <CourierManagement 
+              couriers={couriers} 
+              onAddCourier={handleAddCourier}
+              onToggleAvailability={handleToggleCourierAvailability}
             />
-          ) : (
-            <OrderList 
-              orders={filteredOrders} 
-              onStatusChange={handleStatusChange}
-              onAssignDelivery={handleAssignDelivery}
-            />
-          )}
-        </TabsContent>
-        
-        {/* Couriers tab */}
-        <TabsContent value="couriers" className="mt-0">
-          <CourierManagement 
-            couriers={couriers} 
-            onAddCourier={handleAddCourier}
-            onToggleAvailability={handleToggleCourierAvailability}
-          />
-        </TabsContent>
-        
-        {/* Reports tab */}
-        <TabsContent value="reports" className="mt-0">
-          <DeliveryReport orders={orders} couriers={couriers} />
-        </TabsContent>
+          </TabsContent>
+          
+          {/* Reports tab */}
+          <TabsContent value="reports" className="mt-0">
+            <DeliveryReport orders={orders} couriers={couriers} />
+          </TabsContent>
+        </Tabs>
       </div>
       
       {/* Courier assignment dialog */}
@@ -408,4 +411,3 @@ const OrderManagement = () => {
 };
 
 export default OrderManagement;
-

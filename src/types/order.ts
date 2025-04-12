@@ -53,4 +53,3 @@ export interface Order {
   };
   notes?: string;
 }
-

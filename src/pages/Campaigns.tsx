@@ -39,7 +39,7 @@ import { useToast } from "@/components/ui/use-toast";
 const CampaignsPage = () => {
   const [activeTab, setActiveTab] = useState("active");
   const [showCreator, setShowCreator] = useState(false);
-  const [showPresets, setShowPresets] = useState(false);
+  const [showPresets, setShowPresets] = useState(true); // Changed to true to show presets by default
   const [selectedTemplate, setSelectedTemplate] = useState<CampaignTemplate | null>(null);
   const location = useLocation();
   const { toast } = useToast();
@@ -54,6 +54,7 @@ const CampaignsPage = () => {
   useEffect(() => {
     if (location.state && location.state.createCampaign) {
       setShowCreator(true);
+      setShowPresets(false); // Hide presets when creating campaign from another page
 
       // Check if we have a category to select a template
       if (location.state.category) {
@@ -89,8 +90,11 @@ const CampaignsPage = () => {
                   Choose from ready-to-use campaign templates
                 </CardDescription>
               </div>
-              <Button variant="outline" onClick={() => setShowPresets(false)}>
-                Back to List
+              <Button variant="outline" onClick={() => {
+                setShowPresets(false);
+                setShowCreator(false);
+              }}>
+                View All Campaigns
               </Button>
             </div>
           </CardHeader>
@@ -240,18 +244,20 @@ const CampaignsPage = () => {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            className="items-center gap-2"
-            onClick={() => {
-              setShowPresets(true);
-              setShowCreator(false);
-            }}
-          >
-            <Sparkles className="h-4 w-4" />
-            <span className="hidden md:inline">Preset Campaigns</span>
-            <span className="inline md:hidden">Presets</span>
-          </Button>
+          {!showPresets && (
+            <Button 
+              variant="outline" 
+              className="items-center gap-2"
+              onClick={() => {
+                setShowPresets(true);
+                setShowCreator(false);
+              }}
+            >
+              <Sparkles className="h-4 w-4" />
+              <span className="hidden md:inline">Preset Campaigns</span>
+              <span className="inline md:hidden">Presets</span>
+            </Button>
+          )}
           <Button variant="outline" className="hidden md:flex items-center gap-2">
             <Filter className="h-4 w-4" />
             Filter

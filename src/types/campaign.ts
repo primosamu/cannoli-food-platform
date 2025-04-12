@@ -1,4 +1,5 @@
 
+
 export type CampaignType = 'whatsapp' | 'sms' | 'email' | 'paid';
 
 export type CampaignTemplate = {
@@ -10,6 +11,7 @@ export type CampaignTemplate = {
   description: string;
   imageUrl?: string;
   platform?: string; // For paid traffic (meta, google, etc)
+  category?: string; // Added category field
 };
 
 export type CampaignData = {
@@ -38,3 +40,4 @@ export interface CampaignEvent {
   endDate?: Date;
   type: CampaignType;
 }
+

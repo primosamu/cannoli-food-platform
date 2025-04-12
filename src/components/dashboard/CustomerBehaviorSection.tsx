@@ -19,6 +19,7 @@ import {
   Sun,
 } from "lucide-react";
 import { DollarSign } from "./DollarSign";
+import { DesertPreference } from "./DesertPreference";
 import { 
   PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, 
   Legend, ResponsiveContainer, BarChart, Bar, ComposedChart, Area, Radar, 
@@ -360,7 +361,10 @@ export const CustomerBehaviorSection = () => {
                   }}
                 />
                 {rfmSegmentsData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.fill} content={<CustomizedTreemapContent />} />
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={entry.fill} 
+                  />
                 ))}
               </Treemap>
             </ResponsiveContainer>

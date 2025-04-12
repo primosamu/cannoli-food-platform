@@ -169,7 +169,90 @@ const enTranslations: Translations = {
   apply: 'Apply',
   normal: 'Normal',
   imageOptimized: 'Image optimized',
-  imageOptimizedDesc: 'Your image has been optimized successfully'
+  imageOptimizedDesc: 'Your image has been optimized successfully',
+
+  // Dashboard
+  overview: 'Overview',
+  detailedAnalytics: 'Detailed Analytics',
+  totalRevenue: 'Total Revenue',
+  activeCustomers: 'Active Customers',
+  customerSegmentation: 'Customer Segmentation',
+  topPerformingMenuItems: 'Top Performing Menu Items',
+  campaignPerformance: 'Campaign Performance',
+  salesByStore: 'Sales by Store',
+  customersAndOrdersPerDay: 'Customers and Orders per Day',
+  restaurantPerformance: 'Restaurant Performance',
+  customerData: 'Customer Data',
+  
+  // Menu Management
+  menuManagement: 'Menu Management',
+  createAndManageMenu: 'Create and manage your menu items across different channels',
+  categories: 'Categories',
+  items: 'Items',
+  
+  // Customers
+  customerManagement: 'Customer Management',
+  manageCustomerInfo: 'Manage your customer information and contact details',
+  
+  // Calendar
+  calendarManagement: 'Calendar Management',
+  scheduleAndManageEvents: 'Schedule and manage your restaurant events and marketing campaigns',
+  filterCampaigns: 'Filter Campaigns',
+  dateRange: 'Date Range',
+  
+  // Coupons
+  couponManagement: 'Coupon Management',
+  createAndManageCoupons: 'Create and manage discount coupons for your customers',
+  activeCoupons: 'Active Coupons',
+  inactiveCoupons: 'Inactive Coupons',
+  scheduledCoupons: 'Scheduled Coupons',
+  
+  // Loyalty
+  loyaltyAndPoints: 'Loyalty & Points',
+  manageCustomerLoyalty: 'Manage your customer loyalty program and rewards',
+  totalPointsIssued: 'Total Points Issued',
+  activeMembers: 'Active Members',
+  rewardsClaimed: 'Rewards Claimed',
+  memberTiers: 'Member Tiers',
+  loyaltyProgramMembers: 'Loyalty Program Members',
+  availableRewards: 'Available Rewards',
+  pointTransactions: 'Point Transactions',
+  
+  // Integrations
+  integrationsManagement: 'Integrations Management',
+  connectYourRestaurant: 'Connect your restaurant system with other platforms and services',
+  paymentProcessors: 'Payment Processors',
+  deliveryMarketplaces: 'Delivery Marketplaces',
+  socialMedia: 'Social Media',
+  marketingTools: 'Marketing Tools',
+  
+  // Settings
+  settingsManagement: 'Settings Management',
+  manageAccount: 'Manage your account, stores, and application preferences',
+  stores: 'Stores',
+  applicationPreferences: 'Application Preferences',
+
+  // Data Insights
+  dataInsights: 'Data Insights',
+  exploreConnections: 'Explore connections and relationships between different data entities in your restaurant',
+  connectedCustomers: 'Connected Customers',
+  connectedOrders: 'Connected Orders',
+  menuItems: 'Menu Items',
+  campaignsCoupons: 'Campaigns & Coupons',
+  popularMenuItems: 'Popular Menu Items',
+  customerRetention: 'Customer Retention',
+  
+  // Common dashboard elements
+  distributionAcrossDays: 'Distribution across days',
+  ordersPerDate: 'Orders per Date',
+  orderForecast: 'Order Forecast',
+  nextDays: 'Next Days',
+  historicalData: 'Historical Data',
+  futurePredicitions: 'Future Predictions',
+  lessThan: 'Less',
+  moreThan: 'More',
+  customerVisits: 'Customer Visits',
+  trafficByHour: 'Traffic by Hour',
 };
 
 export default enTranslations;

@@ -169,7 +169,90 @@ const ptTranslations: Translations = {
   apply: 'Aplicar',
   normal: 'Normal',
   imageOptimized: 'Imagem otimizada',
-  imageOptimizedDesc: 'Sua imagem foi otimizada com sucesso'
+  imageOptimizedDesc: 'Sua imagem foi otimizada com sucesso',
+
+  // Dashboard
+  overview: 'Visão Geral',
+  detailedAnalytics: 'Análises Detalhadas',
+  totalRevenue: 'Receita Total',
+  activeCustomers: 'Clientes Ativos',
+  customerSegmentation: 'Segmentação de Clientes',
+  topPerformingMenuItems: 'Itens do Menu mais Vendidos',
+  campaignPerformance: 'Desempenho de Campanhas',
+  salesByStore: 'Vendas por Loja',
+  customersAndOrdersPerDay: 'Clientes e Pedidos por Dia',
+  restaurantPerformance: 'Desempenho do Restaurante',
+  customerData: 'Dados de Clientes',
+  
+  // Menu Management
+  menuManagement: 'Gestão de Cardápio',
+  createAndManageMenu: 'Crie e gerencie seus itens de cardápio em diferentes canais',
+  categories: 'Categorias',
+  items: 'Itens',
+  
+  // Customers
+  customerManagement: 'Gestão de Clientes',
+  manageCustomerInfo: 'Gerencie as informações e detalhes de contato dos seus clientes',
+  
+  // Calendar
+  calendarManagement: 'Gestão de Calendário',
+  scheduleAndManageEvents: 'Agende e gerencie eventos e campanhas de marketing do seu restaurante',
+  filterCampaigns: 'Filtrar Campanhas',
+  dateRange: 'Intervalo de Datas',
+  
+  // Coupons
+  couponManagement: 'Gestão de Cupons',
+  createAndManageCoupons: 'Crie e gerencie cupons de desconto para seus clientes',
+  activeCoupons: 'Cupons Ativos',
+  inactiveCoupons: 'Cupons Inativos',
+  scheduledCoupons: 'Cupons Agendados',
+  
+  // Loyalty
+  loyaltyAndPoints: 'Fidelidade e Pontos',
+  manageCustomerLoyalty: 'Gerencie o programa de fidelidade e recompensas para seus clientes',
+  totalPointsIssued: 'Total de Pontos Emitidos',
+  activeMembers: 'Membros Ativos',
+  rewardsClaimed: 'Recompensas Resgatadas',
+  memberTiers: 'Níveis de Membros',
+  loyaltyProgramMembers: 'Membros do Programa de Fidelidade',
+  availableRewards: 'Recompensas Disponíveis',
+  pointTransactions: 'Transações de Pontos',
+  
+  // Integrations
+  integrationsManagement: 'Gestão de Integrações',
+  connectYourRestaurant: 'Conecte seu sistema de restaurante com outras plataformas e serviços',
+  paymentProcessors: 'Processadores de Pagamento',
+  deliveryMarketplaces: 'Marketplaces de Entrega',
+  socialMedia: 'Redes Sociais',
+  marketingTools: 'Ferramentas de Marketing',
+  
+  // Settings
+  settingsManagement: 'Gestão de Configurações',
+  manageAccount: 'Gerencie sua conta, lojas e preferências de aplicativo',
+  stores: 'Lojas',
+  applicationPreferences: 'Preferências do Aplicativo',
+
+  // Data Insights
+  dataInsights: 'Análise de Dados',
+  exploreConnections: 'Explore conexões e relações entre diferentes entidades de dados no seu restaurante',
+  connectedCustomers: 'Clientes Conectados',
+  connectedOrders: 'Pedidos Conectados',
+  menuItems: 'Itens do Menu',
+  campaignsCoupons: 'Campanhas e Cupons',
+  popularMenuItems: 'Itens Populares do Menu',
+  customerRetention: 'Retenção de Clientes',
+  
+  // Common dashboard elements
+  distributionAcrossDays: 'Distribuição ao longo dos dias',
+  ordersPerDate: 'Pedidos por Data',
+  orderForecast: 'Previsão de Pedidos',
+  nextDays: 'Próximos Dias',
+  historicalData: 'Dados Históricos',
+  futurePredicitions: 'Previsões Futuras',
+  lessThan: 'Menos',
+  moreThan: 'Mais',
+  customerVisits: 'Visitas de Clientes',
+  trafficByHour: 'Tráfego por Hora',
 };
 
 export default ptTranslations;

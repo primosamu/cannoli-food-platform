@@ -103,7 +103,7 @@ export interface Translations {
   addNewCourier: string;
   enterCourierPhone: string;
   addCourier: string;
-
+  
   // Reports
   reports: string;
   deliveryReport: string;
@@ -141,12 +141,12 @@ export interface Translations {
   createManageCampaigns: string;
   presets: string;
   createCampaign: string;
-  
+
   // Campaign categories
   'customer-recovery': string;
   'consumption-pattern': string;
   'channel-migration': string;
-  
+
   // Campaign category descriptions
   'customer-recoveryDescription': string;
   'loyaltyDescription': string;
@@ -170,4 +170,87 @@ export interface Translations {
   normal: string;
   imageOptimized: string;
   imageOptimizedDesc: string;
+
+  // Dashboard
+  overview: string;
+  detailedAnalytics: string;
+  totalRevenue: string;
+  activeCustomers: string;
+  customerSegmentation: string;
+  topPerformingMenuItems: string;
+  campaignPerformance: string;
+  salesByStore: string;
+  customersAndOrdersPerDay: string;
+  restaurantPerformance: string;
+  customerData: string;
+  
+  // Menu Management
+  menuManagement: string;
+  createAndManageMenu: string;
+  categories: string;
+  items: string;
+  
+  // Customers
+  customerManagement: string;
+  manageCustomerInfo: string;
+  
+  // Calendar
+  calendarManagement: string;
+  scheduleAndManageEvents: string;
+  filterCampaigns: string;
+  dateRange: string;
+  
+  // Coupons
+  couponManagement: string;
+  createAndManageCoupons: string;
+  activeCoupons: string;
+  inactiveCoupons: string;
+  scheduledCoupons: string;
+  
+  // Loyalty
+  loyaltyAndPoints: string;
+  manageCustomerLoyalty: string;
+  totalPointsIssued: string;
+  activeMembers: string;
+  rewardsClaimed: string;
+  memberTiers: string;
+  loyaltyProgramMembers: string;
+  availableRewards: string;
+  pointTransactions: string;
+  
+  // Integrations
+  integrationsManagement: string;
+  connectYourRestaurant: string;
+  paymentProcessors: string;
+  deliveryMarketplaces: string;
+  socialMedia: string;
+  marketingTools: string;
+  
+  // Settings
+  settingsManagement: string;
+  manageAccount: string;
+  stores: string;
+  applicationPreferences: string;
+
+  // Data Insights
+  dataInsights: string;
+  exploreConnections: string;
+  connectedCustomers: string;
+  connectedOrders: string;
+  menuItems: string;
+  campaignsCoupons: string;
+  popularMenuItems: string;
+  customerRetention: string;
+  
+  // Common dashboard elements
+  distributionAcrossDays: string;
+  ordersPerDate: string;
+  orderForecast: string;
+  nextDays: string;
+  historicalData: string;
+  futurePredicitions: string;
+  lessThan: string;
+  moreThan: string;
+  customerVisits: string;
+  trafficByHour: string;
 }

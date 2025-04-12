@@ -35,11 +35,13 @@ import {
 import { getTemplatesByCategory } from "@/data/campaignTemplates";
 import { CampaignTemplate } from "@/types/campaign";
 import { useToast } from "@/components/ui/use-toast";
+import CampaignSettings from "@/components/campaigns/CampaignSettings";
 
 const CampaignsPage = () => {
   const [activeTab, setActiveTab] = useState("active");
   const [showCreator, setShowCreator] = useState(false);
-  const [showPresets, setShowPresets] = useState(true); // Changed to true to show presets by default
+  const [showPresets, setShowPresets] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<CampaignTemplate | null>(null);
   const location = useLocation();
   const { toast } = useToast();
@@ -54,7 +56,8 @@ const CampaignsPage = () => {
   useEffect(() => {
     if (location.state && location.state.createCampaign) {
       setShowCreator(true);
-      setShowPresets(false); // Hide presets when creating campaign from another page
+      setShowPresets(false);
+      setShowSettings(false);
 
       // Check if we have a category to select a template
       if (location.state.category) {
@@ -69,8 +72,9 @@ const CampaignsPage = () => {
 
   const handlePresetSelect = (template: CampaignTemplate) => {
     setSelectedTemplate(template);
-    setShowCreator(true);
+    setShowCreator(false);
     setShowPresets(false);
+    setShowSettings(true);
     
     toast({
       title: "Template selected",
@@ -93,6 +97,7 @@ const CampaignsPage = () => {
               <Button variant="outline" onClick={() => {
                 setShowPresets(false);
                 setShowCreator(false);
+                setShowSettings(false);
               }}>
                 View All Campaigns
               </Button>
@@ -100,6 +105,38 @@ const CampaignsPage = () => {
           </CardHeader>
           <CardContent>
             <PresetCampaigns onSelect={handlePresetSelect} />
+          </CardContent>
+        </Card>
+      );
+    }
+    
+    if (showSettings) {
+      return (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Campaign Settings</CardTitle>
+                <CardDescription>
+                  Configure your campaign audience, channels and delivery options
+                </CardDescription>
+              </div>
+              <Button variant="outline" onClick={() => {
+                setShowSettings(false);
+                setShowPresets(true);
+              }}>
+                Back to Templates
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <CampaignSettings 
+              template={selectedTemplate}
+              onContinue={() => {
+                setShowSettings(false);
+                setShowCreator(true);
+              }}
+            />
           </CardContent>
         </Card>
       );
@@ -116,8 +153,16 @@ const CampaignsPage = () => {
                   Design your marketing campaign for WhatsApp, SMS, Email or Paid Traffic
                 </CardDescription>
               </div>
-              <Button variant="outline" onClick={() => setShowCreator(false)}>
-                Back to List
+              <Button variant="outline" onClick={() => {
+                if (selectedTemplate) {
+                  setShowCreator(false);
+                  setShowSettings(true);
+                } else {
+                  setShowCreator(false);
+                  setShowPresets(true);
+                }
+              }}>
+                {selectedTemplate ? 'Back to Settings' : 'Back to Templates'}
               </Button>
             </div>
           </CardHeader>
@@ -251,6 +296,7 @@ const CampaignsPage = () => {
               onClick={() => {
                 setShowPresets(true);
                 setShowCreator(false);
+                setShowSettings(false);
               }}
             >
               <Sparkles className="h-4 w-4" />
@@ -265,6 +311,7 @@ const CampaignsPage = () => {
           <Button onClick={() => {
             setShowCreator(true);
             setShowPresets(false);
+            setShowSettings(false);
           }}>
             <PlusCircle className="mr-2 h-4 w-4" /> Create Campaign
           </Button>

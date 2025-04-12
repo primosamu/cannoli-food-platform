@@ -1,5 +1,4 @@
 
-
 export type CampaignType = 'whatsapp' | 'sms' | 'email' | 'paid';
 
 export type CampaignTemplate = {
@@ -29,6 +28,12 @@ export type CampaignData = {
   menuIds?: string[];  // Associated menu IDs for this campaign
   deliveryPlatforms?: string[];  // Associated delivery platforms
   platform?: string; // For paid traffic (meta, google, etc)
+  incentiveType?: 'coupon' | 'loyalty' | 'none';
+  couponId?: string;
+  loyaltyPoints?: number;
+  audienceType?: 'all' | 'segment' | 'custom';
+  audienceSegmentId?: string;
+  channels: CampaignType[];
 };
 
 export interface CampaignEvent {
@@ -40,4 +45,3 @@ export interface CampaignEvent {
   endDate?: Date;
   type: CampaignType;
 }
-

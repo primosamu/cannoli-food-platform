@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState } from 'react';
 
 export type Language = 'en' | 'pt' | 'es';
@@ -144,7 +145,6 @@ export interface Translations {
   
   // Campaign categories
   'customer-recovery': string;
-  'loyalty': string;
   'consumption-pattern': string;
   'channel-migration': string;
   
@@ -299,7 +299,6 @@ const translations: Record<Language, Translations> = {
 
     // Campaign categories
     'customer-recovery': 'Customer Recovery',
-    'loyalty': 'Customer Loyalty',
     'consumption-pattern': 'Consumption Patterns',
     'channel-migration': 'Channel Migration',
 
@@ -451,7 +450,6 @@ const translations: Record<Language, Translations> = {
 
     // Campaign categories
     'customer-recovery': 'Recuperação de Clientes',
-    'loyalty': 'Fidelidade de Clientes',
     'consumption-pattern': 'Padrões de Consumo',
     'channel-migration': 'Migração de Canal',
 
@@ -603,7 +601,6 @@ const translations: Record<Language, Translations> = {
 
     // Campaign categories
     'customer-recovery': 'Recuperación de Clientes',
-    'loyalty': 'Fidelidad de Clientes',
     'consumption-pattern': 'Patrones de Consumo',
     'channel-migration': 'Migración de Canal',
 
@@ -646,5 +643,3 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     </LanguageContext.Provider>
   );
 };
-
-export { LanguageProvider };

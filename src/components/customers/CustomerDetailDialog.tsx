@@ -17,7 +17,7 @@ import { Customer } from "./CustomerList";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Calendar, Mail, MessageSquare, User, Package, Tag } from "lucide-react";
+import { Calendar, Mail, MessageSquare, User, Package, Tag, Phone, UserRound } from "lucide-react";
 
 interface CustomerDetailDialogProps {
   customer: Customer | null;
@@ -140,11 +140,11 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2">
-            <User className="h-5 w-5" />
+            <UserRound className="h-5 w-5" />
             {customer.name}
           </DialogTitle>
           <DialogDescription>
-            Customer since {format(customer.joinDate, "MMMM dd, yyyy")}
+            Customer since {format(customer.joinDate, "MMMM dd, yyyy")} • CPF: {customer.cpf}
           </DialogDescription>
         </DialogHeader>
 
@@ -207,7 +207,18 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
                   </div>
                   <div className="grid grid-cols-3 gap-1">
                     <span className="text-sm font-medium">Phone:</span>
-                    <span className="text-sm col-span-2">{customer.phone}</span>
+                    <span className="text-sm col-span-2">
+                      {customer.phone ? customer.phone : (
+                        <span className="text-amber-500 text-xs italic flex items-center gap-1">
+                          <Phone className="h-3 w-3" />
+                          No phone number
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1">
+                    <span className="text-sm font-medium">CPF:</span>
+                    <span className="text-sm col-span-2">{customer.cpf}</span>
                   </div>
                   <div className="grid grid-cols-3 gap-1">
                     <span className="text-sm font-medium">Join Date:</span>
@@ -245,18 +256,28 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
                   <CardTitle className="text-base">Send Message</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <Textarea 
-                    placeholder="Enter your message"
-                    value={messageText}
-                    onChange={(e) => setMessageText(e.target.value)}
-                    className="min-h-[100px]"
-                  />
-                  <Button 
-                    className="w-full"
-                    onClick={handleSendMessage}
-                  >
-                    <MessageSquare className="h-4 w-4 mr-2" /> Send WhatsApp/SMS
-                  </Button>
+                  {customer.phone ? (
+                    <>
+                      <Textarea 
+                        placeholder="Enter your message"
+                        value={messageText}
+                        onChange={(e) => setMessageText(e.target.value)}
+                        className="min-h-[100px]"
+                      />
+                      <Button 
+                        className="w-full"
+                        onClick={handleSendMessage}
+                      >
+                        <MessageSquare className="h-4 w-4 mr-2" /> Send WhatsApp/SMS
+                      </Button>
+                    </>
+                  ) : (
+                    <div className="p-4 bg-muted rounded-md flex items-center justify-center flex-col text-center gap-2">
+                      <Phone className="h-8 w-8 text-muted-foreground" />
+                      <p className="text-sm font-medium">No phone number available</p>
+                      <p className="text-xs text-muted-foreground">Use phone enrichment to complete this customer's data.</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
               

@@ -299,7 +299,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
             <tr>
               {columns.map((column) => (
                 <th key={column.id || String(column.accessorKey)} className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
-                  {column.header}
+                  {column.header as React.ReactNode}
                 </th>
               ))}
             </tr>
@@ -311,11 +311,15 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
                 className="border-t hover:bg-muted/50 cursor-pointer"
                 onClick={() => openCustomerDetails(customer)}
               >
-                {columns.map((column) => (
-                  <td key={column.id || String(column.accessorKey)} className="p-4 align-middle">
-                    {column.cell ? column.cell({ row: { original: customer } }) : null}
-                  </td>
-                ))}
+                {columns.map((column) => {
+                  return (
+                    <td key={column.id || String(column.accessorKey)} className="p-4 align-middle">
+                      {column.cell && typeof column.cell === 'function' 
+                        ? column.cell({ row: { original: customer } })
+                        : null}
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>

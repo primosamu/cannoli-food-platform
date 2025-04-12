@@ -53,4 +53,5 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 };
 
-export { Language, Translations };
+// Change this line to properly re-export the types
+export type { Language, Translations };

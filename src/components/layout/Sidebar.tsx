@@ -18,23 +18,25 @@ import {
   ShoppingBag,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-const menuItems = [
-  { path: '/', label: 'Dashboard', icon: <BarChart3 className="h-5 w-5" /> },
-  { path: '/menus', label: 'Menu Management', icon: <BookOpen className="h-5 w-5" /> },
-  { path: '/customers', label: 'Customers', icon: <Users className="h-5 w-5" /> },
-  { path: '/campaigns', label: 'Campaigns', icon: <MessageSquare className="h-5 w-5" /> },
-  { path: '/orders', label: 'Order Management', icon: <ShoppingBag className="h-5 w-5" /> },
-  { path: '/calendar', label: 'Calendar', icon: <Calendar className="h-5 w-5" /> },
-  { path: '/coupons', label: 'Coupons', icon: <PercentCircle className="h-5 w-5" /> },
-  { path: '/loyalty', label: 'Loyalty & Points', icon: <CreditCard className="h-5 w-5" /> },
-  { path: '/integrations', label: 'Integrations', icon: <Store className="h-5 w-5" /> },
-  { path: '/settings', label: 'Settings', icon: <Settings className="h-5 w-5" /> },
-];
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
+  const { translations } = useLanguage();
+
+  const menuItems = [
+    { path: '/', label: translations.dashboard, icon: <BarChart3 className="h-5 w-5" /> },
+    { path: '/menus', label: translations.menus, icon: <BookOpen className="h-5 w-5" /> },
+    { path: '/customers', label: translations.customers, icon: <Users className="h-5 w-5" /> },
+    { path: '/campaigns', label: translations.campaigns, icon: <MessageSquare className="h-5 w-5" /> },
+    { path: '/orders', label: translations.orders, icon: <ShoppingBag className="h-5 w-5" /> },
+    { path: '/calendar', label: translations.calendar, icon: <Calendar className="h-5 w-5" /> },
+    { path: '/coupons', label: translations.coupons, icon: <PercentCircle className="h-5 w-5" /> },
+    { path: '/loyalty', label: translations.loyalty, icon: <CreditCard className="h-5 w-5" /> },
+    { path: '/integrations', label: translations.integrations, icon: <Store className="h-5 w-5" /> },
+    { path: '/settings', label: translations.settings, icon: <Settings className="h-5 w-5" /> },
+  ];
 
   return (
     <>
@@ -96,7 +98,7 @@ export function Sidebar() {
               </div>
               <div>
                 <p className="text-sm font-medium">Cannoli Food Tech</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">CRM System</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{translations.system}</p>
               </div>
             </div>
           </div>

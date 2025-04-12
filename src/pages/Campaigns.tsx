@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
@@ -12,6 +12,7 @@ import {
   Filter 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "react-router-dom";
 import CampaignCreator from "@/components/campaigns/CampaignCreator";
 import CampaignList from "@/components/campaigns/CampaignList";
 import ImageOptimizer from "@/components/campaigns/ImageOptimizer";
@@ -29,16 +30,36 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { getTemplatesByCategory } from "@/data/campaignTemplates";
+import { CampaignTemplate } from "@/types/campaign";
 
 const CampaignsPage = () => {
   const [activeTab, setActiveTab] = useState("active");
   const [showCreator, setShowCreator] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<CampaignTemplate | null>(null);
+  const location = useLocation();
 
   // Get the campaigns for each tab
   const activeCampaigns = getActiveCampaigns();
   const scheduledCampaigns = getScheduledCampaigns();
   const completedCampaigns = getCompletedCampaigns();
   const draftCampaigns = getDraftCampaigns();
+
+  // Handle navigation from other parts of the app
+  useEffect(() => {
+    if (location.state && location.state.createCampaign) {
+      setShowCreator(true);
+
+      // Check if we have a category to select a template
+      if (location.state.category) {
+        // Find a template that matches the category
+        const templates = getTemplatesByCategory(location.state.category);
+        if (templates && templates.length > 0) {
+          setSelectedTemplate(templates[0]);
+        }
+      }
+    }
+  }, [location]);
 
   return (
     <div className="space-y-6">
@@ -88,7 +109,11 @@ const CampaignsPage = () => {
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="content" className="pt-6">
-                <CampaignCreator />
+                <CampaignCreator 
+                  initialTemplate={selectedTemplate}
+                  segmentName={location.state?.segmentName}
+                  segmentType={location.state?.segmentType}
+                />
               </TabsContent>
               <TabsContent value="images" className="pt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

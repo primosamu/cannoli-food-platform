@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -182,16 +183,53 @@ export const CustomerBehaviorSection = () => {
       description: `Creating campaign for ${segmentName || "this segment"}`,
     });
     
+    // Navigate to campaigns page and set state to indicate we should create a campaign
     navigate("/campaigns", { 
       state: { 
         createCampaign: true, 
         segmentName: segmentName || (selectedSegment?.name || selectedSegment?.group),
-        segmentType: segmentType || selectedChart
+        segmentType: segmentType || selectedChart,
+        category: getCategoryFromSegment(segmentType || selectedChart, segmentName)
       } 
     });
     
     setIsDialogOpen(false);
   }, [navigate, selectedSegment, selectedChart, toast]);
+
+  // Helper function to determine campaign category from segment
+  const getCategoryFromSegment = (segmentType?: string, segmentName?: string): string => {
+    // RFM segments
+    if (segmentType === 'rfm-segments') {
+      if (segmentName === 'Champions' || segmentName === 'Loyal' || segmentName === 'Potential Loyalist') {
+        return 'loyalty';
+      } else if (segmentName === 'At Risk' || segmentName === 'Can\'t Lose' || segmentName === 'Hibernating' || segmentName === 'Lost') {
+        return 'customer-recovery';
+      }
+    }
+    
+    // Recency - people who haven't purchased in a while
+    if (segmentType === 'recency' && (segmentName?.includes('>60 days') || segmentName?.includes('45-60 days'))) {
+      return 'customer-recovery';
+    }
+    
+    // Frequency - loyal customers
+    if (segmentType === 'frequency' && (segmentName?.includes('>10 orders') || segmentName?.includes('6-10 orders'))) {
+      return 'loyalty';
+    }
+    
+    // Meal preference - change consumption patterns
+    if (segmentType === 'meal-preference') {
+      return 'consumption-pattern';
+    }
+    
+    // Day preference - weekday vs weekend
+    if (segmentType === 'day-preference') {
+      return 'consumption-pattern';
+    }
+    
+    // Default to generic template
+    return '';
+  };
 
   return (
     <div className="space-y-6">

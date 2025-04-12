@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -32,16 +33,21 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { getTemplatesByCategory } from "@/data/campaignTemplates";
-import { CampaignTemplate } from "@/types/campaign";
+import { CampaignTemplate, CampaignEvent } from "@/types/campaign";
 import { useToast } from "@/components/ui/use-toast";
 import CampaignSettings from "@/components/campaigns/CampaignSettings";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CampaignCalendar } from "@/components/campaigns/CampaignCalendar";
+import { CampaignReports } from "@/components/campaigns/CampaignReports";
 
 const CampaignsPage = () => {
   const [activeTab, setActiveTab] = useState("active");
+  const [activeView, setActiveView] = useState("list");
   const [showCreator, setShowCreator] = useState(false);
   const [showPresets, setShowPresets] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+  const [showReports, setShowReports] = useState(false);
+  const [selectedCampaignId, setSelectedCampaignId] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<CampaignTemplate | null>(null);
   const location = useLocation();
   const { toast } = useToast();
@@ -54,9 +60,11 @@ const CampaignsPage = () => {
 
   useEffect(() => {
     if (location.state && location.state.createCampaign) {
+      console.log("Creating campaign with state:", location.state);
       setShowCreator(false);
       setShowPresets(true);
       setShowSettings(false);
+      setShowReports(false);
 
       if (location.state.category) {
         const templates = getTemplatesByCategory(location.state.category);
@@ -73,6 +81,7 @@ const CampaignsPage = () => {
     setShowCreator(false);
     setShowPresets(false);
     setShowSettings(true);
+    setShowReports(false);
     
     toast({
       title: "Template selected",
@@ -80,7 +89,52 @@ const CampaignsPage = () => {
     });
   };
 
+  const handleViewReport = (campaignId: string) => {
+    setSelectedCampaignId(campaignId);
+    setShowReports(true);
+    setShowCreator(false);
+    setShowPresets(false);
+    setShowSettings(false);
+    setActiveView("reports");
+  };
+
+  const handleViewCampaign = (campaignId: string) => {
+    setSelectedCampaignId(campaignId);
+    setShowCreator(true);
+    setShowPresets(false);
+    setShowSettings(false);
+    setShowReports(false);
+  };
+
   const renderContent = () => {
+    // Show campaign reports
+    if (showReports) {
+      return (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Campaign Reports</CardTitle>
+                <CardDescription>
+                  View detailed analytics and performance for your campaigns
+                </CardDescription>
+              </div>
+              <Button variant="outline" onClick={() => {
+                setShowReports(false);
+                setActiveView("list");
+              }}>
+                Back to Campaigns
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <CampaignReports campaignId={selectedCampaignId || undefined} />
+          </CardContent>
+        </Card>
+      );
+    }
+    
+    // Show preset campaigns selection
     if (showPresets) {
       return (
         <Card>
@@ -96,6 +150,7 @@ const CampaignsPage = () => {
                 setShowPresets(false);
                 setShowCreator(false);
                 setShowSettings(false);
+                setShowReports(false);
               }}>
                 {translations.viewAllCampaigns || "View All Campaigns"}
               </Button>
@@ -108,6 +163,7 @@ const CampaignsPage = () => {
       );
     }
     
+    // Show campaign settings
     if (showSettings) {
       return (
         <Card>
@@ -140,6 +196,7 @@ const CampaignsPage = () => {
       );
     }
     
+    // Show campaign creator
     if (showCreator) {
       return (
         <Card>
@@ -216,17 +273,41 @@ const CampaignsPage = () => {
       );
     }
     
+    // Show campaign list or calendar view
+    if (activeView === "calendar") {
+      return (
+        <CampaignCalendar
+          onViewReport={handleViewReport}
+          onViewCampaign={handleViewCampaign}
+        />
+      );
+    }
+
+    // Default view - campaign list
     return (
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle>{translations.allCampaigns || "All Campaigns"}</CardTitle>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="hidden md:flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="hidden md:flex items-center gap-2"
+                onClick={() => setActiveView("calendar")}
+              >
                 <Calendar className="h-4 w-4" />
                 {translations.schedule || "Schedule"}
               </Button>
-              <Button variant="outline" size="sm" className="hidden md:flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="hidden md:flex items-center gap-2"
+                onClick={() => {
+                  setShowReports(true);
+                  setActiveView("reports");
+                }}
+              >
                 <BarChart className="h-4 w-4" />
                 {translations.analytics || "Analytics"}
               </Button>
@@ -262,16 +343,36 @@ const CampaignsPage = () => {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="active" className="p-6">
-              <CampaignList campaigns={activeCampaigns} type="active" />
+              <CampaignList 
+                campaigns={activeCampaigns} 
+                type="active" 
+                onViewReport={handleViewReport}
+                onViewCampaign={handleViewCampaign}
+              />
             </TabsContent>
             <TabsContent value="scheduled" className="p-6">
-              <CampaignList campaigns={scheduledCampaigns} type="scheduled" />
+              <CampaignList 
+                campaigns={scheduledCampaigns} 
+                type="scheduled" 
+                onViewReport={handleViewReport}
+                onViewCampaign={handleViewCampaign}
+              />
             </TabsContent>
             <TabsContent value="completed" className="p-6">
-              <CampaignList campaigns={completedCampaigns} type="completed" />
+              <CampaignList 
+                campaigns={completedCampaigns} 
+                type="completed" 
+                onViewReport={handleViewReport}
+                onViewCampaign={handleViewCampaign}
+              />
             </TabsContent>
             <TabsContent value="drafts" className="p-6">
-              <CampaignList campaigns={draftCampaigns} type="draft" />
+              <CampaignList 
+                campaigns={draftCampaigns} 
+                type="draft" 
+                onViewReport={handleViewReport}
+                onViewCampaign={handleViewCampaign}
+              />
             </TabsContent>
           </Tabs>
         </CardContent>
@@ -289,7 +390,7 @@ const CampaignsPage = () => {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          {!showPresets && (
+          {!showPresets && !showReports && activeView !== "calendar" && (
             <Button 
               variant="outline" 
               className="items-center gap-2"
@@ -297,6 +398,7 @@ const CampaignsPage = () => {
                 setShowPresets(true);
                 setShowCreator(false);
                 setShowSettings(false);
+                setShowReports(false);
               }}
             >
               <Sparkles className="h-4 w-4" />
@@ -304,7 +406,30 @@ const CampaignsPage = () => {
               <span className="inline md:hidden">{translations.presets || "Presets"}</span>
             </Button>
           )}
-          <Button variant="outline" className="hidden md:flex items-center gap-2">
+          {!showReports && activeView !== "calendar" && (
+            <Button 
+              variant="outline" 
+              className="items-center gap-2"
+              onClick={() => {
+                setActiveView(activeView === "list" ? "calendar" : "list");
+                setShowReports(false);
+                setShowPresets(false);
+                setShowCreator(false);
+                setShowSettings(false);
+              }}
+            >
+              {activeView === "list" ? (
+                <Calendar className="h-4 w-4 mr-2" />
+              ) : (
+                <BarChart className="h-4 w-4 mr-2" />
+              )}
+              {activeView === "list" ? "Calendar" : "List View"}
+            </Button>
+          )}
+          <Button 
+            variant="outline" 
+            className="hidden md:flex items-center gap-2"
+          >
             <Filter className="h-4 w-4" />
             {translations.filter || "Filter"}
           </Button>
@@ -312,6 +437,8 @@ const CampaignsPage = () => {
             setShowCreator(true);
             setShowPresets(false);
             setShowSettings(false);
+            setShowReports(false);
+            setActiveView("list");
           }}>
             <PlusCircle className="mr-2 h-4 w-4" /> {translations.createCampaign || "Create Campaign"}
           </Button>

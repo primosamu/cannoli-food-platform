@@ -15,24 +15,35 @@ export const CustomerBehaviorSection = () => {
   const { toast } = useToast();
 
   const handleChartClick = (chartId: string, data?: any) => {
+    console.log("Chart clicked:", chartId, data);
     setSelectedChart(chartId);
     setSelectedSegment(data);
     setIsDialogOpen(true);
   };
 
   const redirectToCampaign = useCallback((segmentName?: string, segmentType?: string) => {
+    const segmentToUse = segmentName || (selectedSegment?.name || selectedSegment?.group);
+    const segmentTypeToUse = segmentType || selectedChart;
+    const category = getCategoryFromSegment(segmentTypeToUse, segmentToUse);
+    
+    console.log("Redirecting to campaign with:", {
+      segmentName: segmentToUse,
+      segmentType: segmentTypeToUse,
+      category
+    });
+    
     toast({
       title: "Redirecting to Campaigns",
-      description: `Creating campaign for ${segmentName || "this segment"}`,
+      description: `Creating campaign for ${segmentToUse || "this segment"}`,
     });
     
     // Navigate to campaigns page and set state to indicate we should create a campaign
     navigate("/campaigns", { 
       state: { 
         createCampaign: true, 
-        segmentName: segmentName || (selectedSegment?.name || selectedSegment?.group),
-        segmentType: segmentType || selectedChart,
-        category: getCategoryFromSegment(segmentType || selectedChart, segmentName)
+        segmentName: segmentToUse,
+        segmentType: segmentTypeToUse,
+        category
       } 
     });
     

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select";
 import { Globe } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import type { Language } from '@/contexts/LanguageContext';
+import type { Language } from '@/types/language';
 
 export const LanguageSelector = () => {
   const { language, setLanguage, translations } = useLanguage();

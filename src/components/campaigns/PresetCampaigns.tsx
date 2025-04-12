@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { getTemplateIcon } from "@/components/dashboard/customer-behavior/utils";
 import { CampaignTemplate } from "@/types/campaign";
 import { campaignTemplates } from "@/data/campaignTemplates";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface PresetCampaignsProps {
   onSelect: (template: CampaignTemplate) => void;
@@ -46,63 +47,56 @@ const getTemplatesByCategory = (category: string): CampaignTemplate[] => {
 };
 
 const PresetCampaigns: React.FC<PresetCampaignsProps> = ({ onSelect }) => {
+  const { translations } = useLanguage();
+  
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Preset Campaigns</h2>
-        <p className="text-muted-foreground">
-          Choose from our ready-to-use campaign templates for common restaurant marketing needs
-        </p>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {presetCategories.map((category) => {
-          // Get templates for this category
-          const templates = getTemplatesByCategory(category.id);
-          
-          return (
-            <Card key={category.id} className="overflow-hidden">
-              <CardHeader className="pb-3">
-                <Badge variant="outline" className={category.color}>
-                  {category.name}
-                </Badge>
-                <CardDescription className="mt-2">
-                  {category.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-0">
-                <ScrollArea className="h-64 px-6">
-                  <div className="space-y-3 pb-6">
-                    {templates.map((template) => (
-                      <div 
-                        key={template.id}
-                        className="border rounded-md p-3 hover:bg-muted/50 cursor-pointer"
-                        onClick={() => onSelect(template)}
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            {getTemplateIcon(template.type)}
-                            <span className="font-medium">{template.name}</span>
-                          </div>
-                          <Button size="sm" variant="ghost" onClick={(e) => {
-                            e.stopPropagation();
-                            onSelect(template);
-                          }}>
-                            Use
-                          </Button>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {presetCategories.map((category) => {
+        // Get templates for this category
+        const templates = getTemplatesByCategory(category.id);
+        
+        return (
+          <Card key={category.id} className="overflow-hidden">
+            <CardHeader className="pb-3">
+              <Badge variant="outline" className={category.color}>
+                {translations[category.id as keyof typeof translations] || category.name}
+              </Badge>
+              <CardDescription className="mt-2">
+                {translations[`${category.id}Description` as keyof typeof translations] || category.description}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ScrollArea className="h-64 px-6">
+                <div className="space-y-3 pb-6">
+                  {templates.map((template) => (
+                    <div 
+                      key={template.id}
+                      className="border rounded-md p-3 hover:bg-muted/50 cursor-pointer"
+                      onClick={() => onSelect(template)}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          {getTemplateIcon(template.type)}
+                          <span className="font-medium">{template.name}</span>
                         </div>
-                        <p className="text-xs text-muted-foreground line-clamp-2">
-                          {template.description}
-                        </p>
+                        <Button size="sm" variant="ghost" onClick={(e) => {
+                          e.stopPropagation();
+                          onSelect(template);
+                        }}>
+                          {translations.use || "Use"}
+                        </Button>
                       </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+                      <p className="text-xs text-muted-foreground line-clamp-2">
+                        {template.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 };

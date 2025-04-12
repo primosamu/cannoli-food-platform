@@ -35,6 +35,7 @@ import { getTemplatesByCategory } from "@/data/campaignTemplates";
 import { CampaignTemplate } from "@/types/campaign";
 import { useToast } from "@/components/ui/use-toast";
 import CampaignSettings from "@/components/campaigns/CampaignSettings";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const CampaignsPage = () => {
   const [activeTab, setActiveTab] = useState("active");
@@ -44,6 +45,7 @@ const CampaignsPage = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<CampaignTemplate | null>(null);
   const location = useLocation();
   const { toast } = useToast();
+  const { translations } = useLanguage();
 
   const activeCampaigns = getActiveCampaigns();
   const scheduledCampaigns = getScheduledCampaigns();
@@ -85,9 +87,9 @@ const CampaignsPage = () => {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Preset Campaigns</CardTitle>
+                <CardTitle>{translations.presetCampaigns || "Preset Campaigns"}</CardTitle>
                 <CardDescription>
-                  Choose from ready-to-use campaign templates
+                  {translations.chooseTemplates || "Choose from ready-to-use campaign templates"}
                 </CardDescription>
               </div>
               <Button variant="outline" onClick={() => {
@@ -95,7 +97,7 @@ const CampaignsPage = () => {
                 setShowCreator(false);
                 setShowSettings(false);
               }}>
-                View All Campaigns
+                {translations.viewAllCampaigns || "View All Campaigns"}
               </Button>
             </div>
           </CardHeader>
@@ -218,15 +220,15 @@ const CampaignsPage = () => {
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle>All Campaigns</CardTitle>
+            <CardTitle>{translations.allCampaigns || "All Campaigns"}</CardTitle>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" className="hidden md:flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                Schedule
+                {translations.schedule || "Schedule"}
               </Button>
               <Button variant="outline" size="sm" className="hidden md:flex items-center gap-2">
                 <BarChart className="h-4 w-4" />
-                Analytics
+                {translations.analytics || "Analytics"}
               </Button>
             </div>
           </div>
@@ -238,25 +240,25 @@ const CampaignsPage = () => {
                 value="active" 
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
               >
-                Active
+                {translations.active || "Active"}
               </TabsTrigger>
               <TabsTrigger 
                 value="scheduled" 
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
               >
-                Scheduled
+                {translations.scheduled || "Scheduled"}
               </TabsTrigger>
               <TabsTrigger 
                 value="completed" 
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
               >
-                Completed
+                {translations.completed || "Completed"}
               </TabsTrigger>
               <TabsTrigger 
                 value="drafts" 
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
               >
-                Drafts
+                {translations.drafts || "Drafts"}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="active" className="p-6">
@@ -281,9 +283,9 @@ const CampaignsPage = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Marketing Campaigns</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{translations.marketingCampaigns || "Marketing Campaigns"}</h2>
           <p className="text-muted-foreground">
-            Create and manage marketing campaigns for your restaurant.
+            {translations.createManageCampaigns || "Create and manage marketing campaigns for your restaurant."}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -298,20 +300,20 @@ const CampaignsPage = () => {
               }}
             >
               <Sparkles className="h-4 w-4" />
-              <span className="hidden md:inline">Preset Campaigns</span>
-              <span className="inline md:hidden">Presets</span>
+              <span className="hidden md:inline">{translations.presetCampaigns || "Preset Campaigns"}</span>
+              <span className="inline md:hidden">{translations.presets || "Presets"}</span>
             </Button>
           )}
           <Button variant="outline" className="hidden md:flex items-center gap-2">
             <Filter className="h-4 w-4" />
-            Filter
+            {translations.filter || "Filter"}
           </Button>
           <Button onClick={() => {
             setShowCreator(true);
             setShowPresets(false);
             setShowSettings(false);
           }}>
-            <PlusCircle className="mr-2 h-4 w-4" /> Create Campaign
+            <PlusCircle className="mr-2 h-4 w-4" /> {translations.createCampaign || "Create Campaign"}
           </Button>
         </div>
       </div>

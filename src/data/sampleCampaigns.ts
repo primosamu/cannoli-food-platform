@@ -14,7 +14,8 @@ export const sampleCampaigns: CampaignData[] = [
     updatedAt: new Date("2025-03-01"),
     scheduledDate: new Date("2025-04-15"),
     menuIds: ["menu-1", "menu-2"],
-    deliveryPlatforms: ["ifood", "rappi"]
+    deliveryPlatforms: ["ifood", "rappi"],
+    channels: ["whatsapp"]  // Added the required channels property
   },
   {
     id: "camp-2",
@@ -27,7 +28,8 @@ export const sampleCampaigns: CampaignData[] = [
     createdAt: new Date("2025-03-10"),
     updatedAt: new Date("2025-03-10"),
     scheduledDate: new Date("2025-04-20"),
-    menuIds: ["menu-1"]
+    menuIds: ["menu-1"],
+    channels: ["email"]  // Added the required channels property
   },
   {
     id: "camp-3",
@@ -38,7 +40,8 @@ export const sampleCampaigns: CampaignData[] = [
     audienceSize: 2100,
     createdAt: new Date("2025-03-15"),
     updatedAt: new Date("2025-03-15"),
-    scheduledDate: new Date("2025-04-22")
+    scheduledDate: new Date("2025-04-22"),
+    channels: ["sms"]  // Added the required channels property
   },
   {
     id: "camp-4",
@@ -50,7 +53,8 @@ export const sampleCampaigns: CampaignData[] = [
     audienceSize: 10000,
     createdAt: new Date("2025-03-20"),
     updatedAt: new Date("2025-03-20"),
-    platform: "facebook"
+    platform: "facebook",
+    channels: ["paid"]  // Added the required channels property
   },
   {
     id: "camp-5",
@@ -62,7 +66,8 @@ export const sampleCampaigns: CampaignData[] = [
     audienceSize: 4200,
     createdAt: new Date("2025-01-25"),
     updatedAt: new Date("2025-02-15"),
-    scheduledDate: new Date("2025-02-14")
+    scheduledDate: new Date("2025-02-14"),
+    channels: ["email"]  // Added the required channels property
   }
 ];
 

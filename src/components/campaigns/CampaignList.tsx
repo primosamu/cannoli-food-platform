@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { CampaignData, CampaignType } from "@/types/campaign";
 import { DataTable } from "@/components/ui/data-table";
@@ -30,11 +31,15 @@ import { format } from "date-fns";
 interface CampaignListProps {
   campaigns: CampaignData[];
   type?: "active" | "scheduled" | "completed" | "draft";
+  onViewReport?: (campaignId: string) => void;
+  onViewCampaign?: (campaignId: string) => void;
 }
 
 const CampaignList: React.FC<CampaignListProps> = ({
   campaigns,
   type = "active",
+  onViewReport,
+  onViewCampaign,
 }) => {
   const [data, setData] = useState<CampaignData[]>(campaigns);
 
@@ -123,8 +128,14 @@ const CampaignList: React.FC<CampaignListProps> = ({
       id: "stats",
       header: "Statistics",
       cell: ({ row }) => {
+        const campaign = row.original;
         return (
-          <Button variant="outline" size="sm" className="h-8 gap-1">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-8 gap-1"
+            onClick={() => onViewReport && onViewReport(campaign.id)}
+          >
             <BarChart className="h-4 w-4" />
             <span>View Stats</span>
           </Button>
@@ -149,7 +160,7 @@ const CampaignList: React.FC<CampaignListProps> = ({
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onViewCampaign && onViewCampaign(campaign.id)}>
                   <Eye className="mr-2 h-4 w-4" /> View
                 </DropdownMenuItem>
                 <DropdownMenuItem>

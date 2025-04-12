@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useMenu } from "./MenuProvider";
 import {
@@ -112,7 +111,18 @@ export const MenuItemFormModal = () => {
         ...values,
       });
     } else {
-      addMenuItem(values);
+      addMenuItem({
+        name: values.name,
+        description: values.description,
+        category: values.category,
+        status: values.status,
+        active: values.active,
+        featured: values.featured || false,
+        prices: values.prices,
+        platforms: values.platforms,
+        allergens: [],
+        tags: [],
+      });
     }
     handleClose();
   };

@@ -79,3 +79,5 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({ customer }) => {
     </div>
   );
 };
+
+export default CustomerDetail;

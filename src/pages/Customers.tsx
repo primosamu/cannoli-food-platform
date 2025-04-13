@@ -4,21 +4,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { CustomerList } from "@/components/customers/CustomerList";
-import { CustomerDetailDialog } from "@/components/customers/CustomerDetailDialog";
-import { CustomerEditDialog } from "@/components/customers/CustomerEditDialog";
+// Fix import to use default export instead of named export
+import CustomerList from "@/components/customers/CustomerList";
+// Fix import to use default export instead of named export
+import CustomerDetailDialog from "@/components/customers/CustomerDetailDialog";
+// Fix import to use default export instead of named export
+import CustomerEditDialog from "@/components/customers/CustomerEditDialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { CustomerEnrichmentDialog } from "@/components/customers/CustomerEnrichmentDialog";
 import { InsufficientCreditsDialog } from "@/components/customers/InsufficientCreditsDialog";
 
-import { Plus, Import, Export, Users, TagIcon } from "lucide-react";
+// Fix incorrect import - Export is not available, use FileUp or Upload instead
+import { Plus, Import, FileUp, Users, TagIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Tag } from "@/components/ui/tag";
+// Remove incorrect tag import
 import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useLanguage } from "@/contexts/LanguageContext";
 
 const sampleCustomers = [
   {
@@ -127,7 +130,8 @@ export const Customers = () => {
   const confirmDelete = () => {
     setCustomers(customers.filter(c => c.id !== selectedCustomer.id));
     setIsDeleteConfirmOpen(false);
-    toast.success(`Customer ${selectedCustomer.name} was removed`);
+    // Fix toast usage - use proper format without title property
+    toast("Customer was removed successfully");
   };
 
   const handleCustomerUpdate = (updatedCustomer: any) => {
@@ -135,7 +139,8 @@ export const Customers = () => {
       c.id === updatedCustomer.id ? updatedCustomer : c
     ));
     setIsEditOpen(false);
-    toast.success(`Customer ${updatedCustomer.name} was updated successfully`);
+    // Fix toast usage
+    toast("Customer updated successfully");
   };
 
   const handleEnrichmentClick = () => {
@@ -147,10 +152,8 @@ export const Customers = () => {
   };
 
   const handleProceedWithEnrichment = () => {
-    toast({
-      title: "Phone Enrichment",
-      description: "The enrichment process has started and you will be notified when it is complete.",
-    });
+    // Fix toast usage
+    toast("The enrichment process has started and you will be notified when it is complete.");
     setIsEnrichmentDialogOpen(false);
   };
 
@@ -188,7 +191,7 @@ export const Customers = () => {
           </Button>
           
           <Button variant="outline" size="icon" className="h-8 w-8">
-            <Export className="h-3.5 w-3.5" />
+            <FileUp className="h-3.5 w-3.5" />
           </Button>
         </div>
       </div>
@@ -340,10 +343,10 @@ export const Customers = () => {
         </AlertDialogContent>
       </AlertDialog>
 
+      {/* Fix component props to match interface definition */}
       <CustomerEnrichmentDialog
         isOpen={isEnrichmentDialogOpen}
         onClose={() => setIsEnrichmentDialogOpen(false)}
-        customersWithoutPhone={customersWithoutPhone}
         onProceed={handleProceedWithEnrichment}
       />
 

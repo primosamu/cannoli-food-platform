@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Customer } from "./CustomerList";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { CustomerDetail } from "./CustomerDetail";
 
 interface CustomerDetailDialogProps {
@@ -25,8 +24,6 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
   onClose,
   onEdit,
 }) => {
-  const { translations } = useLanguage();
-
   if (!customer) return null;
 
   return (
@@ -40,11 +37,11 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
         
         <DialogFooter className="gap-2 sm:gap-0">
           <Button variant="outline" onClick={onClose}>
-            {translations.close || "Fechar"}
+            Close
           </Button>
           {onEdit && (
             <Button onClick={() => onEdit(customer)}>
-              {translations.edit || "Editar"}
+              Edit
             </Button>
           )}
         </DialogFooter>

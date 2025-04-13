@@ -1,6 +1,5 @@
 
 import React from "react";
-import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Dialog,
   DialogContent,
@@ -15,38 +14,45 @@ interface CustomerEnrichmentDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onProceed: () => void;
+  // This prop is used in Customers.tsx but was missing in the interface
+  customersWithoutPhone?: any[];
 }
 
 export const CustomerEnrichmentDialog: React.FC<CustomerEnrichmentDialogProps> = ({
   isOpen,
   onClose,
   onProceed,
+  customersWithoutPhone,
 }) => {
-  const { translations } = useLanguage();
-  
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{translations.phoneEnrichment || "Enriquecimento de Telefone"}</DialogTitle>
+          <DialogTitle>Phone Enrichment</DialogTitle>
           <DialogDescription>
-            {translations.completeMissingPhoneNumbers || "Completar números de telefone faltantes"}
+            Complete missing phone numbers
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <p className="text-sm text-muted-foreground">
-            {translations.apiWillUse || "A API utilizará o CPF do cliente para obter números de telefone válidos de nosso provedor de dados confiável."}
+            The API will use the customer's CPF to obtain valid phone numbers from our trusted data provider.
+            {customersWithoutPhone && (
+              <span className="block mt-2">
+                {customersWithoutPhone.length} customers will be processed.
+              </span>
+            )}
           </p>
         </div>
         <DialogFooter className="gap-2 sm:gap-0">
           <Button variant="outline" onClick={onClose}>
-            {translations.cancel || "Cancelar"}
+            Cancel
           </Button>
           <Button onClick={onProceed}>
-            {translations.proceedWithEnrichment || "Prosseguir com o Enriquecimento"}
+            Proceed with Enrichment
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
+

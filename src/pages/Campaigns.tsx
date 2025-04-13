@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,10 +9,11 @@ import {
   BarChart, 
   Calendar, 
   Filter,
-  Sparkles
+  Sparkles,
+  AlertCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CampaignCreator from "@/components/campaigns/CampaignCreator";
 import CampaignList from "@/components/campaigns/CampaignList";
 import ImageOptimizer from "@/components/campaigns/ImageOptimizer";
@@ -31,6 +31,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { getTemplatesByCategory } from "@/data/campaignTemplates";
 import { CampaignTemplate, CampaignEvent } from "@/types/campaign";
@@ -49,7 +50,9 @@ const CampaignsPage = () => {
   const [showReports, setShowReports] = useState(false);
   const [selectedCampaignId, setSelectedCampaignId] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<CampaignTemplate | null>(null);
+  const [showInsufficientCreditsDialog, setShowInsufficientCreditsDialog] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const { translations } = useLanguage();
 
@@ -57,6 +60,9 @@ const CampaignsPage = () => {
   const scheduledCampaigns = getScheduledCampaigns();
   const completedCampaigns = getCompletedCampaigns();
   const draftCampaigns = getDraftCampaigns();
+  
+  const availableCampaignCredits = 50; // Simulado como baixo para demonstração
+  const minimumCreditsRequired = 100;
 
   useEffect(() => {
     if (location.state && location.state.createCampaign) {
@@ -76,7 +82,16 @@ const CampaignsPage = () => {
     }
   }, [location]);
 
+  const checkSufficientCredits = () => {
+    return availableCampaignCredits >= minimumCreditsRequired;
+  };
+
   const handlePresetSelect = (template: CampaignTemplate) => {
+    if (!checkSufficientCredits()) {
+      setShowInsufficientCreditsDialog(true);
+      return;
+    }
+    
     setSelectedTemplate(template);
     setShowCreator(false);
     setShowPresets(false);
@@ -89,6 +104,19 @@ const CampaignsPage = () => {
     });
   };
 
+  const handleCreateCampaign = () => {
+    if (!checkSufficientCredits()) {
+      setShowInsufficientCreditsDialog(true);
+      return;
+    }
+
+    setShowCreator(true);
+    setShowPresets(false);
+    setShowSettings(false);
+    setShowReports(false);
+    setActiveView("list");
+  };
+
   const handleViewReport = (campaignId: string) => {
     setSelectedCampaignId(campaignId);
     setShowReports(true);
@@ -99,6 +127,11 @@ const CampaignsPage = () => {
   };
 
   const handleViewCampaign = (campaignId: string) => {
+    if (!checkSufficientCredits()) {
+      setShowInsufficientCreditsDialog(true);
+      return;
+    }
+    
     setSelectedCampaignId(campaignId);
     setShowCreator(true);
     setShowPresets(false);
@@ -106,8 +139,12 @@ const CampaignsPage = () => {
     setShowReports(false);
   };
 
+  const handleNavigateToBilling = () => {
+    navigate('/billing');
+    setShowInsufficientCreditsDialog(false);
+  };
+
   const renderContent = () => {
-    // Show campaign reports
     if (showReports) {
       return (
         <Card>
@@ -134,7 +171,6 @@ const CampaignsPage = () => {
       );
     }
     
-    // Show preset campaigns selection
     if (showPresets) {
       return (
         <Card>
@@ -163,7 +199,6 @@ const CampaignsPage = () => {
       );
     }
     
-    // Show campaign settings
     if (showSettings) {
       return (
         <Card>
@@ -196,7 +231,6 @@ const CampaignsPage = () => {
       );
     }
     
-    // Show campaign creator
     if (showCreator) {
       return (
         <Card>
@@ -273,7 +307,6 @@ const CampaignsPage = () => {
       );
     }
     
-    // Show campaign list or calendar view
     if (activeView === "calendar") {
       return (
         <CampaignCalendar
@@ -283,7 +316,6 @@ const CampaignsPage = () => {
       );
     }
 
-    // Default view - campaign list
     return (
       <Card>
         <CardHeader className="pb-3">
@@ -433,13 +465,7 @@ const CampaignsPage = () => {
             <Filter className="h-4 w-4" />
             {translations.filter || "Filter"}
           </Button>
-          <Button onClick={() => {
-            setShowCreator(true);
-            setShowPresets(false);
-            setShowSettings(false);
-            setShowReports(false);
-            setActiveView("list");
-          }}>
+          <Button onClick={handleCreateCampaign}>
             <PlusCircle className="mr-2 h-4 w-4" /> {translations.createCampaign || "Create Campaign"}
           </Button>
         </div>
@@ -489,6 +515,41 @@ const CampaignsPage = () => {
               Click on "Preset Campaigns" to quickly select a pre-configured campaign for common marketing needs.
             </p>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showInsufficientCreditsDialog} onOpenChange={setShowInsufficientCreditsDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-orange-500" />
+              {translations.insufficientCredits || "Créditos insuficientes"}
+            </DialogTitle>
+            <DialogDescription>
+              {translations.buyCreditsToUseFeature || "Compre créditos para utilizar esta funcionalidade"}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm">
+              {`${translations.campaignCredits || "Créditos de campanhas"}: `}
+              <span className="font-semibold text-orange-500">{availableCampaignCredits}</span>
+              {` / ${minimumCreditsRequired} ${translations.credits || "créditos"}`}
+            </p>
+            <div className="h-2 bg-muted mt-2 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-orange-500" 
+                style={{ width: `${(availableCampaignCredits / minimumCreditsRequired) * 100}%` }}
+              ></div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowInsufficientCreditsDialog(false)}>
+              {translations.cancel || "Cancelar"}
+            </Button>
+            <Button onClick={handleNavigateToBilling}>
+              {translations.buyCredits || "Comprar Créditos"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

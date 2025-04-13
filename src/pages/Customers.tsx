@@ -1,226 +1,314 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  PlusCircle, 
-  Download, 
-  Upload, 
-  Filter, 
-  Search,
-  UserPlus,
-  Mail,
-  Tag,
-  UserCheck
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SearchIcon, PlusCircle, AlertCircle, Download, Upload, Tag } from "lucide-react";
 import CustomerList from "@/components/customers/CustomerList";
-import { sampleCustomers } from "@/data/sampleCustomers";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
+import { CustomerDetailDialog } from "@/components/customers/CustomerDetailDialog";
+import { CustomerEditDialog } from "@/components/customers/CustomerEditDialog";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useNavigate } from "react-router-dom";
+
+interface Customer {
+  id: string;
+  name: string;
+  phoneNumber: string;
+  lastOrder: string;
+  totalSpent: number;
+  tags: string[];
+}
 
 const CustomersPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("all");
-  const { translations } = useLanguage();
+  const [customers, setCustomers] = useState<Customer[]>([
+    {
+      id: '1',
+      name: 'John Doe',
+      phoneNumber: '+1234567890',
+      lastOrder: '2024-07-20',
+      totalSpent: 150.00,
+      tags: ['VIP', 'New'],
+    },
+    {
+      id: '2',
+      name: 'Jane Smith',
+      phoneNumber: '+1987654321',
+      lastOrder: '2024-07-15',
+      totalSpent: 75.50,
+      tags: ['Regular'],
+    },
+    {
+      id: '3',
+      name: 'Alice Johnson',
+      phoneNumber: '+1555123456',
+      lastOrder: '2024-07-10',
+      totalSpent: 200.00,
+      tags: ['VIP', 'Loyal'],
+    },
+    {
+      id: '4',
+      name: 'Bob Williams',
+      phoneNumber: '+1123555789',
+      lastOrder: '2024-07-05',
+      totalSpent: 50.00,
+      tags: ['New'],
+    },
+    {
+      id: '5',
+      name: 'Charlie Brown',
+      phoneNumber: '+1987123555',
+      lastOrder: '2024-06-30',
+      totalSpent: 120.75,
+      tags: ['Regular', 'Loyal'],
+    },
+  ]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [isEnrichmentDialogOpen, setIsEnrichmentDialogOpen] = useState(false);
   const { toast } = useToast();
+  const [showInsufficientCreditsDialog, setShowInsufficientCreditsDialog] = useState(false);
+  const navigate = useNavigate();
+  const { translations } = useLanguage();
 
-  const filteredCustomers = sampleCustomers.filter(
-    (customer) =>
-      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.phone.toLowerCase().includes(searchTerm.toLowerCase())
+  // Simulating available phone enrichment credits
+  const availablePhoneCredits = 150; // Simulando como baixo para demonstração
+  const minimumCreditsRequired = 200;
+  
+  const filteredCustomers = customers.filter(customer =>
+    customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    customer.phoneNumber.includes(searchQuery)
   );
 
-  const displayedCustomers = activeTab === "all" 
-    ? filteredCustomers 
-    : filteredCustomers.filter(customer => 
-        customer.tags.includes(activeTab === "regular" ? "regular" : 
-                              activeTab === "vip" ? "vip" : 
-                              activeTab === "new" ? "new" : "")
-      );
+  const handleDetailOpen = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setIsDetailDialogOpen(true);
+  };
 
+  const handleDetailClose = () => {
+    setIsDetailDialogOpen(false);
+    setSelectedCustomer(null);
+  };
+
+  const handleEditOpen = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleEditClose = () => {
+    setIsEditDialogOpen(false);
+    setSelectedCustomer(null);
+  };
+
+  const handleCustomerUpdate = (updatedCustomer: Customer) => {
+    setCustomers(customers.map(customer =>
+      customer.id === updatedCustomer.id ? updatedCustomer : customer
+    ));
+    setIsEditDialogOpen(false);
+    setSelectedCustomer(null);
+    toast({
+      title: translations.customerUpdated || "Customer updated",
+      description: `${updatedCustomer.name} ${translations.wasUpdated || "was updated successfully"}`,
+    });
+  };
+
+  const handleDelete = (customer: Customer) => {
+    setCustomers(customers.filter(c => c.id !== customer.id));
+    toast({
+      title: translations.customerDeleted || "Customer deleted",
+      description: `${customer.name} ${translations.wasRemoved || "was removed"}`,
+    });
+  };
+  
+  const checkSufficientCredits = () => {
+    return availablePhoneCredits >= minimumCreditsRequired;
+  };
+  
+  const handleEnrichment = () => {
+    if (!checkSufficientCredits()) {
+      setShowInsufficientCreditsDialog(true);
+      return;
+    }
+    
+    // Original enrichment code
+    setIsEnrichmentDialogOpen(true);
+  };
+  
+  const handleNavigateToBilling = () => {
+    navigate('/billing');
+    setShowInsufficientCreditsDialog(false);
+  };
+  
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">{translations.customerManagement}</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{translations.customerManagement || "Customer Management"}</h2>
           <p className="text-muted-foreground">
-            {translations.viewAndManageCustomer}
+            {translations.manageCustomerInfo || "Manage your customer information and contact details"}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center space-x-2">
           <Button variant="outline">
-            <Upload className="mr-2 h-4 w-4" /> {translations.importCustomers}
+            <Upload className="mr-2 h-4 w-4" />
+            {translations.importCustomers || "Import"}
           </Button>
           <Button variant="outline">
-            <Download className="mr-2 h-4 w-4" /> {translations.exportCustomers}
+            <Download className="mr-2 h-4 w-4" />
+            {translations.exportCustomers || "Export"}
           </Button>
           <Button>
-            <PlusCircle className="mr-2 h-4 w-4" /> {translations.addCustomer}
+            <PlusCircle className="mr-2 h-4 w-4" />
+            {translations.addCustomer || "Add Customer"}
           </Button>
         </div>
       </div>
-
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <div className="space-y-1">
-            <CardTitle>{translations.connectedCustomers}</CardTitle>
-            <CardDescription>
-              {translations.manageCustomerInfo}
-            </CardDescription>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="relative max-w-sm">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input 
-                type="search" 
-                placeholder={translations.searchCustomers} 
-                className="pl-8 w-[250px]" 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+        <CardHeader>
+          <CardTitle>{translations.connectedCustomers || "Connected Customers"}</CardTitle>
+          <CardDescription>{translations.viewAndManageCustomer || "View and manage your customer database."}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
+            <div className="col-span-2">
+              <Input
+                type="search"
+                placeholder={translations.searchCustomers || "Search customers..."}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <Button variant="outline" size="icon">
-              <Filter className="h-4 w-4" />
-            </Button>
+            <div>
+              <Button variant="outline" className="w-full">
+                <Tag className="mr-2 h-4 w-4" />
+                {translations.tags || "Tags"}
+              </Button>
+            </div>
           </div>
-        </CardHeader>
-
-        <CardContent className="p-0">
-          <Tabs 
-            value={activeTab} 
-            onValueChange={setActiveTab} 
-            className="p-0"
-          >
-            <TabsList className="grid w-full grid-cols-5 rounded-none border-b bg-transparent p-0">
-              <TabsTrigger
-                value="all"
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
-              >
-                {translations.allCustomers}
-              </TabsTrigger>
-              <TabsTrigger
-                value="vip"
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
-              >
-                <span className="flex items-center gap-1">
-                  <UserCheck className="h-4 w-4" />
-                  {translations.vipCustomer}
-                </span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="regular"
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
-              >
-                <span className="flex items-center gap-1">
-                  <UserCheck className="h-4 w-4" />
-                  {translations.regularCustomer}
-                </span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="new"
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
-              >
-                <span className="flex items-center gap-1">
-                  <UserPlus className="h-4 w-4" />
-                  {translations.newCustomer}
-                </span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="tags"
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
-              >
-                <span className="flex items-center gap-1">
-                  <Tag className="h-4 w-4" />
-                  {translations.tags}
-                </span>
-              </TabsTrigger>
+        </CardContent>
+        <CardContent>
+          <Tabs defaultValue="all" className="space-y-4">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="all">{translations.allCustomers || "All Customers"}</TabsTrigger>
+              <TabsTrigger value="new">{translations.newCustomer || "New"}</TabsTrigger>
+              <TabsTrigger value="vip">{translations.vipCustomer || "VIP"}</TabsTrigger>
+              <TabsTrigger value="regular">{translations.regularCustomer || "Regular"}</TabsTrigger>
             </TabsList>
-
-            <TabsContent value="all" className="p-0 pt-6">
-              {displayedCustomers.length > 0 ? (
-                <CustomerList customers={displayedCustomers} />
+            <TabsContent value="all" className="pt-4">
+              {filteredCustomers.length > 0 ? (
+                <CustomerList
+                  customers={filteredCustomers}
+                  onDetailOpen={handleDetailOpen}
+                  onEditOpen={handleEditOpen}
+                  onDelete={handleDelete}
+                />
               ) : (
-                <div className="text-center p-16 text-muted-foreground">
-                  <p className="text-lg">{translations.noCustomersFound}</p>
-                  <p className="mt-2">{translations.adjustSearchFilter}</p>
+                <div className="text-center py-4">
+                  <p className="text-muted-foreground">{translations.noCustomersFound || "No customers found."}</p>
+                  <p className="text-muted-foreground">{translations.adjustSearchFilter || "Try adjusting your search or filter criteria."}</p>
                 </div>
               )}
             </TabsContent>
-
-            <TabsContent value="vip" className="p-0 pt-6">
-              {displayedCustomers.length > 0 ? (
-                <CustomerList customers={displayedCustomers} />
-              ) : (
-                <div className="text-center p-16 text-muted-foreground">
-                  <p className="text-lg">{translations.noCustomersFound}</p>
-                  <Button className="mt-4">
-                    <UserPlus className="mr-2 h-4 w-4" /> {translations.addCustomer}
-                  </Button>
-                </div>
-              )}
+            <TabsContent value="new" className="pt-4">
+              {/* Content for New Customers tab */}
             </TabsContent>
-
-            <TabsContent value="regular" className="p-0 pt-6">
-              {displayedCustomers.length > 0 ? (
-                <CustomerList customers={displayedCustomers} />
-              ) : (
-                <div className="text-center p-16 text-muted-foreground">
-                  <p className="text-lg">{translations.noCustomersFound}</p>
-                </div>
-              )}
+            <TabsContent value="vip" className="pt-4">
+              {/* Content for VIP Customers tab */}
             </TabsContent>
-
-            <TabsContent value="new" className="p-0 pt-6">
-              {displayedCustomers.length > 0 ? (
-                <CustomerList customers={displayedCustomers} />
-              ) : (
-                <div className="text-center p-16 text-muted-foreground">
-                  <p className="text-lg">{translations.noCustomersFound}</p>
-                </div>
-              )}
-            </TabsContent>
-
-            <TabsContent value="tags" className="p-6">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <Button variant="outline" className="justify-start h-auto p-4">
-                  <div className="text-left">
-                    <div className="font-medium">Delivery</div>
-                    <Badge variant="secondary" className="mt-1">3 customers</Badge>
-                  </div>
-                </Button>
-                <Button variant="outline" className="justify-start h-auto p-4">
-                  <div className="text-left">
-                    <div className="font-medium">Dine-in</div>
-                    <Badge variant="secondary" className="mt-1">2 customers</Badge>
-                  </div>
-                </Button>
-                <Button variant="outline" className="justify-start h-auto p-4">
-                  <div className="text-left">
-                    <div className="font-medium">Pickup</div>
-                    <Badge variant="secondary" className="mt-1">1 customer</Badge>
-                  </div>
-                </Button>
-                <Button variant="outline" className="justify-start h-auto p-4">
-                  <div className="text-left">
-                    <div className="font-medium">Catering</div>
-                    <Badge variant="secondary" className="mt-1">1 customer</Badge>
-                  </div>
-                </Button>
-                <Button variant="outline" className="justify-start h-auto p-4 border-dashed">
-                  <div className="text-left flex items-center">
-                    <PlusCircle className="h-4 w-4 mr-2" />
-                    <span>{translations.addCustomer}</span>
-                  </div>
-                </Button>
-              </div>
+            <TabsContent value="regular" className="pt-4">
+              {/* Content for Regular Customers tab */}
             </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>{translations.phoneEnrichment || "Phone Number Enrichment"}</CardTitle>
+          <CardDescription>
+            {customers.length} {translations.customersWithoutPhone || "customers without phone numbers"}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button onClick={handleEnrichment}>
+            <SearchIcon className="mr-2 h-4 w-4" />
+            {translations.completeMissingPhoneNumbers || "Complete Missing Phone Numbers"}
+          </Button>
+        </CardContent>
+      </Card>
+      
+      {/* Insufficient Credits Dialog */}
+      <Dialog open={showInsufficientCreditsDialog} onOpenChange={setShowInsufficientCreditsDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-orange-500" />
+              {translations.insufficientCredits || "Créditos insuficientes"}
+            </DialogTitle>
+            <DialogDescription>
+              {translations.buyCreditsToUseFeature || "Compre créditos para utilizar esta funcionalidade"}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm">
+              {`${translations.phoneEnrichmentCredits || "Créditos de enriquecimento de telefone"}: `}
+              <span className="font-semibold text-orange-500">{availablePhoneCredits}</span>
+              {` / ${minimumCreditsRequired} ${translations.credits || "créditos"}`}
+            </p>
+            <div className="h-2 bg-muted mt-2 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-orange-500" 
+                style={{ width: `${(availablePhoneCredits / minimumCreditsRequired) * 100}%` }}
+              ></div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowInsufficientCreditsDialog(false)}>
+              {translations.cancel || "Cancelar"}
+            </Button>
+            <Button onClick={handleNavigateToBilling}>
+              {translations.buyCredits || "Comprar Créditos"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <CustomerDetailDialog
+        open={isDetailDialogOpen}
+        onClose={handleDetailClose}
+        customer={selectedCustomer}
+      />
+      <CustomerEditDialog
+        open={isEditDialogOpen}
+        onClose={handleEditClose}
+        customer={selectedCustomer}
+        onUpdate={handleCustomerUpdate}
+      />
+      <Dialog open={isEnrichmentDialogOpen} onOpenChange={setIsEnrichmentDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{translations.phoneEnrichment || "Phone Number Enrichment"}</DialogTitle>
+            <DialogDescription>
+              {translations.completeMissingPhoneNumbers || "Complete Missing Phone Numbers"}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm text-muted-foreground">
+              {translations.apiWillUse || "The API will use the customer CPF to fetch valid mobile phone numbers from our trusted data provider."}
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEnrichmentDialogOpen(false)}>
+              {translations.cancel || "Cancel"}
+            </Button>
+            <Button>
+              {translations.proceedWithEnrichment || "Proceed with Enrichment"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

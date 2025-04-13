@@ -11,12 +11,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { CreditPackageSelector } from "./credits/CreditPackageSelector";
-import { CreditPackageDetails } from "./credits/CreditPackageDetails";
 import { CreditQuantitySelector } from "./credits/CreditQuantitySelector";
 import { CreditCostsInfo } from "./credits/CreditCostsInfo";
 import { CreditSummary } from "./credits/CreditSummary";
-import { CreditType, CreditPackage, CreditPackagesData, CreditCosts } from "./credits/types";
+import { CreditType, CreditPackagesData, CreditCosts } from "./credits/types";
+import { CreditCards } from "./CreditCards";
 
 interface BuyCreditsModalProps {
   open: boolean;
@@ -32,14 +31,15 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
   creditType
 }) => {
   const { translations } = useLanguage();
-  const [selectedTab, setSelectedTab] = useState<CreditType>(creditType);
-  const [selectedPackage, setSelectedPackage] = useState<string>("small");
+  const [selectedTab, setSelectedTab] = useState<string>("packages");
+  const [selectedType, setSelectedType] = useState<CreditType>(creditType);
+  const [selectedPackage, setSelectedPackage] = useState<number>(500);
   const [quantity, setQuantity] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   
   useEffect(() => {
     if (creditType) {
-      setSelectedTab(creditType);
+      setSelectedType(creditType);
     }
   }, [creditType]);
   
@@ -73,77 +73,111 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
     rcs: 0.30 // R$0,30 por mensagem RCS
   };
   
-  const currentPackages = creditPackages[selectedTab];
-  const currentPackage = currentPackages.find(pkg => pkg.id === `${selectedTab}-${selectedPackage}`);
-  
-  useEffect(() => {
-    setSelectedPackage("small");
-    setQuantity(1);
-  }, [selectedTab]);
-  
-  useEffect(() => {
-    if (currentPackage) {
-      setTotal(currentPackage.price * quantity);
+  const getCreditsForPackage = (packageValue: number) => {
+    switch(packageValue) {
+      case 100: return 1000;
+      case 500: return 6000;  // 5500 + 500 bonus
+      case 1000: return 14000; // 12000 + 2000 bonus
+      default: return 6000;
     }
-  }, [currentPackage, quantity]);
-  
-  const handleTabChange = (value: CreditType) => {
-    setSelectedTab(value);
   };
   
-  const handlePackageChange = (packageSize: string) => {
-    setSelectedPackage(packageSize);
-  };
+  useEffect(() => {
+    if (selectedTab === "packages") {
+      setTotal(selectedPackage * quantity);
+    } else {
+      const currentPackages = creditPackages[selectedType];
+      const currentPackage = currentPackages.find(pkg => pkg.id === `${selectedType}-medium`);
+      if (currentPackage) {
+        setTotal(currentPackage.price * quantity);
+      }
+    }
+  }, [selectedType, selectedTab, selectedPackage, quantity, creditPackages]);
   
   const handlePurchase = () => {
-    if (currentPackage) {
-      onPurchase(currentPackage.id, quantity);
-      onClose();
+    if (selectedTab === "packages") {
+      onPurchase(`package-${selectedPackage}`, quantity);
+    } else {
+      const packageId = `${selectedType}-medium`;
+      onPurchase(packageId, quantity);
     }
+  };
+
+  const handleSelectType = (type: CreditType) => {
+    setSelectedType(type);
+  };
+
+  const handleSelectPackage = (packageValue: number) => {
+    setSelectedPackage(packageValue);
   };
   
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[700px]">
         <DialogHeader>
           <DialogTitle>{translations.buyCredits || "Comprar Créditos"}</DialogTitle>
           <DialogDescription>
-            {translations.selectQuantity || "Selecione a quantidade de créditos que deseja comprar"}
+            {translations.selectPackageOrCredits || "Selecione um pacote ou tipo específico de créditos para comprar"}
           </DialogDescription>
         </DialogHeader>
         
         <div className="py-4 space-y-6">
-          <Tabs defaultValue={selectedTab} value={selectedTab} onValueChange={(value) => handleTabChange(value as CreditType)}>
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="phone">{translations.phoneEnrichment || "Enriquecimento"}</TabsTrigger>
-              <TabsTrigger value="message">SMS</TabsTrigger>
-              <TabsTrigger value="rcs">RCS</TabsTrigger>
-              <TabsTrigger value="campaign">{translations.campaignsCreated || "Campanhas"}</TabsTrigger>
+          <Tabs defaultValue="packages" value={selectedTab} onValueChange={setSelectedTab}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="packages">{translations.creditPackages || "Pacotes de Créditos"}</TabsTrigger>
+              <TabsTrigger value="specific">{translations.specificCredits || "Créditos Específicos"}</TabsTrigger>
             </TabsList>
             
-            <CreditCostsInfo selectedTab={selectedTab} costs={creditCosts} />
+            <TabsContent value="packages" className="space-y-4 pt-4">
+              <CreditCards 
+                onBuyCredits={() => {}}
+                showPackages={true}
+                selectedPackage={selectedPackage}
+                onSelectPackage={handleSelectPackage}
+              />
+              
+              <CreditQuantitySelector 
+                quantity={quantity}
+                onQuantityChange={setQuantity}
+              />
+            </TabsContent>
             
-            <CreditPackageSelector 
-              packageSizes={["small", "medium", "large"]}
-              selectedPackage={selectedPackage}
-              onPackageChange={handlePackageChange}
-            />
-            
-            {currentPackage && (
-              <>
-                <CreditPackageDetails currentPackage={currentPackage} />
-                
-                <CreditQuantitySelector 
-                  quantity={quantity}
-                  onQuantityChange={setQuantity}
-                />
-              </>
-            )}
+            <TabsContent value="specific" className="space-y-4 pt-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {["phone", "message", "campaign", "rcs"].map((type) => (
+                  <Card 
+                    key={type}
+                    className={`cursor-pointer ${selectedType === type ? 'border-primary ring-1 ring-primary' : ''}`}
+                    onClick={() => handleSelectType(type as CreditType)}
+                  >
+                    <CardHeader className="p-4">
+                      <CardTitle className="text-sm">
+                        {type === "phone" && (translations.phoneEnrichment || "Enriquecimento")}
+                        {type === "message" && "SMS"}
+                        {type === "campaign" && (translations.campaignsCreated || "Campanhas")}
+                        {type === "rcs" && "RCS"}
+                      </CardTitle>
+                    </CardHeader>
+                  </Card>
+                ))}
+              </div>
+              
+              <CreditCostsInfo selectedTab={selectedType} costs={creditCosts} />
+              
+              <CreditQuantitySelector 
+                quantity={quantity}
+                onQuantityChange={setQuantity}
+              />
+            </TabsContent>
           </Tabs>
           
           <CreditSummary 
             total={total} 
-            totalCredits={currentPackage ? quantity * currentPackage.credits : 0} 
+            totalCredits={
+              selectedTab === "packages" 
+                ? getCreditsForPackage(selectedPackage) * quantity
+                : Math.floor(total / creditCosts[selectedType]) * 10
+            } 
           />
         </div>
         
@@ -159,3 +193,6 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
     </Dialog>
   );
 };
+
+// Card component to avoid import issues if not already imported
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";

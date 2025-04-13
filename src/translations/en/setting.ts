@@ -60,4 +60,16 @@ export const settingTranslations: SettingTranslations = {
   eachCampaignCreated: 'per campaign created',
   eachRcsMessageSent: 'per RCS message sent',
   cancel: 'Cancel',
+  
+  // New translations
+  lowCreditWarning: 'Low credits',
+  selectPackage: 'Select a package',
+  creditConversionInfo: 'Credit conversion information',
+  creditConversionText: 'Credit value varies depending on usage: each phone enrichment costs 10 credits, each SMS sent costs 5 credits, each campaign created costs 100 credits and each RCS message costs 15 credits.',
+  creditPackages: 'Credit Packages',
+  specificCredits: 'Specific Credits',
+  bonusCredits: 'Bonus',
+  selectPackageOrCredits: 'Select a package or specific type of credits to purchase',
+  insufficientCredits: 'Insufficient credits',
+  buyCreditsToUseFeature: 'Buy credits to use this feature',
 };

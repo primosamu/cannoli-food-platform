@@ -58,4 +58,16 @@ export interface SettingTranslations {
   eachCampaignCreated: string;
   eachRcsMessageSent: string;
   cancel: string;
+  
+  // Novas traduções
+  lowCreditWarning?: string;
+  selectPackage?: string;
+  creditConversionInfo?: string;
+  creditConversionText?: string;
+  creditPackages?: string;
+  specificCredits?: string;
+  bonusCredits?: string;
+  selectPackageOrCredits?: string;
+  insufficientCredits?: string;
+  buyCreditsToUseFeature?: string;
 }

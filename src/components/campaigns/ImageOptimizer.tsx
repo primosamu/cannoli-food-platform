@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -39,7 +38,7 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
   const [hasImage, setHasImage] = useState(false);
   
   const { toast } = useToast();
-  const { translations, language } = useLanguage();
+  const { translations } = useLanguage();
   
   // Define text translations based on context
   const texts = {
@@ -59,15 +58,9 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
     optimizing: translations.optimizing,
     apply: translations.apply,
     normal: translations.normal,
-    imageSaved: language === 'en' ? 'Image saved' :
-               language === 'pt' ? 'Imagem salva' :
-               'Imagen guardada',
-    imageSavedDesc: language === 'en' ? 'Your image has been saved successfully' :
-                   language === 'pt' ? 'Sua imagem foi salva com sucesso' :
-                   'Tu imagen se ha guardado con éxito',
-    imageOptimizingDesc: language === 'en' ? 'Your image is being optimized with AI...' :
-                        language === 'pt' ? 'Sua imagem está sendo otimizada com IA...' :
-                        'Tu imagen se está optimizando con IA...',
+    imageSaved: 'Imagem salva',
+    imageSavedDesc: 'Sua imagem foi salva com sucesso',
+    imageOptimizingDesc: 'Sua imagem está sendo otimizada com IA...',
     imageOptimized: translations.imageOptimized,
     imageOptimizedDesc: translations.imageOptimizedDesc
   };
@@ -83,10 +76,8 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
 
   const presets = [
     { 
-      name: language === 'en' ? "Vivid Food" : language === 'pt' ? "Comida Vibrante" : "Comida Vibrante",
-      description: language === 'en' ? "Makes food photos pop" : 
-                  language === 'pt' ? "Faz as fotos de comida se destacarem" : 
-                  "Hace que las fotos de comida resalten",
+      name: "Comida Vibrante",
+      description: "Faz as fotos de comida se destacarem",
       values: {
         brightness: 110,
         contrast: 115,
@@ -97,10 +88,8 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
       }
     },
     { 
-      name: language === 'en' ? "Menu Ready" : language === 'pt' ? "Pronto para Menu" : "Listo para Menú",
-      description: language === 'en' ? "Perfect for menu photos" : 
-                  language === 'pt' ? "Perfeito para fotos de cardápio" : 
-                  "Perfecto para fotos de menú",
+      name: "Pronto para Menu",
+      description: "Perfeito para fotos de cardápio",
       values: {
         brightness: 105,
         contrast: 110,
@@ -111,10 +100,8 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
       }
     },
     { 
-      name: language === 'en' ? "Professional" : language === 'pt' ? "Profissional" : "Profesional",
-      description: language === 'en' ? "Clean, professional look" : 
-                  language === 'pt' ? "Visual limpo e profissional" : 
-                  "Aspecto limpio y profesional",
+      name: "Profissional",
+      description: "Visual limpo e profissional",
       values: {
         brightness: 100,
         contrast: 105,
@@ -160,10 +147,8 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
   const handleUploadClick = () => {
     // Simulate file upload
     toast({
-      title: language === 'en' ? "Upload complete" : language === 'pt' ? "Upload completo" : "Subida completa",
-      description: language === 'en' ? "Your image has been uploaded successfully" : 
-                  language === 'pt' ? "Sua imagem foi carregada com sucesso" : 
-                  "Tu imagen ha sido subida con éxito",
+      title: "Upload completo",
+      description: "Sua imagem foi carregada com sucesso",
     });
     setHasImage(true);
   };
@@ -177,9 +162,7 @@ const ImageOptimizer: React.FC<ImageOptimizerProps> = ({ onImageOptimized }) => 
     setCurrentFilter(preset.values.filter);
     
     toast({
-      title: language === 'en' ? `Preset ${preset.name} applied` : 
-             language === 'pt' ? `Predefinição ${preset.name} aplicada` : 
-             `Preajuste ${preset.name} aplicado`,
+      title: `Predefinição ${preset.name} aplicada`,
       description: preset.description,
     });
   };

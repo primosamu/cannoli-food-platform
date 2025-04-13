@@ -9,28 +9,20 @@ import {
 } from "@/components/ui/select";
 import { Globe } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import type { Language } from '@/types/language';
 
 export const LanguageSelector = () => {
-  const { language, setLanguage, translations } = useLanguage();
-
-  const handleLanguageChange = (value: string) => {
-    setLanguage(value as Language);
-    
-    // Force a re-render of the entire app by triggering a small state update
-    document.dispatchEvent(new CustomEvent('language-changed', { detail: value }));
-  };
-
+  const { translations } = useLanguage();
+  
+  // Since we're now fixed to Portuguese, this is just a display component
+  // that doesn't allow changing the language
   return (
-    <Select onValueChange={handleLanguageChange} value={language}>
+    <Select value="pt" disabled>
       <SelectTrigger className="w-[180px]">
         <Globe className="h-4 w-4 mr-2" />
         <SelectValue placeholder={translations.language} />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="pt">{translations.portuguese}</SelectItem>
-        <SelectItem value="en">{translations.english}</SelectItem>
-        <SelectItem value="es">{translations.spanish}</SelectItem>
       </SelectContent>
     </Select>
   );

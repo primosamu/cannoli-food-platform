@@ -27,7 +27,7 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({ customer }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <h3 className="text-sm font-medium text-muted-foreground">{translations.contactInfo || "Informações de Contato"}</h3>
+          <h3 className="text-sm font-medium text-muted-foreground">{translations.customerInformation || "Informações de Contato"}</h3>
           <div className="mt-2 space-y-2">
             <div>
               <p className="text-sm font-medium">{translations.email || "Email"}</p>
@@ -51,7 +51,7 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({ customer }) => {
         </div>
         
         <div>
-          <h3 className="text-sm font-medium text-muted-foreground">{translations.orderHistory || "Histórico de Pedidos"}</h3>
+          <h3 className="text-sm font-medium text-muted-foreground">{translations.purchaseHistory || "Histórico de Pedidos"}</h3>
           <div className="mt-2 space-y-2">
             <div>
               <p className="text-sm font-medium">{translations.totalOrders || "Total de Pedidos"}</p>

@@ -48,6 +48,7 @@ export interface CustomerTranslations {
   popularTags: string;
   averageOrderValue: string;
   maximumAvailable: string;
+  enrichmentInProgress: string;
   
   // Customer actions
   customer: string;
@@ -119,4 +120,3 @@ export interface CustomerTranslations {
   enterYourMessage: string;
   noOrdersYet: string;
 }
-

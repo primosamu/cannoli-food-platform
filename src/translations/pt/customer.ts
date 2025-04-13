@@ -49,6 +49,7 @@ export const customerTranslations: CustomerTranslations = {
   popularTags: 'Etiquetas Populares',
   averageOrderValue: 'Valor Médio do Pedido',
   maximumAvailable: 'Disponível',
+  enrichmentInProgress: 'O processo de enriquecimento foi iniciado e você será notificado quando estiver concluído.',
   
   // Customer actions
   customer: 'Cliente',

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -88,10 +87,9 @@ const CustomersPage = () => {
   const navigate = useNavigate();
   const { translations } = useLanguage();
 
-  // Simulating available phone enrichment credits
-  const availablePhoneCredits = 150; // Simulando como baixo para demonstração
+  const availablePhoneCredits = 150;
   const minimumCreditsRequired = 200;
-  
+
   const filteredCustomers = customers.filter(customer =>
     customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     customer.phone.includes(searchQuery)
@@ -156,10 +154,9 @@ const CustomersPage = () => {
   };
 
   const handleProceedWithEnrichment = () => {
-    // Simulate enrichment process
     toast({
       title: translations.phoneEnrichment || "Enriquecimento de Telefone",
-      description: translations.enrichmentInProgress || "O processo de enriquecimento foi iniciado e você será notificado quando estiver concluído.",
+      description: translations.phoneEnrichmentComplete || "O processo de enriquecimento foi iniciado e você será notificado quando estiver concluído.",
     });
     setIsEnrichmentDialogOpen(false);
   };

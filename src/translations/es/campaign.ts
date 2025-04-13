@@ -15,6 +15,17 @@ export const campaignTranslations: CampaignTranslations = {
   createManageCampaigns: 'Cree y gestione campañas de marketing para su restaurante.',
   presets: 'Preestablecidas',
   createCampaign: 'Crear Campaña',
+  active: 'Activas',
+  completed: 'Completadas',
+  
+  // Predefined campaign names
+  weMissYou: 'Te Extrañamos',
+  comeBackToUs: 'Vuelve a Nosotros',
+  specialOffer: 'Oferta Especial',
+  newMenuItem: 'Nuevo Elemento en el Menú',
+  birthdayDiscount: 'Descuento de Cumpleaños',
+  loyaltyReward: 'Recompensa de Fidelidad',
+  weekendPromo: 'Promoción de Fin de Semana',
 
   // Campaign categories
   'customer-recovery': 'Recuperación de Clientes',
@@ -26,4 +37,5 @@ export const campaignTranslations: CampaignTranslations = {
   'loyaltyDescription': 'Recompense y comprometa a sus clientes fieles',
   'consumption-patternDescription': 'Fomente nuevos comportamientos de consumo',
   'channel-migrationDescription': 'Traslade clientes de marketplaces a pedidos directos',
+  allStores: 'Todas las Tiendas',
 };

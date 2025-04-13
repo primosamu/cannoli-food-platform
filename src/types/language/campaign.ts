@@ -13,15 +13,27 @@ export interface CampaignTranslations {
   createManageCampaigns: string;
   presets: string;
   createCampaign: string;
-
-  // Campaign categories
-  'customer-recovery': string;
-  'consumption-pattern': string;
-  'channel-migration': string;
+  active: string;
+  completed: string;
+  
+  // Predefined campaign names
+  weMissYou: string;
+  comeBackToUs: string;
+  specialOffer: string;
+  newMenuItem: string;
+  birthdayDiscount: string;
+  loyaltyReward: string;
+  weekendPromo: string;
 
   // Campaign category descriptions
   'customer-recoveryDescription': string;
   'loyaltyDescription': string;
   'consumption-patternDescription': string;
   'channel-migrationDescription': string;
+
+  // Campaign categories
+  'customer-recovery': string;
+  'consumption-pattern': string;
+  'channel-migration': string;
+  allStores: string;
 }

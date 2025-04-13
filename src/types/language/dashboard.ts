@@ -24,4 +24,23 @@ export interface DashboardTranslations {
   moreThan: string;
   customerVisits: string;
   trafficByHour: string;
+  
+  // Chart related
+  orderSummary: string;
+  customerBehavior: string;
+  rfmAnalysis: string;
+  behaviorPatterns: string;
+  churnRisk: string;
+  highValue: string;
+  loyalCustomers: string;
+  newCustomers: string;
+  potentialLoyalists: string;
+  needsAttention: string;
+  atRisk: string;
+  cantLose: string;
+  total: string;
+  recency: string;
+  frequency: string;
+  monetary: string;
+  recentVsOlder: string;
 }

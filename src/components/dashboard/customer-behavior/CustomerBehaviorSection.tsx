@@ -6,6 +6,7 @@ import { RFMAnalysisSection } from "./RFMAnalysisSection";
 import { BehaviorPatternsSection } from "./BehaviorPatternsSection";
 import { CustomerDialog } from "./CustomerDialog";
 import { getCategoryFromSegment } from "./utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const CustomerBehaviorSection = () => {
   const [selectedChart, setSelectedChart] = useState<string | null>(null);
@@ -13,6 +14,7 @@ export const CustomerBehaviorSection = () => {
   const [selectedSegment, setSelectedSegment] = useState<any>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { translations } = useLanguage();
 
   const handleChartClick = (chartId: string, data?: any) => {
     console.log("Chart clicked:", chartId, data);
@@ -33,8 +35,8 @@ export const CustomerBehaviorSection = () => {
     });
     
     toast({
-      title: "Redirecting to Campaigns",
-      description: `Creating campaign for ${segmentToUse || "this segment"}`,
+      title: translations.redirectingToCampaigns || "Redirecting to Campaigns",
+      description: `${translations.creatingCampaignFor || "Creating campaign for"} ${segmentToUse || translations.thisSegment || "this segment"}`,
     });
     
     // Navigate to campaigns page and set state to indicate we should create a campaign
@@ -48,7 +50,7 @@ export const CustomerBehaviorSection = () => {
     });
     
     setIsDialogOpen(false);
-  }, [navigate, selectedSegment, selectedChart, toast]);
+  }, [navigate, selectedSegment, selectedChart, toast, translations]);
 
   return (
     <div className="space-y-6">

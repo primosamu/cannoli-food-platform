@@ -26,4 +26,23 @@ export const dashboardTranslations: DashboardTranslations = {
   moreThan: 'Mais',
   customerVisits: 'Visitas de Clientes',
   trafficByHour: 'Tráfego por Hora',
+
+  // Chart related
+  orderSummary: 'Resumo de Pedidos',
+  customerBehavior: 'Comportamento do Cliente',
+  rfmAnalysis: 'Análise RFM',
+  behaviorPatterns: 'Padrões de Comportamento',
+  churnRisk: 'Risco de Abandono',
+  highValue: 'Alto Valor',
+  loyalCustomers: 'Clientes Fiéis',
+  newCustomers: 'Novos Clientes',
+  potentialLoyalists: 'Potenciais Fidelizados',
+  needsAttention: 'Necessita Atenção',
+  atRisk: 'Em Risco',
+  cantLose: 'Não Pode Perder',
+  total: 'Total',
+  recency: 'Recência',
+  frequency: 'Frequência',
+  monetary: 'Valor Monetário',
+  recentVsOlder: 'Recentes vs. Antigos',
 };

@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Calendar, Mail, MessageSquare, User, Package, Tag, Phone, UserRound } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CustomerDetailDialogProps {
   customer: Customer | null;
@@ -64,6 +65,7 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
   onClose,
 }) => {
   const { toast } = useToast();
+  const { translations } = useLanguage();
   const [activeTab, setActiveTab] = useState("overview");
   const [messageText, setMessageText] = useState("");
   const [emailSubject, setEmailSubject] = useState("");
@@ -77,16 +79,16 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
   const handleSendMessage = () => {
     if (!messageText) {
       toast({
-        title: "Error",
-        description: "Please enter a message",
+        title: translations.error || "Erro",
+        description: translations.pleaseEnterMessage || "Por favor, digite uma mensagem",
         variant: "destructive",
       });
       return;
     }
     
     toast({
-      title: "Message sent",
-      description: `Your message has been queued to be sent to ${customer.name}`,
+      title: translations.messageSent || "Mensagem enviada",
+      description: `${translations.messageQueuedFor || "Sua mensagem foi enfileirada para ser enviada para"} ${customer.name}`,
     });
     setMessageText("");
   };
@@ -94,16 +96,16 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
   const handleSendEmail = () => {
     if (!emailSubject || !emailBody) {
       toast({
-        title: "Error",
-        description: "Please enter both subject and body",
+        title: translations.error || "Erro",
+        description: translations.pleaseEnterSubjectAndBody || "Por favor, preencha o assunto e o conteúdo",
         variant: "destructive",
       });
       return;
     }
     
     toast({
-      title: "Email sent",
-      description: `Your email has been queued to be sent to ${customer.name}`,
+      title: translations.emailSent || "Email enviado",
+      description: `${translations.emailQueuedFor || "Seu email foi enfileirado para ser enviado para"} ${customer.name}`,
     });
     setEmailSubject("");
     setEmailBody("");
@@ -112,11 +114,11 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "delivered":
-        return <Badge className="bg-blue-100 text-blue-800">Delivered</Badge>;
+        return <Badge className="bg-blue-100 text-blue-800">{translations.delivered || "Entregue"}</Badge>;
       case "opened":
-        return <Badge className="bg-green-100 text-green-800">Opened</Badge>;
+        return <Badge className="bg-green-100 text-green-800">{translations.opened || "Aberto"}</Badge>;
       case "clicked":
-        return <Badge className="bg-purple-100 text-purple-800">Clicked</Badge>;
+        return <Badge className="bg-purple-100 text-purple-800">{translations.clicked || "Clicado"}</Badge>;
       default:
         return <Badge className="bg-gray-100 text-gray-800">{status}</Badge>;
     }
@@ -144,14 +146,14 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
             {customer.name}
           </DialogTitle>
           <DialogDescription>
-            Customer since {format(customer.joinDate, "MMMM dd, yyyy")} • CPF: {customer.cpf}
+            {translations.customerSince || "Cliente desde"} {format(customer.joinDate, "dd/MM/yyyy")} • CPF: {customer.cpf}
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+              <CardTitle className="text-sm font-medium">{translations.totalOrders || "Total de Pedidos"}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{customer.orderCount}</div>
@@ -159,18 +161,18 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Total Spent</CardTitle>
+              <CardTitle className="text-sm font-medium">{translations.totalSpent || "Total Gasto"}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${customer.totalSpent.toFixed(2)}</div>
+              <div className="text-2xl font-bold">R$ {customer.totalSpent.toFixed(2)}</div>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Last Order</CardTitle>
+              <CardTitle className="text-sm font-medium">{translations.lastOrder || "Último Pedido"}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{format(customer.lastOrderDate, "MMM dd")}</div>
+              <div className="text-2xl font-bold">{format(customer.lastOrderDate, "dd/MM")}</div>
             </CardContent>
           </Card>
         </div>
@@ -178,7 +180,7 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
         <div className="flex flex-wrap gap-2 mb-4">
           <div className="flex items-center">
             <Tag className="h-4 w-4 mr-2 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">Tags:</span>
+            <span className="text-sm text-muted-foreground">{translations.tags || "Etiquetas"}:</span>
           </div>
           {customer.tags.map((tag) => (
             <Badge key={tag} variant="secondary" className="text-xs">
@@ -189,16 +191,16 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="purchases">Purchase History</TabsTrigger>
-            <TabsTrigger value="campaigns">Campaign History</TabsTrigger>
+            <TabsTrigger value="overview">{translations.overview || "Visão Geral"}</TabsTrigger>
+            <TabsTrigger value="purchases">{translations.purchaseHistory || "Histórico de Compras"}</TabsTrigger>
+            <TabsTrigger value="campaigns">{translations.campaignHistory || "Histórico de Campanhas"}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Customer Information</CardTitle>
+                  <CardTitle className="text-base">{translations.customerInformation || "Informações do Cliente"}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <div className="grid grid-cols-3 gap-1">
@@ -206,12 +208,12 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
                     <span className="text-sm col-span-2">{customer.email}</span>
                   </div>
                   <div className="grid grid-cols-3 gap-1">
-                    <span className="text-sm font-medium">Phone:</span>
+                    <span className="text-sm font-medium">{translations.phone || "Telefone"}:</span>
                     <span className="text-sm col-span-2">
                       {customer.phone ? customer.phone : (
                         <span className="text-amber-500 text-xs italic flex items-center gap-1">
                           <Phone className="h-3 w-3" />
-                          No phone number
+                          {translations.noPhoneNumber || "Sem número de telefone"}
                         </span>
                       )}
                     </span>
@@ -221,31 +223,31 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
                     <span className="text-sm col-span-2">{customer.cpf}</span>
                   </div>
                   <div className="grid grid-cols-3 gap-1">
-                    <span className="text-sm font-medium">Join Date:</span>
-                    <span className="text-sm col-span-2">{format(customer.joinDate, "MMMM dd, yyyy")}</span>
+                    <span className="text-sm font-medium">{translations.joinDate || "Data de Cadastro"}:</span>
+                    <span className="text-sm col-span-2">{format(customer.joinDate, "dd/MM/yyyy")}</span>
                   </div>
                 </CardContent>
               </Card>
               
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Recent Activity</CardTitle>
+                  <CardTitle className="text-base">{translations.recentActivity || "Atividade Recente"}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <div className="text-sm">
-                    <span className="font-medium">Last order: </span>
-                    <span>{format(customer.lastOrderDate, "MMMM dd, yyyy")}</span>
+                    <span className="font-medium">{translations.lastOrder || "Último pedido"}: </span>
+                    <span>{format(customer.lastOrderDate, "dd/MM/yyyy")}</span>
                   </div>
                   {purchaseHistory.length > 0 && (
                     <div className="text-sm">
-                      <span className="font-medium">Recent purchase: </span>
+                      <span className="font-medium">{translations.recentPurchase || "Compra recente"}: </span>
                       <span>{purchaseHistory[0].items}</span>
                     </div>
                   )}
                   {campaignHistory.length > 0 && (
                     <div className="text-sm">
-                      <span className="font-medium">Last campaign: </span>
-                      <span>{campaignHistory[0].name} ({format(campaignHistory[0].date, "MMM dd")})</span>
+                      <span className="font-medium">{translations.lastCampaign || "Última campanha"}: </span>
+                      <span>{campaignHistory[0].name} ({format(campaignHistory[0].date, "dd/MM")})</span>
                     </div>
                   )}
                 </CardContent>
@@ -253,13 +255,13 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
               
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Send Message</CardTitle>
+                  <CardTitle className="text-base">{translations.sendMessage || "Enviar Mensagem"}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   {customer.phone ? (
                     <>
                       <Textarea 
-                        placeholder="Enter your message"
+                        placeholder={translations.enterYourMessage || "Digite sua mensagem"}
                         value={messageText}
                         onChange={(e) => setMessageText(e.target.value)}
                         className="min-h-[100px]"
@@ -268,14 +270,14 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
                         className="w-full"
                         onClick={handleSendMessage}
                       >
-                        <MessageSquare className="h-4 w-4 mr-2" /> Send WhatsApp/SMS
+                        <MessageSquare className="h-4 w-4 mr-2" /> {translations.sendWhatsAppSms || "Enviar WhatsApp/SMS"}
                       </Button>
                     </>
                   ) : (
                     <div className="p-4 bg-muted rounded-md flex items-center justify-center flex-col text-center gap-2">
                       <Phone className="h-8 w-8 text-muted-foreground" />
-                      <p className="text-sm font-medium">No phone number available</p>
-                      <p className="text-xs text-muted-foreground">Use phone enrichment to complete this customer's data.</p>
+                      <p className="text-sm font-medium">{translations.noPhoneAvailable || "Nenhum número de telefone disponível"}</p>
+                      <p className="text-xs text-muted-foreground">{translations.usePhoneEnrichment || "Use o enriquecimento de telefone para completar os dados deste cliente."}</p>
                     </div>
                   )}
                 </CardContent>
@@ -283,17 +285,17 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
               
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Send Email</CardTitle>
+                  <CardTitle className="text-base">{translations.sendEmail || "Enviar Email"}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <Input 
-                    placeholder="Subject"
+                    placeholder={translations.subject || "Assunto"}
                     value={emailSubject}
                     onChange={(e) => setEmailSubject(e.target.value)}
                     className="mb-2"
                   />
                   <Textarea 
-                    placeholder="Email body"
+                    placeholder={translations.emailBody || "Conteúdo do email"}
                     value={emailBody}
                     onChange={(e) => setEmailBody(e.target.value)}
                     className="min-h-[100px]"
@@ -302,7 +304,7 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
                     className="w-full"
                     onClick={handleSendEmail}
                   >
-                    <Mail className="h-4 w-4 mr-2" /> Send Email
+                    <Mail className="h-4 w-4 mr-2" /> {translations.sendEmail || "Enviar Email"}
                   </Button>
                 </CardContent>
               </Card>
@@ -314,19 +316,19 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="px-4 py-2 text-left">Order ID</th>
-                    <th className="px-4 py-2 text-left">Date</th>
-                    <th className="px-4 py-2 text-left">Items</th>
-                    <th className="px-4 py-2 text-left">Amount</th>
+                    <th className="px-4 py-2 text-left">{translations.orderId || "ID do Pedido"}</th>
+                    <th className="px-4 py-2 text-left">{translations.date || "Data"}</th>
+                    <th className="px-4 py-2 text-left">{translations.items || "Itens"}</th>
+                    <th className="px-4 py-2 text-left">{translations.amount || "Valor"}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {purchaseHistory.map((purchase) => (
                     <tr key={purchase.id} className="border-b">
                       <td className="px-4 py-2">{purchase.id}</td>
-                      <td className="px-4 py-2">{format(purchase.date, "MMM dd, yyyy")}</td>
+                      <td className="px-4 py-2">{format(purchase.date, "dd/MM/yyyy")}</td>
                       <td className="px-4 py-2">{purchase.items}</td>
-                      <td className="px-4 py-2">${purchase.amount.toFixed(2)}</td>
+                      <td className="px-4 py-2">R$ {purchase.amount.toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -339,17 +341,17 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="px-4 py-2 text-left">Campaign</th>
-                    <th className="px-4 py-2 text-left">Date</th>
-                    <th className="px-4 py-2 text-left">Type</th>
-                    <th className="px-4 py-2 text-left">Status</th>
+                    <th className="px-4 py-2 text-left">{translations.campaign || "Campanha"}</th>
+                    <th className="px-4 py-2 text-left">{translations.date || "Data"}</th>
+                    <th className="px-4 py-2 text-left">{translations.type || "Tipo"}</th>
+                    <th className="px-4 py-2 text-left">{translations.status || "Status"}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {campaignHistory.map((campaign) => (
                     <tr key={campaign.id} className="border-b">
                       <td className="px-4 py-2">{campaign.name}</td>
-                      <td className="px-4 py-2">{format(campaign.date, "MMM dd, yyyy")}</td>
+                      <td className="px-4 py-2">{format(campaign.date, "dd/MM/yyyy")}</td>
                       <td className="px-4 py-2">{getTypeBadge(campaign.type)}</td>
                       <td className="px-4 py-2">{getStatusBadge(campaign.status)}</td>
                     </tr>
@@ -361,7 +363,7 @@ const CustomerDetailDialog: React.FC<CustomerDetailDialogProps> = ({
         </Tabs>
 
         <DialogFooter>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={onClose}>{translations.close || "Fechar"}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -13,7 +13,7 @@ export const EmptyScheduledCoupons: React.FC<EmptyScheduledCouponsProps> = ({
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
       <p className="text-muted-foreground">No scheduled coupons found.</p>
-      <Button className="mt-4" variant="outline" onClick={onCreateClick}>
+      <Button className="mt-4" onClick={onCreateClick}>
         <PlusCircle className="mr-2 h-4 w-4" /> Schedule New Coupon
       </Button>
     </div>

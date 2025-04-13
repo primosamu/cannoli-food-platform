@@ -38,7 +38,7 @@ const CreditCard: React.FC<CreditCardProps> = ({
       <CardFooter>
         <Button variant="outline" className="w-full" onClick={() => onBuyCredits(creditType)}>
           <PlusCircle className="h-4 w-4 mr-2" />
-          {translations.buyMore || "Comprar Mais"}
+          {translations.buyMore}
         </Button>
       </CardFooter>
     </Card>
@@ -54,25 +54,25 @@ export const CreditCards: React.FC<CreditCardsProps> = ({ onBuyCredits }) => {
   
   const creditCards = [
     {
-      title: translations.phoneEnrichmentCredits || "Créditos de Enriquecimento de Telefone",
+      title: translations.phoneEnrichmentCredits,
       amount: 2500,
       icon: <CircleDollarSign className="h-5 w-5 text-primary" />,
       creditType: 'phone' as CreditType
     },
     {
-      title: translations.messagingCredits || "Créditos de Mensagens",
+      title: translations.messagingCredits,
       amount: 5000,
       icon: <Wallet className="h-5 w-5 text-primary" />,
       creditType: 'message' as CreditType
     },
     {
-      title: translations.campaignCredits || "Créditos de Campanhas",
+      title: translations.campaignCredits,
       amount: 500,
       icon: <Store className="h-5 w-5 text-primary" />,
       creditType: 'campaign' as CreditType
     },
     {
-      title: translations.rcsCredits || "Créditos RCS",
+      title: translations.rcsCredits,
       amount: 1000,
       icon: <MessageCircle className="h-5 w-5 text-primary" />,
       creditType: 'rcs' as CreditType

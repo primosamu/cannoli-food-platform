@@ -1,11 +1,9 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Language, Translations } from '../types/language';
-import { getTranslations } from '../translations';
+import React, { createContext, useContext } from 'react';
+import { Translations } from '../types/language';
+import ptTranslations from '../translations/pt';
 
 interface LanguageContextProps {
-  language: Language;
-  setLanguage: (language: Language) => void;
   translations: Translations;
 }
 
@@ -20,30 +18,9 @@ export const useLanguage = () => {
 };
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('pt');
-
-  // Store language preference in localStorage
-  useEffect(() => {
-    localStorage.setItem('preferredLanguage', language);
-    
-    // Force language update throughout the app
-    document.dispatchEvent(new CustomEvent('language-changed', { detail: language }));
-    
-    console.log("Language set to:", language);
-  }, [language]);
-  
-  // Load language preference from localStorage on mount
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem('preferredLanguage') as Language | null;
-    if (savedLanguage && ['en', 'pt', 'es'].includes(savedLanguage)) {
-      setLanguage(savedLanguage);
-    }
-  }, []);
-
+  // Fixed to Portuguese translations only
   const value = {
-    language,
-    setLanguage,
-    translations: getTranslations(language),
+    translations: ptTranslations,
   };
 
   return (
@@ -53,6 +30,5 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 };
 
-// Re-export types from the new modular structure
-export type { Language, Translations };
-
+// Re-export types from the modular structure
+export type { Translations };

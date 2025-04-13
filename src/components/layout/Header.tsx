@@ -15,7 +15,6 @@ import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { addDays } from "date-fns";
 import { DatePickerWithRange } from "@/components/ui/date-range-picker";
-import { LanguageSelector } from "@/components/language/LanguageSelector";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Header() {
@@ -43,7 +42,6 @@ export function Header() {
               className="w-64 pl-8 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:ring-cannoli-500"
             />
           </form>
-          <LanguageSelector />
           <Button variant="outline" size="icon" className="relative border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
             <Bell className="h-4 w-4" />
             <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-600" />

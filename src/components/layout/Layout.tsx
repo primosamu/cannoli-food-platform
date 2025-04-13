@@ -2,7 +2,6 @@
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 import { PageContainer } from "./PageContainer";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { useEffect } from "react";
 
 interface LayoutProps {
@@ -10,29 +9,10 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
-  const { language } = useLanguage();
-  
-  // Force document language to update when language changes
+  // Set document language to Portuguese
   useEffect(() => {
-    document.documentElement.lang = language;
-    document.title = language === 'pt' ? 'Cannoli Food Tech - Sistema' : 
-                     language === 'es' ? 'Cannoli Food Tech - Sistema' : 
-                     'Cannoli Food Tech - System';
-    console.log("Language set to:", language);
-  }, [language]);
-  
-  // Listen for language change events to force re-renders
-  useEffect(() => {
-    const handleLanguageEvent = (event: Event) => {
-      console.log("Language changed event detected");
-      // This is just to trigger a re-render
-    };
-    
-    document.addEventListener('language-changed', handleLanguageEvent);
-    
-    return () => {
-      document.removeEventListener('language-changed', handleLanguageEvent);
-    };
+    document.documentElement.lang = 'pt';
+    document.title = 'Cannoli Food Tech - Sistema';
   }, []);
   
   return (

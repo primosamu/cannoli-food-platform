@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from "react";
+import React, { createContext, useContext, useState, ReactNode, useCallback } from "react";
 import { MenuItem, MenuCategory, MenuType, DeliveryPlatform } from "@/types/menu";
 import { toast } from "sonner";
 import { sampleCategories, sampleMenuItems } from "@/data/sampleMenuData";
@@ -63,7 +63,7 @@ export const useMenu = () => {
 };
 
 export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { translations, language } = useLanguage();
+  const { translations } = useLanguage();
   // Menu data state
   const [categories, setCategories] = useState<MenuCategory[]>(sampleCategories);
   const [menuItems, setMenuItems] = useState<MenuItem[]>(sampleMenuItems);
@@ -82,83 +82,41 @@ export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
 
-  // Translate toast messages based on current language
-  const getToastMessages = useCallback(() => {
-    if (language === 'pt') {
-      return {
-        itemAdded: "Item adicionado",
-        itemAddedDesc: (name: string) => `${name} foi adicionado ao seu cardápio.`,
-        itemUpdated: "Item atualizado",
-        itemUpdatedDesc: (name: string) => `${name} foi atualizado.`,
-        itemDeleted: "Item removido",
-        itemDeletedDesc: (name: string) => `${name} foi removido do seu cardápio.`,
-        itemDuplicated: "Item duplicado",
-        itemDuplicatedDesc: (name: string) => `${name} foi duplicado.`,
-        categoryAdded: "Categoria adicionada",
-        categoryAddedDesc: (name: string) => `A categoria ${name} foi adicionada.`,
-        categoryUpdated: "Categoria atualizada",
-        categoryUpdatedDesc: (name: string) => `A categoria ${name} foi atualizada.`,
-        categoryDeleted: "Categoria removida",
-        categoryDeletedDesc: (name: string) => `${name} foi removida.`,
-        cannotDeleteCategory: "Não é possível excluir a categoria",
-        cannotDeleteCategoryDesc: (count: number) => `Esta categoria contém ${count} itens de menu. Por favor, mova ou exclua esses itens primeiro.`,
-        importingFrom: (platform: string) => `Importando de ${platform}`,
-        importingFromDesc: "Conectando à API da plataforma. Isso pode levar algum tempo...",
-        importCompleted: (platform: string) => `Importação de ${platform} concluída`,
-        importCompletedDesc: "5 novos itens de menu e 2 categorias foram importados.",
-        processingFile: (name: string) => `Processando arquivo: ${name}`,
-        processingFileDesc: "Analisando dados da planilha...",
-        excelImportCompleted: "Importação do Excel concluída",
-        excelImportCompletedDesc: "8 itens de menu foram importados com sucesso.",
-        preparingExport: "Preparando exportação",
-        preparingExportDesc: "Gerando arquivo Excel com os dados do seu menu...",
-        exportReady: "Exportação pronta",
-        exportReadyDesc: "Seu menu foi exportado para Excel.",
-        syncingWith: (platform: string) => `Sincronizando com ${platform}`,
-        syncingWithDesc: "Comparando menus locais e da plataforma...",
-        syncCompleted: (platform: string) => `Sincronização com ${platform} concluída`,
-        syncCompletedDesc: "Seu menu agora está sincronizado com a plataforma."
-      };
-    } else {
-      // Default English messages
-      return {
-        itemAdded: "Menu item added",
-        itemAddedDesc: (name: string) => `${name} has been added to your menu.`,
-        itemUpdated: "Menu item updated",
-        itemUpdatedDesc: (name: string) => `${name} has been updated.`,
-        itemDeleted: "Menu item deleted",
-        itemDeletedDesc: (name: string) => `${name} has been removed from your menu.`,
-        itemDuplicated: "Menu item duplicated",
-        itemDuplicatedDesc: (name: string) => `${name} has been duplicated.`,
-        categoryAdded: "Category added",
-        categoryAddedDesc: (name: string) => `${name} category has been added.`,
-        categoryUpdated: "Category updated",
-        categoryUpdatedDesc: (name: string) => `${name} category has been updated.`,
-        categoryDeleted: "Category deleted",
-        categoryDeletedDesc: (name: string) => `${name} has been removed.`,
-        cannotDeleteCategory: "Cannot delete category",
-        cannotDeleteCategoryDesc: (count: number) => `This category contains ${count} menu items. Please move or delete these items first.`,
-        importingFrom: (platform: string) => `Importing from ${platform}`,
-        importingFromDesc: "Connecting to platform API. This may take a moment...",
-        importCompleted: (platform: string) => `Import from ${platform} completed`,
-        importCompletedDesc: "5 new menu items and 2 categories were imported.",
-        processingFile: (name: string) => `Processing file: ${name}`,
-        processingFileDesc: "Analyzing spreadsheet data...",
-        excelImportCompleted: "Excel import completed",
-        excelImportCompletedDesc: "8 menu items were imported successfully.",
-        preparingExport: "Preparing export",
-        preparingExportDesc: "Generating Excel file with your menu data...",
-        exportReady: "Export ready",
-        exportReadyDesc: "Your menu has been exported to Excel.",
-        syncingWith: (platform: string) => `Syncing with ${platform}`,
-        syncingWithDesc: "Comparing local and platform menus...",
-        syncCompleted: (platform: string) => `Sync with ${platform} completed`,
-        syncCompletedDesc: "Your menu is now synchronized with the platform."
-      };
-    }
-  }, [language]);
-
-  const toastMessages = getToastMessages();
+  // Toast messages - now only in Portuguese
+  const toastMessages = {
+    itemAdded: "Item adicionado",
+    itemAddedDesc: (name: string) => `${name} foi adicionado ao seu cardápio.`,
+    itemUpdated: "Item atualizado",
+    itemUpdatedDesc: (name: string) => `${name} foi atualizado.`,
+    itemDeleted: "Item removido",
+    itemDeletedDesc: (name: string) => `${name} foi removido do seu cardápio.`,
+    itemDuplicated: "Item duplicado",
+    itemDuplicatedDesc: (name: string) => `${name} foi duplicado.`,
+    categoryAdded: "Categoria adicionada",
+    categoryAddedDesc: (name: string) => `A categoria ${name} foi adicionada.`,
+    categoryUpdated: "Categoria atualizada",
+    categoryUpdatedDesc: (name: string) => `A categoria ${name} foi atualizada.`,
+    categoryDeleted: "Categoria removida",
+    categoryDeletedDesc: (name: string) => `${name} foi removida.`,
+    cannotDeleteCategory: "Não é possível excluir a categoria",
+    cannotDeleteCategoryDesc: (count: number) => `Esta categoria contém ${count} itens de menu. Por favor, mova ou exclua esses itens primeiro.`,
+    importingFrom: (platform: string) => `Importando de ${platform}`,
+    importingFromDesc: "Conectando à API da plataforma. Isso pode levar algum tempo...",
+    importCompleted: (platform: string) => `Importação de ${platform} concluída`,
+    importCompletedDesc: "5 novos itens de menu e 2 categorias foram importados.",
+    processingFile: (name: string) => `Processando arquivo: ${name}`,
+    processingFileDesc: "Analisando dados da planilha...",
+    excelImportCompleted: "Importação do Excel concluída",
+    excelImportCompletedDesc: "8 itens de menu foram importados com sucesso.",
+    preparingExport: "Preparando exportação",
+    preparingExportDesc: "Gerando arquivo Excel com os dados do seu menu...",
+    exportReady: "Exportação pronta",
+    exportReadyDesc: "Seu menu foi exportado para Excel.",
+    syncingWith: (platform: string) => `Sincronizando com ${platform}`,
+    syncingWithDesc: "Comparando menus locais e da plataforma...",
+    syncCompleted: (platform: string) => `Sincronização com ${platform} concluída`,
+    syncCompletedDesc: "Seu menu agora está sincronizado com a plataforma."
+  };
 
   // Item management functions
   const addMenuItem = useCallback((item: Omit<MenuItem, "id">) => {
@@ -197,18 +155,14 @@ export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const newItem = {
         ...itemToDuplicate,
         id: Date.now().toString(),
-        name: language === 'pt' 
-          ? `${itemToDuplicate.name} (Cópia)`
-          : language === 'es'
-          ? `${itemToDuplicate.name} (Copia)`
-          : `${itemToDuplicate.name} (Copy)`,
+        name: `${itemToDuplicate.name} (Cópia)`,
       };
       setMenuItems(prev => [...prev, newItem]);
       toast.success(toastMessages.itemDuplicated, {
         description: toastMessages.itemDuplicatedDesc(itemToDuplicate.name),
       });
     }
-  }, [menuItems, toastMessages, language]);
+  }, [menuItems, toastMessages]);
 
   // Category management functions
   const addCategory = useCallback((category: Omit<MenuCategory, "id">) => {
@@ -330,20 +284,6 @@ export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       });
     }, 2000);
   }, [toastMessages]);
-
-  // Listen for language changes and update category and menu item translations
-  useEffect(() => {
-    // Listen for language change events to update translations in the menu data
-    const handleLanguageEvent = () => {
-      console.log("Updating menu translations for language:", language);
-    };
-    
-    document.addEventListener('language-changed', handleLanguageEvent);
-    
-    return () => {
-      document.removeEventListener('language-changed', handleLanguageEvent);
-    };
-  }, [language]);
 
   const value = {
     categories,

@@ -1,17 +1,13 @@
 
-import enTranslations from './en';
 import ptTranslations from './pt';
-import esTranslations from './es';
-import { Language } from '../types/language';
+import { Translations } from '../types/language';
 
 const translations = {
-  en: enTranslations,
-  pt: ptTranslations,
-  es: esTranslations
+  pt: ptTranslations
 };
 
-export const getTranslations = (language: Language) => {
-  return translations[language];
+export const getTranslations = () => {
+  return ptTranslations;
 };
 
 export default translations;

@@ -14,6 +14,7 @@ import CalendarPage from "./pages/Calendar";
 import LoyaltyPage from "./pages/Loyalty";
 import IntegrationsPage from "./pages/Integrations";
 import SettingsPage from "./pages/Settings";
+import BillingPage from "./pages/Billing";
 import OrderManagement from "./pages/OrderManagement";
 import NotFound from "./pages/NotFound";
 import React from "react";
@@ -42,6 +43,7 @@ function App() {
               <Route path="/orders" element={<Layout><OrderManagement /></Layout>} />
               <Route path="/integrations" element={<Layout><IntegrationsPage /></Layout>} />
               <Route path="/settings" element={<Layout><SettingsPage /></Layout>} />
+              <Route path="/billing" element={<Layout><BillingPage /></Layout>} />
               <Route path="/data-insights" element={<Layout><DataInsightsPage /></Layout>} />
               <Route path="*" element={<NotFound />} />
             </Routes>

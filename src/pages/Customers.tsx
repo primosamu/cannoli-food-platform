@@ -1,91 +1,97 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { SearchIcon, PlusCircle, Download, Upload } from "lucide-react";
-import CustomerList from "@/components/customers/CustomerList";
-import { useToast } from "@/hooks/use-toast";
-import CustomerDetailDialog from "@/components/customers/CustomerDetailDialog";
-import CustomerEditDialog from "@/components/customers/CustomerEditDialog";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import { CustomerList } from "@/components/customers/CustomerList";
+import { CustomerDetailDialog } from "@/components/customers/CustomerDetailDialog";
+import { CustomerEditDialog } from "@/components/customers/CustomerEditDialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useNavigate } from "react-router-dom";
-import { Customer } from "@/components/customers/CustomerList";
-import { CustomerSearchFilters } from "@/components/customers/CustomerSearchFilters";
-import { InsufficientCreditsDialog } from "@/components/customers/InsufficientCreditsDialog";
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { CustomerEnrichmentDialog } from "@/components/customers/CustomerEnrichmentDialog";
+import { InsufficientCreditsDialog } from "@/components/customers/InsufficientCreditsDialog";
 
-const CustomersPage = () => {
-  const [customers, setCustomers] = useState<Customer[]>([
-    {
-      id: '1',
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      phone: '+1234567890',
-      orderCount: 5,
-      lastOrderDate: new Date('2024-07-20'),
-      totalSpent: 150.00,
-      tags: ['VIP', 'New'],
-      joinDate: new Date('2023-01-15'),
-      cpf: '123.456.789-00'
-    },
-    {
-      id: '2',
-      name: 'Jane Smith',
-      email: 'jane.smith@example.com',
-      phone: '+1987654321',
-      orderCount: 3,
-      lastOrderDate: new Date('2024-07-15'),
-      totalSpent: 75.50,
-      tags: ['Regular'],
-      joinDate: new Date('2023-02-20'),
-      cpf: '987.654.321-00'
-    },
-    {
-      id: '3',
-      name: 'Alice Johnson',
-      email: 'alice.johnson@example.com',
-      phone: '+1555123456',
-      orderCount: 8,
-      lastOrderDate: new Date('2024-07-10'),
-      totalSpent: 200.00,
-      tags: ['VIP', 'Loyal'],
-      joinDate: new Date('2022-11-05'),
-      cpf: '111.222.333-44'
-    },
-    {
-      id: '4',
-      name: 'Bob Williams',
-      email: 'bob.williams@example.com',
-      phone: '+1123555789',
-      orderCount: 2,
-      lastOrderDate: new Date('2024-07-05'),
-      totalSpent: 50.00,
-      tags: ['New'],
-      joinDate: new Date('2024-01-10'),
-      cpf: '444.555.666-77'
-    },
-    {
-      id: '5',
-      name: 'Charlie Brown',
-      email: 'charlie.brown@example.com',
-      phone: '+1987123555',
-      orderCount: 6,
-      lastOrderDate: new Date('2024-06-30'),
-      totalSpent: 120.75,
-      tags: ['Regular', 'Loyal'],
-      joinDate: new Date('2023-06-15'),
-      cpf: '777.888.999-00'
-    },
-  ]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+import { Plus, Import, Export, Users, TagIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Tag } from "@/components/ui/tag";
+import { PlusCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+const sampleCustomers = [
+  {
+    id: "c1",
+    name: "João Silva",
+    phone: "+5511987654321",
+    email: "joao@example.com",
+    lastOrderDate: new Date("2023-03-15"),
+    totalSpent: 1250.75,
+    tags: ["Vegetarian", "Frequent"],
+    orderCount: 15,
+    joinDate: new Date("2022-06-15"),
+    address: "Rua Augusta, 1245, São Paulo, SP",
+    cpf: "123.456.789-00",
+    notes: "Prefers delivery in the evening. Always tips well."
+  },
+  {
+    id: "c2",
+    name: "Maria Oliveira",
+    phone: "",
+    email: "maria@example.com",
+    lastOrderDate: new Date("2023-03-20"),
+    totalSpent: 890.50,
+    tags: ["New Customer", "Office Order"],
+    orderCount: 5,
+    joinDate: new Date("2022-12-10"),
+    address: "Av. Paulista, 1000, São Paulo, SP",
+    cpf: "987.654.321-00",
+    notes: ""
+  },
+  {
+    id: "c3",
+    name: "Pedro Costa",
+    phone: "+5511976543210",
+    email: "pedro@example.com",
+    lastOrderDate: new Date("2023-02-28"),
+    totalSpent: 2300.25,
+    tags: ["VIP", "Frequent", "Weekend"],
+    orderCount: 25,
+    joinDate: new Date("2021-10-05"),
+    address: "",
+    cpf: "456.789.123-00",
+    notes: "Prefers table by the window. Allergic to nuts."
+  },
+  {
+    id: "c4",
+    name: "Ana Souza",
+    phone: "",
+    email: "ana@example.com",
+    lastOrderDate: new Date("2023-01-15"),
+    totalSpent: 450.00,
+    tags: ["Occasional"],
+    orderCount: 3,
+    joinDate: new Date("2022-09-20"),
+    address: "Rua Consolação, 250, São Paulo, SP",
+    cpf: "789.123.456-00",
+    notes: ""
+  }
+];
+
+const customerTags = ["Vegetarian", "Frequent", "New Customer", "Office Order", "VIP", "Weekend", "Occasional"];
+
+export const Customers = () => {
+  const [customers, setCustomers] = useState(sampleCustomers);
+  const [selectedCustomer, setSelectedCustomer] = useState<any | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [isEnrichmentDialogOpen, setIsEnrichmentDialogOpen] = useState(false);
-  const { toast } = useToast();
-  const [showInsufficientCreditsDialog, setShowInsufficientCreditsDialog] = useState(false);
+  const [isInsufficientCreditsOpen, setIsInsufficientCreditsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterTab, setFilterTab] = useState("all");
   const navigate = useNavigate();
-  const { translations } = useLanguage();
 
   const availablePhoneCredits = 150;
   const minimumCreditsRequired = 200;
@@ -93,193 +99,263 @@ const CustomersPage = () => {
   const filteredCustomers = customers.filter(customer =>
     customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     customer.phone.includes(searchQuery)
-  );
+  ).filter(customer => {
+    if (filterTab === "all") return true;
+    if (filterTab === "new") return customer.orderCount < 3;
+    if (filterTab === "vip") return customer.totalSpent > 2000;
+    if (filterTab === "phone-missing") return !customer.phone;
+    return true;
+  });
 
-  const handleDetailOpen = (customer: Customer) => {
+  const customersWithoutPhone = customers.filter(customer => !customer.phone);
+  
+  const handleOpenCustomerDetail = (customer: any) => {
     setSelectedCustomer(customer);
-    setIsDetailDialogOpen(true);
+    setIsDetailOpen(true);
   };
 
-  const handleDetailClose = () => {
-    setIsDetailDialogOpen(false);
-    setSelectedCustomer(null);
-  };
-
-  const handleEditOpen = (customer: Customer) => {
+  const handleOpenCustomerEdit = (customer: any) => {
     setSelectedCustomer(customer);
-    setIsEditDialogOpen(true);
+    setIsEditOpen(true);
   };
 
-  const handleEditClose = () => {
-    setIsEditDialogOpen(false);
-    setSelectedCustomer(null);
+  const handleCustomerDelete = (customer: any) => {
+    setSelectedCustomer(customer);
+    setIsDeleteConfirmOpen(true);
   };
 
-  const handleCustomerUpdate = (updatedCustomer: Customer) => {
-    setCustomers(customers.map(customer =>
-      customer.id === updatedCustomer.id ? updatedCustomer : customer
+  const confirmDelete = () => {
+    setCustomers(customers.filter(c => c.id !== selectedCustomer.id));
+    setIsDeleteConfirmOpen(false);
+    toast.success(`Customer ${selectedCustomer.name} was removed`);
+  };
+
+  const handleCustomerUpdate = (updatedCustomer: any) => {
+    setCustomers(customers.map(c => 
+      c.id === updatedCustomer.id ? updatedCustomer : c
     ));
-    setIsEditDialogOpen(false);
-    setSelectedCustomer(null);
-    toast({
-      title: translations.customerUpdated || "Cliente atualizado",
-      description: `${updatedCustomer.name} ${translations.wasUpdated || "foi atualizado com sucesso"}`,
-    });
+    setIsEditOpen(false);
+    toast.success(`Customer ${updatedCustomer.name} was updated successfully`);
   };
 
-  const handleDelete = (customer: Customer) => {
-    setCustomers(customers.filter(c => c.id !== customer.id));
-    toast({
-      title: translations.customerDeleted || "Cliente excluído",
-      description: `${customer.name} ${translations.wasRemoved || "foi removido"}`,
-    });
-  };
-  
-  const checkSufficientCredits = () => {
-    return availablePhoneCredits >= minimumCreditsRequired;
-  };
-  
-  const handleEnrichment = () => {
-    if (!checkSufficientCredits()) {
-      setShowInsufficientCreditsDialog(true);
-      return;
+  const handleEnrichmentClick = () => {
+    if (availablePhoneCredits < minimumCreditsRequired) {
+      setIsInsufficientCreditsOpen(true);
+    } else {
+      setIsEnrichmentDialogOpen(true);
     }
-    
-    setIsEnrichmentDialogOpen(true);
-  };
-  
-  const handleNavigateToBilling = () => {
-    navigate('/billing');
-    setShowInsufficientCreditsDialog(false);
   };
 
   const handleProceedWithEnrichment = () => {
     toast({
-      title: translations.phoneEnrichment || "Enriquecimento de Telefone",
-      description: translations.phoneEnrichmentComplete || "O processo de enriquecimento foi iniciado e você será notificado quando estiver concluído.",
+      title: "Phone Enrichment",
+      description: "The enrichment process has started and you will be notified when it is complete.",
     });
     setIsEnrichmentDialogOpen(false);
   };
-  
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-4">
+    <div className="space-y-4 p-8 pt-6 max-w-7xl mx-auto">
+      <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-            {translations.customerManagement || "Gerenciamento de Clientes"}
-          </h2>
-          <p className="text-muted-foreground mt-1">
-            {translations.manageCustomerInfo || "Gerencie informações e detalhes de contato dos seus clientes"}
+          <h2 className="text-3xl font-bold tracking-tight">Customer Management</h2>
+          <p className="text-muted-foreground">
+            Manage your customer information and contact details
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" className="gap-2">
-            <Upload className="h-4 w-4" />
-            {translations.importCustomers || "Importar"}
+        
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            className="h-8 gap-1"
+            onClick={handleEnrichmentClick}
+          >
+            <PlusCircle className="h-3.5 w-3.5" />
+            <span className="hidden sm:block">Complete Missing Phone Numbers</span>
+            <span className="block sm:hidden">Add Phones</span>
+            <Badge variant="secondary" className="ml-1">
+              {customersWithoutPhone.length}
+            </Badge>
           </Button>
-          <Button variant="outline" className="gap-2">
-            <Download className="h-4 w-4" />
-            {translations.exportCustomers || "Exportar"}
+          
+          <Button className="h-8 gap-1">
+            <Plus className="h-3.5 w-3.5" />
+            <span>Add Customer</span>
           </Button>
-          <Button className="gap-2 bg-gradient-to-r from-gray-800 to-gray-600 hover:from-gray-900 hover:to-gray-800">
-            <PlusCircle className="h-4 w-4" />
-            {translations.addCustomer || "Adicionar Cliente"}
+          
+          <Button variant="outline" size="icon" className="h-8 w-8">
+            <Import className="h-3.5 w-3.5" />
+          </Button>
+          
+          <Button variant="outline" size="icon" className="h-8 w-8">
+            <Export className="h-3.5 w-3.5" />
           </Button>
         </div>
       </div>
-
-      <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
-        <CardHeader className="pb-2">
-          <CardTitle>{translations.connectedCustomers || "Clientes Conectados"}</CardTitle>
-          <CardDescription>{translations.viewAndManageCustomer || "Visualize e gerencie sua base de clientes."}</CardDescription>
-        </CardHeader>
-        <CardContent className="pb-2">
-          <CustomerSearchFilters searchQuery={searchQuery} onSearchChange={setSearchQuery} />
-        </CardContent>
-        <CardContent>
-          <Tabs defaultValue="all" className="space-y-4">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="all">{translations.allCustomers || "Todos os Clientes"}</TabsTrigger>
-              <TabsTrigger value="new">{translations.newCustomer || "Novos"}</TabsTrigger>
-              <TabsTrigger value="vip">{translations.vipCustomer || "VIP"}</TabsTrigger>
-              <TabsTrigger value="regular">{translations.regularCustomer || "Regulares"}</TabsTrigger>
-            </TabsList>
-            <TabsContent value="all" className="pt-4">
-              {filteredCustomers.length > 0 ? (
-                <CustomerList
-                  customers={filteredCustomers}
-                  onDetailOpen={handleDetailOpen}
-                  onEditOpen={handleEditOpen}
-                  onDelete={handleDelete}
-                />
-              ) : (
-                <div className="text-center py-12 border border-dashed rounded-lg bg-muted/20">
-                  <SearchIcon className="mx-auto h-12 w-12 text-muted stroke-[1.25]" />
-                  <p className="mt-4 text-lg font-medium">{translations.noCustomersFound || "Nenhum cliente encontrado."}</p>
-                  <p className="text-muted-foreground">{translations.adjustSearchFilter || "Tente ajustar seus critérios de busca ou filtro."}</p>
-                </div>
-              )}
-            </TabsContent>
-            <TabsContent value="new" className="pt-4">
-              {/* Content for New Customers tab */}
-            </TabsContent>
-            <TabsContent value="vip" className="pt-4">
-              {/* Content for VIP Customers tab */}
-            </TabsContent>
-            <TabsContent value="regular" className="pt-4">
-              {/* Content for Regular Customers tab */}
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
-
-      <Card className="shadow-sm hover:shadow-md transition-shadow duration-200">
-        <CardHeader>
-          <CardTitle>{translations.phoneEnrichment || "Enriquecimento de Telefone"}</CardTitle>
-          <CardDescription>
-            {customers.length} {translations.customersWithoutPhone || "clientes sem números de telefone"}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button 
-            onClick={handleEnrichment}
-            className="bg-gradient-to-r from-gray-800 to-gray-600 hover:from-gray-900 hover:to-gray-800 gap-2"
+      
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">All Customers</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{customers.length}</div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">VIP Customers</CardTitle>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              className="h-4 w-4 text-muted-foreground"
+            >
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {customers.filter(c => c.totalSpent > 2000).length}
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              className="h-4 w-4 text-muted-foreground"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {customers.filter(c => c.orderCount < 3).length}
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Popular Tags</CardTitle>
+            <TagIcon className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="flex flex-wrap gap-1">
+              {customerTags.slice(0, 3).map((tag, i) => (
+                <Badge key={i} variant="outline" className="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Input
+            placeholder="Search customers..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="max-w-sm"
+          />
+          <Tabs
+            defaultValue="all"
+            className="w-auto"
+            value={filterTab}
+            onValueChange={setFilterTab}
           >
-            <SearchIcon className="h-4 w-4" />
-            {translations.completeMissingPhoneNumbers || "Completar Números de Telefone Faltantes"}
-          </Button>
-        </CardContent>
-      </Card>
-      
-      <InsufficientCreditsDialog
-        isOpen={showInsufficientCreditsDialog}
-        onClose={() => setShowInsufficientCreditsDialog(false)}
-        onBuyCredits={handleNavigateToBilling}
-        availableCredits={availablePhoneCredits}
-        requiredCredits={minimumCreditsRequired}
+            <TabsList>
+              <TabsTrigger value="all" className="text-xs">
+                All
+              </TabsTrigger>
+              <TabsTrigger value="new" className="text-xs">
+                New
+              </TabsTrigger>
+              <TabsTrigger value="vip" className="text-xs">
+                VIP
+              </TabsTrigger>
+              <TabsTrigger value="phone-missing" className="text-xs">
+                No Phone
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+        
+        <div className="rounded-md border">
+          <CustomerList
+            customers={filteredCustomers}
+            onDetailOpen={handleOpenCustomerDetail}
+            onEditOpen={handleOpenCustomerEdit}
+            onDelete={handleCustomerDelete}
+          />
+        </div>
+      </div>
+
+      <CustomerDetailDialog 
+        isOpen={isDetailOpen} 
+        onClose={() => setIsDetailOpen(false)} 
+        customer={selectedCustomer} 
       />
       
-      <CustomerDetailDialog
-        isOpen={isDetailDialogOpen}
-        onClose={handleDetailClose}
-        customer={selectedCustomer}
-        onEdit={handleEditOpen}
+      <CustomerEditDialog 
+        isOpen={isEditOpen} 
+        onClose={() => setIsEditOpen(false)} 
+        customer={selectedCustomer} 
+        onUpdate={handleCustomerUpdate} 
       />
-      
-      <CustomerEditDialog
-        isOpen={isEditDialogOpen}
-        onClose={handleEditClose}
-        customer={selectedCustomer}
-        onUpdate={handleCustomerUpdate}
-      />
-      
+
+      <AlertDialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm deletion</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete {selectedCustomer?.name}? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Delete
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <CustomerEnrichmentDialog
         isOpen={isEnrichmentDialogOpen}
         onClose={() => setIsEnrichmentDialogOpen(false)}
+        customersWithoutPhone={customersWithoutPhone}
         onProceed={handleProceedWithEnrichment}
+      />
+
+      <InsufficientCreditsDialog
+        isOpen={isInsufficientCreditsOpen}
+        onClose={() => setIsInsufficientCreditsOpen(false)}
+        availableCredits={availablePhoneCredits}
+        requiredCredits={minimumCreditsRequired}
+        onBuyCredits={() => navigate("/billing")}
       />
     </div>
   );
 };
 
-export default CustomersPage;
+export default Customers;

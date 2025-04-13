@@ -56,4 +56,5 @@ export const settingTranslations: SettingTranslations = {
   eachPhoneEnrichment: 'per phone enrichment',
   eachMessageSent: 'per message sent',
   eachCampaignCreated: 'per campaign created',
+  cancel: 'Cancel',
 };

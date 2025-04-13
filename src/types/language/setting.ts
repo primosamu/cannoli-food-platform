@@ -54,4 +54,5 @@ export interface SettingTranslations {
   eachPhoneEnrichment: string;
   eachMessageSent: string;
   eachCampaignCreated: string;
+  cancel: string;
 }

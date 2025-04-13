@@ -1,27 +1,28 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CreditUsageChart } from "@/components/billing/CreditUsageChart";
-import { CreditHistoryTable, CreditTransaction } from "@/components/billing/CreditHistoryTable";
 import { BuyCreditsModal } from "@/components/billing/BuyCreditsModal";
-import { PlanCard, PlanDetails } from "@/components/billing/PlanCard";
 import { useToast } from "@/components/ui/use-toast";
-import { CircleDollarSign, Wallet, Store, CreditCard, Receipt, PlusCircle, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { StoreSelector } from "@/components/dashboard/StoreSelector";
 import { CreditType } from "@/components/billing/credits/types";
+import { BillingHeader } from "@/components/billing/BillingHeader";
+import { CreditCards } from "@/components/billing/CreditCards";
+import { CreditHistory } from "@/components/billing/CreditHistory";
+import { PlansSection } from "@/components/billing/PlansSection";
 
 const BillingPage = () => {
-  const { toast } = useToast();
   const { translations } = useLanguage();
-  const [isAnnual, setIsAnnual] = useState(false);
+  const { toast } = useToast();
   const [buyCreditsModalOpen, setBuyCreditsModalOpen] = useState(false);
   const [creditType, setCreditType] = useState<CreditType>('phone');
   const [selectedStores, setSelectedStores] = useState<string[]>([]);
 
-  // Sample data - in a real application, this would come from an API
+  // Sample data for store options
+  const storeOptions = [
+    { id: 'store-1', name: 'Downtown Store' },
+    { id: 'store-2', name: 'Uptown Store' }
+  ];
+
+  // Sample data for credit usage chart
   const creditUsageData = [
     { type: translations.phoneEnrichmentCredits, value: 2500, color: '#9b87f5' },
     { type: translations.messagingCredits, value: 5000, color: '#7E69AB' },
@@ -31,7 +32,8 @@ const BillingPage = () => {
 
   const totalCredits = creditUsageData.reduce((sum, item) => sum + item.value, 0);
 
-  const recentTransactions: CreditTransaction[] = [
+  // Sample data for recent transactions
+  const recentTransactions = [
     {
       id: '1',
       date: '2025-04-12',
@@ -74,7 +76,8 @@ const BillingPage = () => {
     },
   ];
 
-  const plans: PlanDetails[] = [
+  // Sample data for plans
+  const plans = [
     {
       id: 'basic',
       name: translations.basicPlan,
@@ -129,20 +132,6 @@ const BillingPage = () => {
     },
   ];
 
-  const handlePlanSelect = (plan: PlanDetails) => {
-    if (plan.isCurrent) {
-      toast({
-        title: translations.currentPlan,
-        description: `You are already on the ${plan.name} plan.`,
-      });
-    } else {
-      toast({
-        title: "Plan Change",
-        description: `You have successfully changed to the ${plan.name}.`,
-      });
-    }
-  };
-
   const handleBuyCredits = (type: CreditType) => {
     setCreditType(type);
     setBuyCreditsModalOpen(true);
@@ -155,155 +144,23 @@ const BillingPage = () => {
     });
   };
 
-  const storeOptions = [
-    { id: 'store-1', name: 'Downtown Store' },
-    { id: 'store-2', name: 'Uptown Store' }
-  ];
-
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">{translations.billing}</h2>
-          <p className="text-muted-foreground">
-            {translations.billingAndCredits}
-          </p>
-        </div>
-        <div className="flex items-center">
-          <StoreSelector
-            stores={storeOptions}
-            selectedStores={selectedStores}
-            onStoreChange={setSelectedStores}
-          />
-        </div>
-      </div>
+      <BillingHeader 
+        selectedStores={selectedStores} 
+        onStoreChange={setSelectedStores} 
+        storeOptions={storeOptions}
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-8 gap-6">
-        {/* Credit Summary Cards */}
-        <Card className="md:col-span-2">
-          <CardHeader className="pb-2">
-            <div className="flex items-center space-x-2">
-              <CircleDollarSign className="h-5 w-5 text-primary" />
-              <CardTitle>{translations.phoneEnrichmentCredits}</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">2,500</div>
-            <p className="text-xs text-muted-foreground">{translations.credits}</p>
-          </CardContent>
-          <CardFooter>
-            <Button variant="outline" className="w-full" onClick={() => handleBuyCredits('phone')}>
-              <PlusCircle className="h-4 w-4 mr-2" />
-              {translations.buyMore}
-            </Button>
-          </CardFooter>
-        </Card>
+      <CreditCards onBuyCredits={handleBuyCredits} />
 
-        <Card className="md:col-span-2">
-          <CardHeader className="pb-2">
-            <div className="flex items-center space-x-2">
-              <Wallet className="h-5 w-5 text-primary" />
-              <CardTitle>{translations.messagingCredits}</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">5,000</div>
-            <p className="text-xs text-muted-foreground">{translations.credits}</p>
-          </CardContent>
-          <CardFooter>
-            <Button variant="outline" className="w-full" onClick={() => handleBuyCredits('message')}>
-              <PlusCircle className="h-4 w-4 mr-2" />
-              {translations.buyMore}
-            </Button>
-          </CardFooter>
-        </Card>
+      <CreditHistory 
+        transactions={recentTransactions} 
+        usageData={creditUsageData}
+        totalCredits={totalCredits}
+      />
 
-        <Card className="md:col-span-2">
-          <CardHeader className="pb-2">
-            <div className="flex items-center space-x-2">
-              <Store className="h-5 w-5 text-primary" />
-              <CardTitle>{translations.campaignCredits}</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">500</div>
-            <p className="text-xs text-muted-foreground">{translations.credits}</p>
-          </CardContent>
-          <CardFooter>
-            <Button variant="outline" className="w-full" onClick={() => handleBuyCredits('campaign')}>
-              <PlusCircle className="h-4 w-4 mr-2" />
-              {translations.buyMore}
-            </Button>
-          </CardFooter>
-        </Card>
-
-        <Card className="md:col-span-2">
-          <CardHeader className="pb-2">
-            <div className="flex items-center space-x-2">
-              <MessageCircle className="h-5 w-5 text-primary" />
-              <CardTitle>RCS Credits</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">1,000</div>
-            <p className="text-xs text-muted-foreground">{translations.credits}</p>
-          </CardContent>
-          <CardFooter>
-            <Button variant="outline" className="w-full" onClick={() => handleBuyCredits('rcs')}>
-              <PlusCircle className="h-4 w-4 mr-2" />
-              {translations.buyMore}
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2">
-          <CreditHistoryTable transactions={recentTransactions} />
-        </div>
-        <div>
-          <CreditUsageChart data={creditUsageData} total={totalCredits} />
-        </div>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{translations.plans}</CardTitle>
-          <div className="flex items-center space-x-2 mt-2">
-            <Button
-              variant={isAnnual ? "outline" : "default"}
-              size="sm"
-              onClick={() => setIsAnnual(false)}
-            >
-              {translations.monthlySubscription}
-            </Button>
-            <Button
-              variant={isAnnual ? "default" : "outline"}
-              size="sm"
-              onClick={() => setIsAnnual(true)}
-            >
-              {translations.annualSubscription}
-            </Button>
-            {isAnnual && (
-              <span className="text-xs text-primary font-medium">
-                {translations.saveWithAnnual}
-              </span>
-            )}
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {plans.map((plan) => (
-              <PlanCard
-                key={plan.id}
-                plan={plan}
-                isAnnual={isAnnual}
-                onSelect={handlePlanSelect}
-              />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <PlansSection plans={plans} />
 
       <BuyCreditsModal
         open={buyCreditsModalOpen}

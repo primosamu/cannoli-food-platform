@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -18,11 +19,12 @@ import CustomerList from "@/components/customers/CustomerList";
 import { sampleCustomers } from "@/data/sampleCustomers";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const CustomersPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
-
+  const { translations } = useLanguage();
   const { toast } = useToast();
 
   const filteredCustomers = sampleCustomers.filter(
@@ -44,20 +46,20 @@ const CustomersPage = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Customer Management</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{translations.customerManagement}</h2>
           <p className="text-muted-foreground">
-            View and manage your customer database.
+            {translations.viewAndManageCustomer}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline">
-            <Upload className="mr-2 h-4 w-4" /> Import
+            <Upload className="mr-2 h-4 w-4" /> {translations.importCustomers}
           </Button>
           <Button variant="outline">
-            <Download className="mr-2 h-4 w-4" /> Export
+            <Download className="mr-2 h-4 w-4" /> {translations.exportCustomers}
           </Button>
           <Button>
-            <PlusCircle className="mr-2 h-4 w-4" /> Add Customer
+            <PlusCircle className="mr-2 h-4 w-4" /> {translations.addCustomer}
           </Button>
         </div>
       </div>
@@ -65,9 +67,9 @@ const CustomersPage = () => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <div className="space-y-1">
-            <CardTitle>Customers</CardTitle>
+            <CardTitle>{translations.connectedCustomers}</CardTitle>
             <CardDescription>
-              Manage your customer information and contact details.
+              {translations.manageCustomerInfo}
             </CardDescription>
           </div>
           <div className="flex items-center gap-2">
@@ -75,7 +77,7 @@ const CustomersPage = () => {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input 
                 type="search" 
-                placeholder="Search customers..." 
+                placeholder={translations.searchCustomers} 
                 className="pl-8 w-[250px]" 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -98,7 +100,7 @@ const CustomersPage = () => {
                 value="all"
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
               >
-                All Customers
+                {translations.allCustomers}
               </TabsTrigger>
               <TabsTrigger
                 value="vip"
@@ -106,7 +108,7 @@ const CustomersPage = () => {
               >
                 <span className="flex items-center gap-1">
                   <UserCheck className="h-4 w-4" />
-                  VIP
+                  {translations.vipCustomer}
                 </span>
               </TabsTrigger>
               <TabsTrigger
@@ -115,7 +117,7 @@ const CustomersPage = () => {
               >
                 <span className="flex items-center gap-1">
                   <UserCheck className="h-4 w-4" />
-                  Regular
+                  {translations.regularCustomer}
                 </span>
               </TabsTrigger>
               <TabsTrigger
@@ -124,7 +126,7 @@ const CustomersPage = () => {
               >
                 <span className="flex items-center gap-1">
                   <UserPlus className="h-4 w-4" />
-                  New
+                  {translations.newCustomer}
                 </span>
               </TabsTrigger>
               <TabsTrigger
@@ -133,7 +135,7 @@ const CustomersPage = () => {
               >
                 <span className="flex items-center gap-1">
                   <Tag className="h-4 w-4" />
-                  Tags
+                  {translations.tags}
                 </span>
               </TabsTrigger>
             </TabsList>
@@ -143,8 +145,8 @@ const CustomersPage = () => {
                 <CustomerList customers={displayedCustomers} />
               ) : (
                 <div className="text-center p-16 text-muted-foreground">
-                  <p className="text-lg">No customers found.</p>
-                  <p className="mt-2">Try adjusting your search or filter criteria.</p>
+                  <p className="text-lg">{translations.noCustomersFound}</p>
+                  <p className="mt-2">{translations.adjustSearchFilter}</p>
                 </div>
               )}
             </TabsContent>
@@ -154,9 +156,9 @@ const CustomersPage = () => {
                 <CustomerList customers={displayedCustomers} />
               ) : (
                 <div className="text-center p-16 text-muted-foreground">
-                  <p className="text-lg">No VIP customers found.</p>
+                  <p className="text-lg">{translations.noCustomersFound}</p>
                   <Button className="mt-4">
-                    <UserPlus className="mr-2 h-4 w-4" /> Add VIP Customer
+                    <UserPlus className="mr-2 h-4 w-4" /> {translations.addCustomer}
                   </Button>
                 </div>
               )}
@@ -167,7 +169,7 @@ const CustomersPage = () => {
                 <CustomerList customers={displayedCustomers} />
               ) : (
                 <div className="text-center p-16 text-muted-foreground">
-                  <p className="text-lg">No regular customers found.</p>
+                  <p className="text-lg">{translations.noCustomersFound}</p>
                 </div>
               )}
             </TabsContent>
@@ -177,7 +179,7 @@ const CustomersPage = () => {
                 <CustomerList customers={displayedCustomers} />
               ) : (
                 <div className="text-center p-16 text-muted-foreground">
-                  <p className="text-lg">No new customers found.</p>
+                  <p className="text-lg">{translations.noCustomersFound}</p>
                 </div>
               )}
             </TabsContent>
@@ -211,7 +213,7 @@ const CustomersPage = () => {
                 <Button variant="outline" className="justify-start h-auto p-4 border-dashed">
                   <div className="text-left flex items-center">
                     <PlusCircle className="h-4 w-4 mr-2" />
-                    <span>Add Tag</span>
+                    <span>{translations.addCustomer}</span>
                   </div>
                 </Button>
               </div>

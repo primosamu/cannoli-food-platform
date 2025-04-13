@@ -1,6 +1,7 @@
+
 import React, { useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
-import { ColumnDef, Row } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -27,6 +28,7 @@ import CustomerDetailDialog from "./CustomerDetailDialog";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export interface Customer {
   id: string;
@@ -50,6 +52,7 @@ interface CustomerListProps {
 
 const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
   const { toast } = useToast();
+  const { translations } = useLanguage();
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [isMessageDialogOpen, setIsMessageDialogOpen] = useState(false);
@@ -157,7 +160,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
     },
     {
       accessorKey: "phone",
-      header: "Phone",
+      header: translations.phoneNumber,
       cell: ({ row }) => {
         const customer = row.original;
         return customer.phone ? (
@@ -180,7 +183,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
     },
     {
       accessorKey: "lastOrderDate",
-      header: "Last Order",
+      header: translations.lastOrder,
       cell: ({ row }) => {
         const lastOrderDate = row.original.lastOrderDate;
         return (
@@ -197,7 +200,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
     },
     {
       accessorKey: "totalSpent",
-      header: "Total Spent",
+      header: translations.totalSpent,
       cell: ({ row }) => {
         return (
           <Badge variant="outline" className="font-mono">
@@ -208,7 +211,7 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
     },
     {
       accessorKey: "tags",
-      header: "Tags",
+      header: translations.tags,
       cell: ({ row }) => {
         const tags = row.original.tags;
         return (

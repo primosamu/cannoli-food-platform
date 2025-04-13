@@ -5,63 +5,75 @@ import { Input } from "@/components/ui/input";
 import { SearchIcon, PlusCircle, AlertCircle, Download, Upload, Tag } from "lucide-react";
 import CustomerList from "@/components/customers/CustomerList";
 import { useToast } from "@/components/ui/use-toast";
-import { CustomerDetailDialog } from "@/components/customers/CustomerDetailDialog";
-import { CustomerEditDialog } from "@/components/customers/CustomerEditDialog";
+import CustomerDetailDialog from "@/components/customers/CustomerDetailDialog";
+import CustomerEditDialog from "@/components/customers/CustomerEditDialog";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNavigate } from "react-router-dom";
-
-interface Customer {
-  id: string;
-  name: string;
-  phoneNumber: string;
-  lastOrder: string;
-  totalSpent: number;
-  tags: string[];
-}
+import { Customer } from "@/components/customers/CustomerList";
 
 const CustomersPage = () => {
   const [customers, setCustomers] = useState<Customer[]>([
     {
       id: '1',
       name: 'John Doe',
-      phoneNumber: '+1234567890',
-      lastOrder: '2024-07-20',
+      email: 'john.doe@example.com',
+      phone: '+1234567890',
+      orderCount: 5,
+      lastOrderDate: new Date('2024-07-20'),
       totalSpent: 150.00,
       tags: ['VIP', 'New'],
+      joinDate: new Date('2023-01-15'),
+      cpf: '123.456.789-00'
     },
     {
       id: '2',
       name: 'Jane Smith',
-      phoneNumber: '+1987654321',
-      lastOrder: '2024-07-15',
+      email: 'jane.smith@example.com',
+      phone: '+1987654321',
+      orderCount: 3,
+      lastOrderDate: new Date('2024-07-15'),
       totalSpent: 75.50,
       tags: ['Regular'],
+      joinDate: new Date('2023-02-20'),
+      cpf: '987.654.321-00'
     },
     {
       id: '3',
       name: 'Alice Johnson',
-      phoneNumber: '+1555123456',
-      lastOrder: '2024-07-10',
+      email: 'alice.johnson@example.com',
+      phone: '+1555123456',
+      orderCount: 8,
+      lastOrderDate: new Date('2024-07-10'),
       totalSpent: 200.00,
       tags: ['VIP', 'Loyal'],
+      joinDate: new Date('2022-11-05'),
+      cpf: '111.222.333-44'
     },
     {
       id: '4',
       name: 'Bob Williams',
-      phoneNumber: '+1123555789',
-      lastOrder: '2024-07-05',
+      email: 'bob.williams@example.com',
+      phone: '+1123555789',
+      orderCount: 2,
+      lastOrderDate: new Date('2024-07-05'),
       totalSpent: 50.00,
       tags: ['New'],
+      joinDate: new Date('2024-01-10'),
+      cpf: '444.555.666-77'
     },
     {
       id: '5',
       name: 'Charlie Brown',
-      phoneNumber: '+1987123555',
-      lastOrder: '2024-06-30',
+      email: 'charlie.brown@example.com',
+      phone: '+1987123555',
+      orderCount: 6,
+      lastOrderDate: new Date('2024-06-30'),
       totalSpent: 120.75,
       tags: ['Regular', 'Loyal'],
+      joinDate: new Date('2023-06-15'),
+      cpf: '777.888.999-00'
     },
   ]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -80,7 +92,7 @@ const CustomersPage = () => {
   
   const filteredCustomers = customers.filter(customer =>
     customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    customer.phoneNumber.includes(searchQuery)
+    customer.phone.includes(searchQuery)
   );
 
   const handleDetailOpen = (customer: Customer) => {
@@ -276,15 +288,14 @@ const CustomersPage = () => {
       </Dialog>
       
       <CustomerDetailDialog
-        open={isDetailDialogOpen}
+        isOpen={isDetailDialogOpen}
         onClose={handleDetailClose}
         customer={selectedCustomer}
       />
       <CustomerEditDialog
-        open={isEditDialogOpen}
+        isOpen={isEditDialogOpen}
         onClose={handleEditClose}
         customer={selectedCustomer}
-        onUpdate={handleCustomerUpdate}
       />
       <Dialog open={isEnrichmentDialogOpen} onOpenChange={setIsEnrichmentDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">

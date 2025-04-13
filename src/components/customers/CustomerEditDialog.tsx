@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -31,7 +31,7 @@ const CustomerEditDialog: React.FC<CustomerEditDialogProps> = ({
     customer || {}
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (customer) {
       setEditedCustomer({ ...customer });
     }

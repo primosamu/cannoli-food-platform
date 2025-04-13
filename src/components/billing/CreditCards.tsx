@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { PlusCircle, CircleDollarSign, Wallet, Store, MessageCircle, CreditCard } from "lucide-react";
+import { PlusCircle, CircleDollarSign, Wallet, Store, MessageCircle, CreditCard as CreditCardIcon } from "lucide-react";
 import { CreditType } from "../billing/credits/types";
 import { useNavigate } from "react-router-dom";
 
@@ -216,7 +216,7 @@ export const CreditCards: React.FC<CreditCardsProps> = ({
 
           <div className="mt-6 p-4 bg-muted/50 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
-              <CreditCard className="h-4 w-4 text-primary" />
+              <CreditCardIcon className="h-4 w-4 text-primary" />
               <span className="font-medium">{translations.creditConversionInfo || "Informação sobre conversão de créditos"}</span>
             </div>
             <p className="text-sm text-muted-foreground">

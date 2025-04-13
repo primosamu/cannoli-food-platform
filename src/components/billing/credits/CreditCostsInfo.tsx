@@ -1,15 +1,11 @@
 
 import React from 'react';
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CreditType, CreditCosts } from "./types";
 
 interface CreditCostsInfoProps {
-  selectedTab: 'phone' | 'message' | 'campaign' | 'rcs';
-  costs: {
-    phone: number;
-    message: number;
-    campaign: number;
-    rcs: number;
-  };
+  selectedTab: CreditType;
+  costs: CreditCosts;
 }
 
 export const CreditCostsInfo: React.FC<CreditCostsInfoProps> = ({ selectedTab, costs }) => {
@@ -18,12 +14,12 @@ export const CreditCostsInfo: React.FC<CreditCostsInfoProps> = ({ selectedTab, c
   return (
     <div className="mt-4">
       <div className="flex justify-between text-sm mb-2">
-        <span>Custo dos Créditos</span>
+        <span>{translations.creditCosts || "Custo dos Créditos"}</span>
         <span className="font-medium">
           R${costs[selectedTab]} 
-          {selectedTab === 'phone' && " por enriquecimento de telefone"}
-          {selectedTab === 'message' && " por mensagem SMS enviada"}
-          {selectedTab === 'campaign' && " por campanha criada"}
+          {selectedTab === 'phone' && (translations.eachPhoneEnrichment || " por enriquecimento de telefone")}
+          {selectedTab === 'message' && (translations.eachMessageSent || " por mensagem SMS enviada")}
+          {selectedTab === 'campaign' && (translations.eachCampaignCreated || " por campanha criada")}
           {selectedTab === 'rcs' && " por mensagem RCS enviada"}
         </span>
       </div>

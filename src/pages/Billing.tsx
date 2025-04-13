@@ -8,16 +8,17 @@ import { CreditHistoryTable, CreditTransaction } from "@/components/billing/Cred
 import { BuyCreditsModal } from "@/components/billing/BuyCreditsModal";
 import { PlanCard, PlanDetails } from "@/components/billing/PlanCard";
 import { useToast } from "@/components/ui/use-toast";
-import { CircleDollarSign, Wallet, Store, CreditCard, Receipt, PlusCircle } from "lucide-react";
+import { CircleDollarSign, Wallet, Store, CreditCard, Receipt, PlusCircle, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { StoreSelector } from "@/components/dashboard/StoreSelector";
+import { CreditType } from "@/components/billing/credits/types";
 
 const BillingPage = () => {
   const { toast } = useToast();
   const { translations } = useLanguage();
   const [isAnnual, setIsAnnual] = useState(false);
   const [buyCreditsModalOpen, setBuyCreditsModalOpen] = useState(false);
-  const [creditType, setCreditType] = useState<'phone' | 'message' | 'campaign'>('phone');
+  const [creditType, setCreditType] = useState<CreditType>('phone');
   const [selectedStores, setSelectedStores] = useState<string[]>([]);
 
   // Sample data - in a real application, this would come from an API
@@ -25,6 +26,7 @@ const BillingPage = () => {
     { type: translations.phoneEnrichmentCredits, value: 2500, color: '#9b87f5' },
     { type: translations.messagingCredits, value: 5000, color: '#7E69AB' },
     { type: translations.campaignCredits, value: 500, color: '#1EAEDB' },
+    { type: 'RCS Credits', value: 1000, color: '#6A5ACD' },
   ];
 
   const totalCredits = creditUsageData.reduce((sum, item) => sum + item.value, 0);
@@ -60,6 +62,14 @@ const BillingPage = () => {
       description: 'Credit package purchase',
       amount: 1000,
       type: 'purchase',
+      status: 'completed',
+    },
+    {
+      id: '5',
+      date: '2025-04-13',
+      description: 'RCS campaign to loyalty customers',
+      amount: 50,
+      type: 'rcs',
       status: 'completed',
     },
   ];
@@ -133,7 +143,7 @@ const BillingPage = () => {
     }
   };
 
-  const handleBuyCredits = (type: 'phone' | 'message' | 'campaign') => {
+  const handleBuyCredits = (type: CreditType) => {
     setCreditType(type);
     setBuyCreditsModalOpen(true);
   };
@@ -168,7 +178,7 @@ const BillingPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-8 gap-6">
         {/* Credit Summary Cards */}
         <Card className="md:col-span-2">
           <CardHeader className="pb-2">
@@ -221,6 +231,25 @@ const BillingPage = () => {
           </CardContent>
           <CardFooter>
             <Button variant="outline" className="w-full" onClick={() => handleBuyCredits('campaign')}>
+              <PlusCircle className="h-4 w-4 mr-2" />
+              {translations.buyMore}
+            </Button>
+          </CardFooter>
+        </Card>
+
+        <Card className="md:col-span-2">
+          <CardHeader className="pb-2">
+            <div className="flex items-center space-x-2">
+              <MessageCircle className="h-5 w-5 text-primary" />
+              <CardTitle>RCS Credits</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">1,000</div>
+            <p className="text-xs text-muted-foreground">{translations.credits}</p>
+          </CardContent>
+          <CardFooter>
+            <Button variant="outline" className="w-full" onClick={() => handleBuyCredits('rcs')}>
               <PlusCircle className="h-4 w-4 mr-2" />
               {translations.buyMore}
             </Button>

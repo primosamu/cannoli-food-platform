@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { CampaignEvent } from "@/types/campaign";
 import { addDays } from "date-fns";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CampaignCalendarProps {
   events?: CampaignEvent[];
@@ -20,6 +21,7 @@ export const CampaignCalendar: React.FC<CampaignCalendarProps> = ({
   onViewCampaign
 }) => {
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(new Date());
+  const { translations } = useLanguage();
   
   const getEventsForSelectedDate = () => {
     if (!selectedDate) return [];
@@ -64,9 +66,9 @@ export const CampaignCalendar: React.FC<CampaignCalendarProps> = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Campaign Calendar</CardTitle>
+        <CardTitle>Calendário de Campanhas</CardTitle>
         <CardDescription>
-          View and manage your scheduled marketing campaigns
+          Visualize e gerencie suas campanhas de marketing agendadas
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0">
@@ -98,7 +100,7 @@ export const CampaignCalendar: React.FC<CampaignCalendarProps> = ({
                 <CalendarIcon className="h-4 w-4" />
                 {selectedDate ? (
                   <span>
-                    Events on {selectedDate.toLocaleDateString('en-US', { 
+                    Eventos em {selectedDate.toLocaleDateString('pt-BR', { 
                       weekday: 'long', 
                       month: 'long', 
                       day: 'numeric',
@@ -106,7 +108,7 @@ export const CampaignCalendar: React.FC<CampaignCalendarProps> = ({
                     })}
                   </span>
                 ) : (
-                  <span>Select a date</span>
+                  <span>Selecione uma data</span>
                 )}
               </h3>
             </div>
@@ -124,7 +126,7 @@ export const CampaignCalendar: React.FC<CampaignCalendarProps> = ({
                             {event.type.charAt(0).toUpperCase() + event.type.slice(1)}
                           </Badge>
                           <span className="text-sm text-muted-foreground">
-                            {new Date(event.startDate).toLocaleTimeString('en-US', {
+                            {new Date(event.startDate).toLocaleTimeString('pt-BR', {
                               hour: 'numeric',
                               minute: '2-digit'
                             })}
@@ -137,14 +139,14 @@ export const CampaignCalendar: React.FC<CampaignCalendarProps> = ({
                           size="sm"
                           onClick={() => onViewCampaign?.(event.campaignId)}
                         >
-                          View
+                          Visualizar
                         </Button>
                         <Button 
                           variant="outline" 
                           size="sm"
                           onClick={() => onViewReport?.(event.campaignId)}
                         >
-                          <BarChart className="h-4 w-4 mr-1" /> Report
+                          <BarChart className="h-4 w-4 mr-1" /> Relatório
                         </Button>
                       </div>
                     </div>
@@ -153,9 +155,9 @@ export const CampaignCalendar: React.FC<CampaignCalendarProps> = ({
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
                   {selectedDate ? (
-                    <p>No campaigns scheduled for this day</p>
+                    <p>Não há campanhas agendadas para este dia</p>
                   ) : (
-                    <p>Select a date to view scheduled campaigns</p>
+                    <p>Selecione uma data para visualizar as campanhas agendadas</p>
                   )}
                 </div>
               )}
@@ -175,40 +177,40 @@ function generateSampleEvents(): CampaignEvent[] {
     {
       id: "evt-1",
       campaignId: "camp-1",
-      title: "Weekend Special Promotion",
-      description: "WhatsApp campaign for weekend specials",
+      title: "Promoção de Fim de Semana",
+      description: "Campanha de WhatsApp para promoções de fim de semana",
       startDate: addDays(now, 2),
       type: "whatsapp"
     },
     {
       id: "evt-2",
       campaignId: "camp-2",
-      title: "Monthly Newsletter",
-      description: "Regular monthly newsletter to all subscribers",
+      title: "Newsletter Mensal",
+      description: "Newsletter mensal regular para todos os assinantes",
       startDate: addDays(now, 5),
       type: "email"
     },
     {
       id: "evt-3",
       campaignId: "camp-3",
-      title: "New Menu Launch",
-      description: "Announcing our new seasonal menu items",
+      title: "Lançamento do Novo Menu",
+      description: "Anuncio de nossos novos itens sazonais do menu",
       startDate: addDays(now, -2),
       type: "sms"
     },
     {
       id: "evt-4",
       campaignId: "camp-4",
-      title: "Loyalty Program",
-      description: "Special offers for our loyal customers",
+      title: "Programa de Fidelidade",
+      description: "Ofertas especiais para nossos clientes fiéis",
       startDate: now,
       type: "whatsapp"
     },
     {
       id: "evt-5",
       campaignId: "camp-5",
-      title: "Social Media Ad Campaign",
-      description: "Promoted posts on Instagram and Facebook",
+      title: "Campanha de Anúncios em Redes Sociais",
+      description: "Posts promovidos no Instagram e Facebook",
       startDate: addDays(now, 3),
       type: "paid"
     }

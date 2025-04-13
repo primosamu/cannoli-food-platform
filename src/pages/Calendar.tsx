@@ -8,30 +8,33 @@ import { CampaignType } from "@/types/campaign";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { DateRange } from "react-day-picker";
 import { DatePickerWithRange } from "@/components/ui/date-range-picker";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const CalendarPage = () => {
+  const { translations } = useLanguage();
+  
   // Sample campaign events
   const campaignEvents = [
     {
       id: "1",
-      title: "Summer Promotion",
+      title: "Promoção de Verão",
       type: "email" as CampaignType,
       date: new Date(2025, 3, 15), // April 15, 2025
-      content: "20% off summer dishes"
+      content: "20% de desconto nos pratos de verão"
     },
     {
       id: "2",
-      title: "Weekend Special",
+      title: "Especial de Fim de Semana",
       type: "whatsapp" as CampaignType,
       date: new Date(2025, 3, 20), // April 20, 2025
-      content: "Free dessert with weekend orders"
+      content: "Sobremesa grátis com pedidos no fim de semana"
     },
     {
       id: "3",
-      title: "New Menu Launch",
+      title: "Lançamento do Novo Menu",
       type: "paid" as CampaignType,
       date: new Date(2025, 3, 25), // April 25, 2025
-      content: "Try our new dishes!"
+      content: "Experimente nossos novos pratos!"
     }
   ];
 
@@ -45,7 +48,15 @@ const CalendarPage = () => {
   });
 
   // Days of the week
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const days = [
+    translations.mon,
+    translations.tue,
+    translations.wed,
+    translations.thu,
+    translations.fri,
+    translations.sat,
+    translations.sun
+  ];
   
   // Function to get campaign events for a specific day
   const getCampaignsForDay = (day: number) => {
@@ -80,17 +91,17 @@ const CalendarPage = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Calendar</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{translations.calendarManagement}</h2>
           <p className="text-muted-foreground">
-            Schedule and manage your restaurant events and marketing campaigns.
+            {translations.scheduleAndManageEvents}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline">
-            <CalendarIcon className="mr-2 h-4 w-4" /> Today
+            <CalendarIcon className="mr-2 h-4 w-4" /> {translations.today}
           </Button>
           <Button>
-            <Plus className="mr-2 h-4 w-4" /> Add Event
+            <Plus className="mr-2 h-4 w-4" /> {translations.addEvent}
           </Button>
         </div>
       </div>
@@ -99,7 +110,7 @@ const CalendarPage = () => {
         <div className="md:w-1/4 space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Date Range</CardTitle>
+              <CardTitle>{translations.dateRange}</CardTitle>
             </CardHeader>
             <CardContent>
               <DatePickerWithRange date={date} setDate={setDate} />
@@ -108,7 +119,7 @@ const CalendarPage = () => {
           
           <Card>
             <CardHeader>
-              <CardTitle>Filter Campaigns</CardTitle>
+              <CardTitle>{translations.filterCampaigns}</CardTitle>
             </CardHeader>
             <CardContent>
               <ToggleGroup 
@@ -127,7 +138,7 @@ const CalendarPage = () => {
                   <div className="w-3 h-3 rounded-full bg-orange-500 mr-2"></div> Email
                 </ToggleGroupItem>
                 <ToggleGroupItem value="paid" className="justify-start">
-                  <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div> Paid Ads
+                  <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div> Anúncios Pagos
                 </ToggleGroupItem>
               </ToggleGroup>
             </CardContent>
@@ -135,7 +146,7 @@ const CalendarPage = () => {
           
           <Card>
             <CardHeader>
-              <CardTitle>Upcoming Campaigns</CardTitle>
+              <CardTitle>{translations.upcomingCampaigns}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               {campaignEvents.map((event) => (
@@ -153,9 +164,9 @@ const CalendarPage = () => {
 
         <Card className="md:w-3/4">
           <CardHeader>
-            <CardTitle>April 2025</CardTitle>
+            <CardTitle>{translations.april} 2025</CardTitle>
             <CardDescription>
-              Manage your schedule, events, and campaigns.
+              {translations.manageYourSchedule}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -192,7 +203,7 @@ const CalendarPage = () => {
                   ))}
                   {day === 15 && (
                     <div className="mt-1 p-1 text-xs bg-gray-100 text-gray-800 rounded">
-                      Staff Meeting (10:00 AM)
+                      {translations.staffMeeting} (10:00 AM)
                     </div>
                   )}
                 </div>

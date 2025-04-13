@@ -45,4 +45,9 @@ export const dashboardTranslations: DashboardTranslations = {
   frequency: 'Frequência',
   monetary: 'Valor Monetário',
   recentVsOlder: 'Recentes vs. Antigos',
+  
+  // Campaign redirection messages
+  redirectingToCampaigns: 'Redirecionando para Campanhas',
+  creatingCampaignFor: 'Criando campanha para',
+  thisSegment: 'este segmento',
 };

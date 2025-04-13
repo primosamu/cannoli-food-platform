@@ -24,7 +24,7 @@ export interface DashboardTranslations {
   moreThan: string;
   customerVisits: string;
   trafficByHour: string;
-  
+
   // Chart related
   orderSummary: string;
   customerBehavior: string;
@@ -43,4 +43,9 @@ export interface DashboardTranslations {
   frequency: string;
   monetary: string;
   recentVsOlder: string;
+  
+  // Campaign redirection messages
+  redirectingToCampaigns: string;
+  creatingCampaignFor: string;
+  thisSegment: string;
 }

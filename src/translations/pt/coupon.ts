@@ -11,4 +11,7 @@ export const couponTranslations: CouponTranslations = {
   campaignsCoupons: 'Campanhas e Cupons',
   noScheduledCoupons: 'Nenhum cupom agendado encontrado.',
   scheduleNewCoupon: 'Agendar Novo Cupom',
+  createNewCoupon: 'Criar Novo Cupom',
+  createNewCouponInstead: 'Criar novo cupom em vez disso',
+  fillOutCouponForm: 'Preencha o formulário para criar um novo cupom promocional.',
 };

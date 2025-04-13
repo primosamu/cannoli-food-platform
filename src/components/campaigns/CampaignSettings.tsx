@@ -35,6 +35,16 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { CampaignTemplate } from "@/types/campaign";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { CouponForm } from "@/components/coupons/CouponForm";
+import { CouponFormValues } from "@/components/coupons/CouponSchema";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CampaignSettingsProps {
   template: CampaignTemplate | null;
@@ -51,6 +61,8 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
   const [scheduledTime, setScheduledTime] = useState<string>("");
   const [inactiveDays, setInactiveDays] = useState<string>(template?.inactiveDays || "60");
   const [selectedSegment, setSelectedSegment] = useState<string>("");
+  const [newCouponDialogOpen, setNewCouponDialogOpen] = useState<boolean>(false);
+  const { translations } = useLanguage();
   
   const { toast } = useToast();
   
@@ -114,6 +126,15 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
     if (audienceType === 'custom' && template?.category === 'loyalty') return '78';
     if (audienceType === 'custom' && template?.category === 'consumption-pattern') return '112';
     return '120';
+  };
+
+  const handleCreateNewCoupon = (data: CouponFormValues) => {
+    toast({
+      title: "New coupon created",
+      description: `Coupon "${data.name}" (${data.code}) has been created and added to this campaign.`
+    });
+    
+    setNewCouponDialogOpen(false);
   };
 
   return (
@@ -359,9 +380,14 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
                   </Select>
                   
                   <div className="flex items-center">
-                    <Button variant="link" size="sm" className="h-auto p-0">
+                    <Button 
+                      variant="link" 
+                      size="sm" 
+                      className="h-auto p-0"
+                      onClick={() => setNewCouponDialogOpen(true)}
+                    >
                       <BadgePercent className="h-3 w-3 mr-1" />
-                      Create new coupon instead
+                      {translations.createNewCouponInstead || "Create new coupon instead"}
                     </Button>
                   </div>
                 </div>
@@ -461,6 +487,19 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
           <ArrowRightCircle className="h-4 w-4" />
         </Button>
       </div>
+
+      {/* New Coupon Dialog */}
+      <Dialog open={newCouponDialogOpen} onOpenChange={setNewCouponDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{translations.createNewCoupon || "Create New Coupon"}</DialogTitle>
+            <DialogDescription>
+              {translations.fillOutCouponForm || "Fill out the form to create a new promotional coupon."}
+            </DialogDescription>
+          </DialogHeader>
+          <CouponForm onSubmit={handleCreateNewCoupon} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

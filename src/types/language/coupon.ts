@@ -9,4 +9,7 @@ export interface CouponTranslations {
   campaignsCoupons: string;
   noScheduledCoupons?: string;
   scheduleNewCoupon?: string;
+  createNewCoupon?: string;
+  createNewCouponInstead?: string;
+  fillOutCouponForm?: string;
 }

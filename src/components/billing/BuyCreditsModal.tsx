@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Dialog, 
@@ -37,33 +36,38 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
   
   const creditPackages: CreditPackagesData = {
     phone: [
-      { id: "phone-small", name: "Small", credits: 100, price: 9.99 },
-      { id: "phone-medium", name: "Medium", credits: 500, price: 39.99 },
-      { id: "phone-large", name: "Large", credits: 1000, price: 69.99 },
+      { id: "phone-small", name: "Pequeno", credits: 100, price: 9.99 },
+      { id: "phone-medium", name: "Médio", credits: 500, price: 39.99 },
+      { id: "phone-large", name: "Grande", credits: 1000, price: 69.99 },
     ],
     message: [
-      { id: "message-small", name: "Small", credits: 200, price: 19.99 },
-      { id: "message-medium", name: "Medium", credits: 1000, price: 79.99 },
-      { id: "message-large", name: "Large", credits: 5000, price: 299.99 },
+      { id: "message-small", name: "Pequeno", credits: 200, price: 19.99 },
+      { id: "message-medium", name: "Médio", credits: 1000, price: 79.99 },
+      { id: "message-large", name: "Grande", credits: 5000, price: 299.99 },
     ],
     campaign: [
-      { id: "campaign-small", name: "Small", credits: 5, price: 49.99 },
-      { id: "campaign-medium", name: "Medium", credits: 15, price: 129.99 },
-      { id: "campaign-large", name: "Large", credits: 30, price: 199.99 },
+      { id: "campaign-small", name: "Pequeno", credits: 5, price: 49.99 },
+      { id: "campaign-medium", name: "Médio", credits: 15, price: 129.99 },
+      { id: "campaign-large", name: "Grande", credits: 30, price: 199.99 },
+    ],
+    rcs: [
+      { id: "rcs-small", name: "Pequeno", credits: 100, price: 29.99 },
+      { id: "rcs-medium", name: "Médio", credits: 500, price: 119.99 },
+      { id: "rcs-large", name: "Grande", credits: 1000, price: 199.99 },
     ],
   };
 
   const creditCosts: CreditCosts = {
-    phone: 0.10,  // $0.10 per phone enrichment
-    message: 0.05, // $0.05 per message
-    campaign: 10.00 // $10.00 per campaign
+    phone: 0.10,  // R$0,10 por enriquecimento de telefone
+    message: 0.05, // R$0,05 por mensagem SMS
+    campaign: 10.00, // R$10,00 por campanha
+    rcs: 0.30 // R$0,30 por mensagem RCS
   };
   
   const currentPackages = creditPackages[selectedTab];
   const currentPackage = currentPackages.find(pkg => pkg.id === `${selectedTab}-${selectedPackage}`);
   
   useEffect(() => {
-    // Reset to first package and quantity of 1 when changing tabs
     setSelectedPackage("small");
     setQuantity(1);
   }, [selectedTab]);
@@ -93,18 +97,19 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>{translations.buyCredits}</DialogTitle>
+          <DialogTitle>Comprar Créditos</DialogTitle>
           <DialogDescription>
-            {translations.selectQuantity}
+            Selecione a quantidade de créditos que deseja comprar
           </DialogDescription>
         </DialogHeader>
         
         <div className="py-4 space-y-6">
           <Tabs defaultValue="phone" value={selectedTab} onValueChange={(value) => handleTabChange(value as CreditType)}>
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="phone">{translations.phoneEnrichment}</TabsTrigger>
-              <TabsTrigger value="message">{translations.messagesSent}</TabsTrigger>
-              <TabsTrigger value="campaign">{translations.campaignsCreated}</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="phone">Enriquecimento</TabsTrigger>
+              <TabsTrigger value="message">SMS</TabsTrigger>
+              <TabsTrigger value="rcs">RCS</TabsTrigger>
+              <TabsTrigger value="campaign">Campanhas</TabsTrigger>
             </TabsList>
             
             <CreditCostsInfo selectedTab={selectedTab} costs={creditCosts} />
@@ -135,10 +140,10 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
         
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            {translations.cancel}
+            Cancelar
           </Button>
           <Button onClick={handlePurchase}>
-            {translations.proceedToCheckout}
+            Prosseguir para Pagamento
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,13 @@ import {
   Target,
   BarChart3,
   Globe,
-  Store
+  Store,
+  MessageSquare,
+  MessageCircle,
+  Phone,
+  Mail,
+  Send,
+  Smartphone
 } from "lucide-react";
 
 // Integration type definition
@@ -30,7 +35,8 @@ type IntegrationType =
   | "social" 
   | "analytics" 
   | "tag_manager" 
-  | "meta_ads";
+  | "meta_ads"
+  | "messaging";
 
 interface Integration {
   id: string;
@@ -108,13 +114,44 @@ const IntegrationsPage = () => {
       status: "not-connected",
       type: "analytics"
     },
+    {
+      id: "messaging-zenvia-sms",
+      name: "Zenvia SMS",
+      description: "Envie SMS para seus clientes usando a plataforma Zenvia.",
+      icon: <MessageSquare className="h-12 w-12 text-gray-400" />,
+      status: "not-connected",
+      type: "messaging"
+    },
+    {
+      id: "messaging-zenvia-rcs",
+      name: "Zenvia RCS",
+      description: "Envie mensagens RCS ricas para seus clientes usando a Zenvia.",
+      icon: <MessageCircle className="h-12 w-12 text-gray-400" />,
+      status: "not-connected",
+      type: "messaging"
+    },
+    {
+      id: "messaging-zenvia-whatsapp",
+      name: "Zenvia WhatsApp (API Oficial)",
+      description: "Envie mensagens WhatsApp usando a API oficial do WhatsApp com Zenvia.",
+      icon: <Send className="h-12 w-12 text-gray-400" />,
+      status: "not-connected",
+      type: "messaging"
+    },
+    {
+      id: "messaging-evolution-api",
+      name: "Evolution API (WhatsApp)",
+      description: "Alternativa para envio de mensagens WhatsApp com Evolution API.",
+      icon: <Smartphone className="h-12 w-12 text-gray-400" />,
+      status: "not-connected",
+      type: "messaging"
+    },
   ]);
 
   const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(null);
   const [integrationKey, setIntegrationKey] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Filter integrations by type
   const getIntegrationsByType = (type: IntegrationType) => {
     return integrations.filter(integration => integration.type === type);
   };
@@ -135,7 +172,6 @@ const IntegrationsPage = () => {
       return;
     }
 
-    // Update the integration status
     setIntegrations(integrations.map(i => 
       i.id === selectedIntegration.id 
         ? { ...i, status: "connected" } 
@@ -161,17 +197,29 @@ const IntegrationsPage = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Integrations</h2>
+          <h2 className="text-3xl font-bold tracking-tight">Integrações</h2>
           <p className="text-muted-foreground">
-            Connect your restaurant system with other platforms and services.
+            Conecte seu sistema de restaurante com outras plataformas e serviços.
           </p>
         </div>
         <Button onClick={handleAddNewService}>
-          <Link2 className="mr-2 h-4 w-4" /> Connect New Service
+          <Link2 className="mr-2 h-4 w-4" /> Conectar Novo Serviço
         </Button>
       </div>
 
-      {/* Payment Processors */}
+      <div className="space-y-4">
+        <h3 className="text-xl font-semibold">Plataformas de Mensagens</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {getIntegrationsByType("messaging").map((integration) => (
+            <IntegrationCard 
+              key={integration.id} 
+              integration={integration} 
+              onConnect={() => handleConnect(integration)} 
+            />
+          ))}
+        </div>
+      </div>
+
       <div className="space-y-4">
         <h3 className="text-xl font-semibold">Payment Processors</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -185,7 +233,6 @@ const IntegrationsPage = () => {
         </div>
       </div>
 
-      {/* Marketplaces */}
       <div className="space-y-4">
         <h3 className="text-xl font-semibold">Delivery Marketplaces</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -199,7 +246,6 @@ const IntegrationsPage = () => {
         </div>
       </div>
 
-      {/* Social Media */}
       <div className="space-y-4">
         <h3 className="text-xl font-semibold">Social Media</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -213,7 +259,6 @@ const IntegrationsPage = () => {
         </div>
       </div>
 
-      {/* Marketing Tools */}
       <div className="space-y-4">
         <h3 className="text-xl font-semibold">Marketing Tools</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -227,7 +272,6 @@ const IntegrationsPage = () => {
         </div>
       </div>
 
-      {/* Analytics */}
       <div className="space-y-4">
         <h3 className="text-xl font-semibold">Analytics</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -241,7 +285,6 @@ const IntegrationsPage = () => {
         </div>
       </div>
 
-      {/* Available Integrations Card */}
       <Card>
         <CardHeader>
           <CardTitle>Looking for More?</CardTitle>
@@ -261,34 +304,88 @@ const IntegrationsPage = () => {
         </CardContent>
       </Card>
 
-      {/* Connection Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Connect to {selectedIntegration?.name}</DialogTitle>
+            <DialogTitle>Conectar a {selectedIntegration?.name}</DialogTitle>
             <DialogDescription>
-              Enter your API key to connect with {selectedIntegration?.name}.
+              {selectedIntegration?.id.includes('zenvia') ? 
+                "Insira suas credenciais da Zenvia para conectar." : 
+                selectedIntegration?.id.includes('evolution') ? 
+                "Insira a URL da API e o token para conectar à Evolution API." :
+                "Insira sua chave de API para conectar com " + selectedIntegration?.name + "."}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="api-key">API Key</Label>
-              <Input
-                id="api-key"
-                type="password"
-                placeholder="Enter your API key"
-                value={integrationKey}
-                onChange={(e) => setIntegrationKey(e.target.value)}
-              />
-            </div>
+            {selectedIntegration?.id.includes('zenvia') && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="account-id">Zenvia Account ID</Label>
+                  <Input
+                    id="account-id"
+                    placeholder="Insira o ID da sua conta Zenvia"
+                    value={integrationKey}
+                    onChange={(e) => setIntegrationKey(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="api-token">Zenvia API Token</Label>
+                  <Input
+                    id="api-token"
+                    type="password"
+                    placeholder="Insira seu token da API Zenvia"
+                    value={integrationKey}
+                    onChange={(e) => setIntegrationKey(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
+            
+            {selectedIntegration?.id.includes('evolution') && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="api-url">URL da Evolution API</Label>
+                  <Input
+                    id="api-url"
+                    placeholder="https://sua-instancia.evolution-api.com"
+                    value={integrationKey}
+                    onChange={(e) => setIntegrationKey(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="api-token">Token de Autenticação</Label>
+                  <Input
+                    id="api-token"
+                    type="password"
+                    placeholder="Insira seu token da Evolution API"
+                    value={integrationKey}
+                    onChange={(e) => setIntegrationKey(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
+            
+            {!selectedIntegration?.id.includes('zenvia') && !selectedIntegration?.id.includes('evolution') && (
+              <div className="space-y-2">
+                <Label htmlFor="api-key">Chave de API</Label>
+                <Input
+                  id="api-key"
+                  type="password"
+                  placeholder="Insira sua chave de API"
+                  value={integrationKey}
+                  onChange={(e) => setIntegrationKey(e.target.value)}
+                />
+              </div>
+            )}
+            
             <div className="flex items-center space-x-2 text-sm">
               <AlertCircle className="h-4 w-4 text-amber-500" />
-              <span>Your API key is stored securely and never shared.</span>
+              <span>Suas credenciais são armazenadas com segurança e nunca compartilhadas.</span>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSubmitConnection}>Connect</Button>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
+            <Button onClick={handleSubmitConnection}>Conectar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -309,11 +406,11 @@ const IntegrationCard = ({ integration, onConnect }: IntegrationCardProps) => {
           <CardTitle>{integration.name}</CardTitle>
           {integration.status === "connected" ? (
             <div className="flex items-center text-sm text-green-600">
-              <Check className="h-4 w-4 mr-1" /> Connected
+              <Check className="h-4 w-4 mr-1" /> Conectado
             </div>
           ) : (
             <div className="flex items-center text-sm text-gray-500">
-              <X className="h-4 w-4 mr-1" /> Not Connected
+              <X className="h-4 w-4 mr-1" /> Não Conectado
             </div>
           )}
         </div>
@@ -330,7 +427,7 @@ const IntegrationCard = ({ integration, onConnect }: IntegrationCardProps) => {
           variant={integration.status === "connected" ? "outline" : "default"}
           onClick={onConnect}
         >
-          {integration.status === "connected" ? "Manage" : "Connect"}
+          {integration.status === "connected" ? "Gerenciar" : "Conectar"}
         </Button>
       </CardFooter>
     </Card>

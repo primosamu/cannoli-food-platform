@@ -231,6 +231,29 @@ export const campaignTemplates: CampaignTemplate[] = [
     content: "NOITE ESPECIAL DE {{event}} 🎉\n\nJunte-se a nós para uma experiência gastronômica inesquecível no {{restaurant}}.\nDia {{date}} às {{time}}.\nVagas limitadas: {{phone}}",
     description: "Anúncio de evento especial para tráfego pago",
     imageUrl: "event-ad.jpg"
+  },
+
+  // New RCS Templates
+  {
+    id: "rcs-welcome",
+    name: "Boas-vindas RCS",
+    type: "rcs",
+    content: "Olá {{name}}! 👋 Bem-vindo(a) ao *{{restaurant}}*! Aproveite a experiência rica do RCS com imagens, carrosséis e botões interativos. Salve nosso contato!",
+    description: "Mensagem de boas-vindas usando RCS",
+  },
+  {
+    id: "rcs-promo",
+    name: "Promoção do Dia RCS",
+    type: "rcs",
+    content: "Olá {{name}}! 🎉 Promoção especial hoje no {{restaurant}}! Aproveite {{discount}}% de desconto em todos os pratos principais. Botões interativos no RCS para você fazer seu pedido diretamente.",
+    description: "Promoção do dia usando recursos interativos do RCS",
+  },
+  {
+    id: "rcs-menu",
+    name: "Menu Digital RCS",
+    type: "rcs",
+    content: "Confira nosso cardápio digital interativo, {{name}}! Navegue pelas categorias, veja fotos dos pratos e faça seu pedido diretamente por este canal RCS. Uma experiência completa sem precisar baixar nenhum aplicativo!",
+    description: "Menu digital interativo usando RCS",
   }
 ];
 

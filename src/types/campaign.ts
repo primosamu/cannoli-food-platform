@@ -1,5 +1,5 @@
 
-export type CampaignType = 'whatsapp' | 'sms' | 'email' | 'paid';
+export type CampaignType = 'whatsapp' | 'sms' | 'email' | 'paid' | 'rcs';
 
 export type CampaignTemplate = {
   id: string;

@@ -4,7 +4,7 @@ import { CampaignTemplate, CampaignType } from "@/types/campaign";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Mail, PercentCircle } from "lucide-react";
+import { MessageSquare, Mail, PercentCircle, MessageCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getAllCategories } from "@/data/campaignTemplates";
 
@@ -43,6 +43,8 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
         return <MessageSquare className="h-5 w-5 text-green-600" />;
       case "sms":
         return <MessageSquare className="h-5 w-5 text-blue-600" />;
+      case "rcs":
+        return <MessageCircle className="h-5 w-5 text-indigo-600" />;
       case "email":
         return <Mail className="h-5 w-5 text-orange-600" />;
       case "paid":
@@ -58,6 +60,8 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
         return "WhatsApp";
       case "sms":
         return "SMS";
+      case "rcs":
+        return "RCS";
       case "email":
         return "Email";
       case "paid":

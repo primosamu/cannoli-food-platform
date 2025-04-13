@@ -3,11 +3,12 @@ import React from 'react';
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CreditCostsInfoProps {
-  selectedTab: 'phone' | 'message' | 'campaign';
+  selectedTab: 'phone' | 'message' | 'campaign' | 'rcs';
   costs: {
     phone: number;
     message: number;
     campaign: number;
+    rcs: number;
   };
 }
 
@@ -17,12 +18,13 @@ export const CreditCostsInfo: React.FC<CreditCostsInfoProps> = ({ selectedTab, c
   return (
     <div className="mt-4">
       <div className="flex justify-between text-sm mb-2">
-        <span>{translations.creditCosts}</span>
+        <span>Custo dos Créditos</span>
         <span className="font-medium">
-          ${costs[selectedTab]} 
-          {selectedTab === 'phone' && translations.eachPhoneEnrichment}
-          {selectedTab === 'message' && translations.eachMessageSent}
-          {selectedTab === 'campaign' && translations.eachCampaignCreated}
+          R${costs[selectedTab]} 
+          {selectedTab === 'phone' && " por enriquecimento de telefone"}
+          {selectedTab === 'message' && " por mensagem SMS enviada"}
+          {selectedTab === 'campaign' && " por campanha criada"}
+          {selectedTab === 'rcs' && " por mensagem RCS enviada"}
         </span>
       </div>
     </div>

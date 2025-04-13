@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Dialog, 
@@ -97,19 +98,19 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Comprar Créditos</DialogTitle>
+          <DialogTitle>{translations.buyCredits || "Comprar Créditos"}</DialogTitle>
           <DialogDescription>
-            Selecione a quantidade de créditos que deseja comprar
+            {translations.selectQuantity || "Selecione a quantidade de créditos que deseja comprar"}
           </DialogDescription>
         </DialogHeader>
         
         <div className="py-4 space-y-6">
           <Tabs defaultValue="phone" value={selectedTab} onValueChange={(value) => handleTabChange(value as CreditType)}>
             <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="phone">Enriquecimento</TabsTrigger>
+              <TabsTrigger value="phone">{translations.phoneEnrichment || "Enriquecimento"}</TabsTrigger>
               <TabsTrigger value="message">SMS</TabsTrigger>
               <TabsTrigger value="rcs">RCS</TabsTrigger>
-              <TabsTrigger value="campaign">Campanhas</TabsTrigger>
+              <TabsTrigger value="campaign">{translations.campaignsCreated || "Campanhas"}</TabsTrigger>
             </TabsList>
             
             <CreditCostsInfo selectedTab={selectedTab} costs={creditCosts} />
@@ -140,10 +141,10 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
         
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            Cancelar
+            {translations.cancel || "Cancelar"}
           </Button>
           <Button onClick={handlePurchase}>
-            Prosseguir para Pagamento
+            {translations.proceedToCheckout || "Prosseguir para Pagamento"}
           </Button>
         </DialogFooter>
       </DialogContent>

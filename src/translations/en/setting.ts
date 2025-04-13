@@ -19,6 +19,7 @@ export const settingTranslations: SettingTranslations = {
   phoneEnrichmentCredits: 'Phone Enrichment Credits',
   messagingCredits: 'Messaging Credits',
   campaignCredits: 'Campaign Credits',
+  rcsCredits: 'RCS Credits',
   creditHistory: 'Credit History',
   viewAllHistory: 'View All History',
   plans: 'Plans',
@@ -40,6 +41,7 @@ export const settingTranslations: SettingTranslations = {
   phoneEnrichment: 'Phone Enrichment',
   messagesSent: 'Messages Sent',
   campaignsCreated: 'Campaigns Created',
+  rcsMessagesSent: 'RCS Messages Sent',
   paymentHistory: 'Payment History',
   date: 'Date',
   description: 'Description',
@@ -56,5 +58,6 @@ export const settingTranslations: SettingTranslations = {
   eachPhoneEnrichment: 'per phone enrichment',
   eachMessageSent: 'per message sent',
   eachCampaignCreated: 'per campaign created',
+  eachRcsMessageSent: 'per RCS message sent',
   cancel: 'Cancel',
 };

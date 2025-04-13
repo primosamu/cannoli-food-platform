@@ -17,6 +17,7 @@ export interface SettingTranslations {
   phoneEnrichmentCredits: string;
   messagingCredits: string;
   campaignCredits: string;
+  rcsCredits: string;
   creditHistory: string;
   viewAllHistory: string;
   plans: string;
@@ -38,6 +39,7 @@ export interface SettingTranslations {
   phoneEnrichment: string;
   messagesSent: string;
   campaignsCreated: string;
+  rcsMessagesSent: string;
   paymentHistory: string;
   date: string;
   description: string;
@@ -54,5 +56,6 @@ export interface SettingTranslations {
   eachPhoneEnrichment: string;
   eachMessageSent: string;
   eachCampaignCreated: string;
+  eachRcsMessageSent: string;
   cancel: string;
 }

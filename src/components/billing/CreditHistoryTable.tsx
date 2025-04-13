@@ -25,7 +25,7 @@ export interface CreditTransaction {
   date: string;
   description: string;
   amount: number;
-  type: 'phone' | 'message' | 'campaign' | 'purchase';
+  type: 'phone' | 'message' | 'campaign' | 'purchase' | 'rcs';
   status: 'completed' | 'pending' | 'failed';
 }
 

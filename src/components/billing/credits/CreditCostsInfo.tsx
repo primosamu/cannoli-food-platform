@@ -20,7 +20,7 @@ export const CreditCostsInfo: React.FC<CreditCostsInfoProps> = ({ selectedTab, c
           {selectedTab === 'phone' && (translations.eachPhoneEnrichment || " por enriquecimento de telefone")}
           {selectedTab === 'message' && (translations.eachMessageSent || " por mensagem SMS enviada")}
           {selectedTab === 'campaign' && (translations.eachCampaignCreated || " por campanha criada")}
-          {selectedTab === 'rcs' && " por mensagem RCS enviada"}
+          {selectedTab === 'rcs' && (translations.eachRcsMessageSent || " por mensagem RCS enviada")}
         </span>
       </div>
     </div>

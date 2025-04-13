@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Customer } from "./CustomerList";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Label } from "@/components/ui/label";
 
 interface CustomerEditDialogProps {
   customer: Customer | null;
@@ -70,68 +71,82 @@ const CustomerEditDialog: React.FC<CustomerEditDialogProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>{translations.editCustomer || "Editar Cliente"}: {customer.name}</DialogTitle>
+          <DialogTitle className="text-xl font-semibold">
+            {translations.editCustomer || "Editar Cliente"}: {customer.name}
+          </DialogTitle>
         </DialogHeader>
+        
         <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">{translations.name || "Nome"}</label>
+          <div className="grid gap-3">
+            <Label htmlFor="name">{translations.name || "Nome"}</Label>
             <Input
+              id="name"
               name="name"
               value={editedCustomer.name || ""}
               onChange={handleChange}
+              className="w-full"
             />
           </div>
           
-          <div className="space-y-2">
-            <label className="text-sm font-medium">{translations.email || "Email"}</label>
+          <div className="grid gap-3">
+            <Label htmlFor="email">{translations.email || "Email"}</Label>
             <Input
+              id="email"
               name="email"
               type="email"
               value={editedCustomer.email || ""}
               onChange={handleChange}
+              className="w-full"
             />
           </div>
           
-          <div className="space-y-2">
-            <label className="text-sm font-medium">{translations.phoneNumber || "Telefone"}</label>
+          <div className="grid gap-3">
+            <Label htmlFor="phone">{translations.phoneNumber || "Telefone"}</Label>
             <Input
+              id="phone"
               name="phone"
               value={editedCustomer.phone || ""}
               onChange={handleChange}
+              className="w-full"
             />
           </div>
           
-          <div className="space-y-2">
-            <label className="text-sm font-medium">CPF</label>
+          <div className="grid gap-3">
+            <Label htmlFor="cpf">CPF</Label>
             <Input
+              id="cpf"
               name="cpf"
               value={editedCustomer.cpf || ""}
               onChange={handleChange}
+              className="w-full"
             />
           </div>
           
-          <div className="space-y-2">
-            <label className="text-sm font-medium">{translations.address || "Endereço"}</label>
+          <div className="grid gap-3">
+            <Label htmlFor="address">{translations.address || "Endereço"}</Label>
             <Input
+              id="address"
               name="address"
               value={editedCustomer.address || ""}
               onChange={handleChange}
+              className="w-full"
             />
           </div>
           
-          <div className="space-y-2">
-            <label className="text-sm font-medium">{translations.notes || "Observações"}</label>
+          <div className="grid gap-3">
+            <Label htmlFor="notes">{translations.notes || "Observações"}</Label>
             <Textarea
+              id="notes"
               name="notes"
               value={editedCustomer.notes || ""}
               onChange={handleChange}
-              className="min-h-[80px]"
+              className="min-h-[80px] w-full"
             />
           </div>
         </div>
         
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" onClick={onClose} className="mr-2">
             {translations.cancel || "Cancelar"}
           </Button>
           <Button onClick={handleSave}>

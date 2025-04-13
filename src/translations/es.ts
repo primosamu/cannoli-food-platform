@@ -169,7 +169,90 @@ const esTranslations: Translations = {
   apply: 'Aplicar',
   normal: 'Normal',
   imageOptimized: 'Imagen optimizada',
-  imageOptimizedDesc: 'Tu imagen ha sido optimizada con éxito'
+  imageOptimizedDesc: 'Tu imagen ha sido optimizada con éxito',
+
+  // Dashboard
+  overview: 'Vista General',
+  detailedAnalytics: 'Análisis Detallado',
+  totalRevenue: 'Ingresos Totales',
+  activeCustomers: 'Clientes Activos',
+  customerSegmentation: 'Segmentación de Clientes',
+  topPerformingMenuItems: 'Elementos de Menú con Mejor Rendimiento',
+  campaignPerformance: 'Rendimiento de Campañas',
+  salesByStore: 'Ventas por Tienda',
+  customersAndOrdersPerDay: 'Clientes y Pedidos por Día',
+  restaurantPerformance: 'Rendimiento del Restaurante',
+  customerData: 'Datos de Clientes',
+  
+  // Menu Management
+  menuManagement: 'Gestión de Menú',
+  createAndManageMenu: 'Cree y gestione sus elementos de menú a través de diferentes canales',
+  categories: 'Categorías',
+  items: 'Elementos',
+  
+  // Customers
+  customerManagement: 'Gestión de Clientes',
+  manageCustomerInfo: 'Gestione la información y datos de contacto de sus clientes',
+  
+  // Calendar
+  calendarManagement: 'Gestión de Calendario',
+  scheduleAndManageEvents: 'Programe y gestione los eventos de su restaurante y campañas de marketing',
+  filterCampaigns: 'Filtrar Campañas',
+  dateRange: 'Rango de Fechas',
+  
+  // Coupons
+  couponManagement: 'Gestión de Cupones',
+  createAndManageCoupons: 'Cree y gestione cupones de descuento para sus clientes',
+  activeCoupons: 'Cupones Activos',
+  inactiveCoupons: 'Cupones Inactivos',
+  scheduledCoupons: 'Cupones Programados',
+  
+  // Loyalty
+  loyaltyAndPoints: 'Fidelidad y Puntos',
+  manageCustomerLoyalty: 'Gestione su programa de fidelidad y recompensas para clientes',
+  totalPointsIssued: 'Total de Puntos Emitidos',
+  activeMembers: 'Miembros Activos',
+  rewardsClaimed: 'Recompensas Reclamadas',
+  memberTiers: 'Niveles de Miembros',
+  loyaltyProgramMembers: 'Miembros del Programa de Fidelidad',
+  availableRewards: 'Recompensas Disponibles',
+  pointTransactions: 'Transacciones de Puntos',
+  
+  // Integrations
+  integrationsManagement: 'Gestión de Integraciones',
+  connectYourRestaurant: 'Conecte su sistema de restaurante con otras plataformas y servicios',
+  paymentProcessors: 'Procesadores de Pago',
+  deliveryMarketplaces: 'Marketplaces de Entrega',
+  socialMedia: 'Redes Sociales',
+  marketingTools: 'Herramientas de Marketing',
+  
+  // Settings
+  settingsManagement: 'Gestión de Configuración',
+  manageAccount: 'Administre su cuenta, tiendas y preferencias de aplicación',
+  stores: 'Tiendas',
+  applicationPreferences: 'Preferencias de Aplicación',
+
+  // Data Insights
+  dataInsights: 'Análisis de Datos',
+  exploreConnections: 'Explore conexiones y relaciones entre diferentes entidades de datos en su restaurante',
+  connectedCustomers: 'Clientes Conectados',
+  connectedOrders: 'Pedidos Conectados',
+  menuItems: 'Elementos de Menú',
+  campaignsCoupons: 'Campañas y Cupones',
+  popularMenuItems: 'Elementos de Menú Populares',
+  customerRetention: 'Retención de Clientes',
+  
+  // Common dashboard elements
+  distributionAcrossDays: 'Distribución a lo largo de los días',
+  ordersPerDate: 'Pedidos por Fecha',
+  orderForecast: 'Previsión de Pedidos',
+  nextDays: 'Próximos Días',
+  historicalData: 'Datos Históricos',
+  futurePredicitions: 'Predicciones Futuras',
+  lessThan: 'Menos',
+  moreThan: 'Más',
+  customerVisits: 'Visitas de Clientes',
+  trafficByHour: 'Tráfico por Hora',
 };
 
 export default esTranslations;

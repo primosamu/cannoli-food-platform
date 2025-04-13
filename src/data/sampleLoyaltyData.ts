@@ -113,8 +113,8 @@ const generateLoyaltyRewards = (): LoyaltyReward[] => {
   const rewards: LoyaltyReward[] = [
     {
       id: "reward_1",
-      name: "Free Dessert",
-      description: "Redeem for any dessert item of your choice",
+      name: "Sobremesa Grátis",
+      description: "Resgate para qualquer sobremesa à sua escolha",
       pointCost: 250,
       active: true,
       category: "freebie",
@@ -124,8 +124,8 @@ const generateLoyaltyRewards = (): LoyaltyReward[] => {
     },
     {
       id: "reward_2",
-      name: "10% Off Order",
-      description: "10% discount on your next order",
+      name: "10% de Desconto",
+      description: "10% de desconto no seu próximo pedido",
       pointCost: 350,
       active: true,
       category: "discount",
@@ -135,8 +135,8 @@ const generateLoyaltyRewards = (): LoyaltyReward[] => {
     },
     {
       id: "reward_3",
-      name: "Free Delivery",
-      description: "Redeem for free delivery on your next order",
+      name: "Entrega Grátis",
+      description: "Resgate para entrega gratuita no seu próximo pedido",
       pointCost: 200,
       active: true,
       category: "discount",
@@ -146,8 +146,8 @@ const generateLoyaltyRewards = (): LoyaltyReward[] => {
     },
     {
       id: "reward_4",
-      name: "Chef's Table Experience",
-      description: "Exclusive dinner with our head chef for you and one guest",
+      name: "Experiência Mesa do Chef",
+      description: "Jantar exclusivo com nosso chef para você e um convidado",
       pointCost: 2000,
       active: true,
       category: "experience",
@@ -159,8 +159,8 @@ const generateLoyaltyRewards = (): LoyaltyReward[] => {
     },
     {
       id: "reward_5",
-      name: "Buy One Get One Free",
-      description: "Free main course of equal or lesser value",
+      name: "Compre Um Leve Dois",
+      description: "Prato principal grátis de valor igual ou menor",
       pointCost: 500,
       active: true,
       category: "freebie",
@@ -170,8 +170,8 @@ const generateLoyaltyRewards = (): LoyaltyReward[] => {
     },
     {
       id: "reward_6",
-      name: "Priority Reservation",
-      description: "Skip the wait list for reservations",
+      name: "Reserva Prioritária",
+      description: "Pule a lista de espera para reservas",
       pointCost: 300,
       active: true,
       category: "exclusive",
@@ -181,8 +181,8 @@ const generateLoyaltyRewards = (): LoyaltyReward[] => {
     },
     {
       id: "reward_7",
-      name: "Anniversary Special",
-      description: "Complimentary bottle of wine on your anniversary",
+      name: "Especial de Aniversário",
+      description: "Garrafa de vinho cortesia no seu aniversário",
       pointCost: 400,
       active: true,
       category: "exclusive",
@@ -192,8 +192,8 @@ const generateLoyaltyRewards = (): LoyaltyReward[] => {
     },
     {
       id: "reward_8",
-      name: "Double Points Weekend",
-      description: "Earn 2x points on all purchases this weekend",
+      name: "Final de Semana de Pontos Duplos",
+      description: "Ganhe 2x pontos em todas as compras neste final de semana",
       pointCost: 600,
       active: false, // Currently inactive
       category: "exclusive",
@@ -230,7 +230,7 @@ const generatePointTransactions = (members: LoyaltyMember[], rewards: LoyaltyRew
         points,
         orderId: order.id,
         createdAt: new Date(order.createdAt.getTime() + 5 * 60 * 1000), // 5 minutes after order
-        description: `Points earned for Order #${order.orderNumber}`
+        description: `Pontos ganhos pelo Pedido #${order.orderNumber}`
       });
     }
   });
@@ -257,7 +257,7 @@ const generatePointTransactions = (members: LoyaltyMember[], rewards: LoyaltyRew
         points: -reward.pointCost, // Negative points for redemption
         rewardId: reward.id,
         createdAt: randomPastDate(180), // Within the last 6 months
-        description: `Redeemed ${reward.name}`
+        description: `Resgatou ${reward.name}`
       });
     }
   });
@@ -275,7 +275,7 @@ const generatePointTransactions = (members: LoyaltyMember[], rewards: LoyaltyRew
         transactionType: "expire",
         points: -expiredPoints, // Negative points for expiry
         createdAt: randomPastDate(150),
-        description: "Points expired"
+        description: "Pontos expirados"
       });
     }
   });
@@ -290,7 +290,7 @@ const generatePointTransactions = (members: LoyaltyMember[], rewards: LoyaltyRew
         transactionType: "referral",
         points: 100, // 100 points per referral
         createdAt: randomPastDate(200),
-        description: "Referral bonus"
+        description: "Bônus de indicação"
       });
     }
   });

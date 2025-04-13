@@ -16,6 +16,7 @@ import {
   loyaltyProgramStats
 } from "@/data/sampleLoyaltyData";
 import { formatDistanceToNow } from "date-fns";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Helper function to get tier color
 const getTierColor = (tier: string) => {
@@ -44,8 +45,31 @@ const formatPoints = (points: number) => {
   return points > 0 ? `+${points}` : points.toString();
 };
 
+// Helper function to translate tier names
+const translateTierName = (tier: string) => {
+  switch(tier) {
+    case "platinum": return "Platina";
+    case "gold": return "Ouro";
+    case "silver": return "Prata";
+    default: return "Bronze";
+  }
+};
+
+// Helper function to translate transaction types
+const translateTransactionType = (type: string) => {
+  switch(type) {
+    case "earn": return "Ganho";
+    case "redeem": return "Resgate";
+    case "expire": return "Expirado";
+    case "adjustment": return "Ajuste";
+    case "referral": return "Indicação";
+    default: return type;
+  }
+};
+
 const LoyaltyPage = () => {
   const [filterTier, setFilterTier] = useState<string | null>(null);
+  const { translations } = useLanguage();
   
   // Filter members by tier if a filter is selected
   const filteredMembers = filterTier 
@@ -56,17 +80,17 @@ const LoyaltyPage = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Loyalty & Points</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{translations.loyaltyAndPoints}</h2>
           <p className="text-muted-foreground">
-            Manage your customer loyalty program and rewards.
+            {translations.manageCustomerLoyalty}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline">
-            <Gift className="mr-2 h-4 w-4" /> Import Rewards
+            <Gift className="mr-2 h-4 w-4" /> Importar Recompensas
           </Button>
           <Button>
-            <Settings className="mr-2 h-4 w-4" /> Configure Program
+            <Settings className="mr-2 h-4 w-4" /> Configurar Programa
           </Button>
         </div>
       </div>
@@ -74,64 +98,64 @@ const LoyaltyPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Total Points Issued</CardTitle>
-            <CardDescription>All time</CardDescription>
+            <CardTitle className="text-lg">{translations.totalPointsIssued}</CardTitle>
+            <CardDescription>Total</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{loyaltyProgramStats.totalPointsIssued.toLocaleString()}</div>
             <p className="text-muted-foreground text-sm mt-1">
-              {loyaltyProgramStats.totalPointsRedeemed.toLocaleString()} points redeemed
+              {loyaltyProgramStats.totalPointsRedeemed.toLocaleString()} pontos resgatados
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Active Members</CardTitle>
-            <CardDescription>Current month</CardDescription>
+            <CardTitle className="text-lg">{translations.activeMembers}</CardTitle>
+            <CardDescription>Mês atual</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{loyaltyProgramStats.activeMembers}</div>
             <p className="text-muted-foreground text-sm mt-1">
-              {loyaltyProgramStats.totalMembers.toLocaleString()} total enrolled
+              {loyaltyProgramStats.totalMembers.toLocaleString()} total cadastrados
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Rewards Claimed</CardTitle>
-            <CardDescription>Current month</CardDescription>
+            <CardTitle className="text-lg">{translations.rewardsClaimed}</CardTitle>
+            <CardDescription>Mês atual</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{loyaltyProgramStats.rewardsClaimedThisMonth}</div>
             <div className="flex items-center text-sm text-muted-foreground mt-1">
-              <span>Most popular: {loyaltyProgramStats.mostRedeemedReward.name}</span>
+              <span>Mais popular: {loyaltyProgramStats.mostRedeemedReward.name}</span>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Member Tiers</CardTitle>
-            <CardDescription>Distribution</CardDescription>
+            <CardTitle className="text-lg">{translations.memberTiers}</CardTitle>
+            <CardDescription>Distribuição</CardDescription>
           </CardHeader>
           <CardContent className="pt-2">
             <div className="flex gap-1 flex-col">
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
-                  <Badge variant="outline" className={`bg-purple-100 text-purple-800 mr-2`}>Platinum</Badge>
+                  <Badge variant="outline" className={`bg-purple-100 text-purple-800 mr-2`}>Platina</Badge>
                   <span className="text-muted-foreground text-sm">{loyaltyProgramStats.membersByTier.platinum}</span>
                 </div>
                 <span className="text-sm">{Math.round((loyaltyProgramStats.membersByTier.platinum / loyaltyProgramStats.totalMembers) * 100)}%</span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
-                  <Badge variant="outline" className={`bg-amber-100 text-amber-800 mr-2`}>Gold</Badge>
+                  <Badge variant="outline" className={`bg-amber-100 text-amber-800 mr-2`}>Ouro</Badge>
                   <span className="text-muted-foreground text-sm">{loyaltyProgramStats.membersByTier.gold}</span>
                 </div>
                 <span className="text-sm">{Math.round((loyaltyProgramStats.membersByTier.gold / loyaltyProgramStats.totalMembers) * 100)}%</span>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
-                  <Badge variant="outline" className={`bg-slate-100 text-slate-800 mr-2`}>Silver</Badge>
+                  <Badge variant="outline" className={`bg-slate-100 text-slate-800 mr-2`}>Prata</Badge>
                   <span className="text-muted-foreground text-sm">{loyaltyProgramStats.membersByTier.silver}</span>
                 </div>
                 <span className="text-sm">{Math.round((loyaltyProgramStats.membersByTier.silver / loyaltyProgramStats.totalMembers) * 100)}%</span>
@@ -151,36 +175,36 @@ const LoyaltyPage = () => {
       <Tabs defaultValue="members">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="members">
-            <Users className="h-4 w-4 mr-2" /> Members
+            <Users className="h-4 w-4 mr-2" /> Membros
           </TabsTrigger>
           <TabsTrigger value="rewards">
-            <Award className="h-4 w-4 mr-2" /> Rewards
+            <Award className="h-4 w-4 mr-2" /> Recompensas
           </TabsTrigger>
           <TabsTrigger value="transactions">
-            <CreditCard className="h-4 w-4 mr-2" /> Point Transactions
+            <CreditCard className="h-4 w-4 mr-2" /> Transações de Pontos
           </TabsTrigger>
         </TabsList>
         <TabsContent value="members" className="space-y-4 pt-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Loyalty Program Members</CardTitle>
+                <CardTitle>{translations.loyaltyProgramMembers}</CardTitle>
                 <CardDescription>
-                  View and manage customers enrolled in your loyalty program.
+                  Visualize e gerencie clientes inscritos no programa de fidelidade.
                 </CardDescription>
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => setFilterTier(null)}>
-                  <Users className="h-4 w-4 mr-2" /> All Tiers
+                  <Users className="h-4 w-4 mr-2" /> Todos os Níveis
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => setFilterTier("platinum")}>
-                  <Crown className="h-4 w-4 mr-2 text-purple-600" /> Platinum
+                  <Crown className="h-4 w-4 mr-2 text-purple-600" /> Platina
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => setFilterTier("gold")}>
-                  <Crown className="h-4 w-4 mr-2 text-amber-600" /> Gold
+                  <Crown className="h-4 w-4 mr-2 text-amber-600" /> Ouro
                 </Button>
                 <Button variant="outline" size="sm">
-                  <ArrowUpDown className="h-4 w-4 mr-2" /> Sort
+                  <ArrowUpDown className="h-4 w-4 mr-2" /> Ordenar
                 </Button>
               </div>
             </CardHeader>
@@ -190,12 +214,12 @@ const LoyaltyPage = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Member</TableHead>
-                        <TableHead>Tier</TableHead>
-                        <TableHead className="text-right">Points</TableHead>
-                        <TableHead>Enrollment</TableHead>
-                        <TableHead>Last Activity</TableHead>
-                        <TableHead className="text-center">Actions</TableHead>
+                        <TableHead>Membro</TableHead>
+                        <TableHead>Nível</TableHead>
+                        <TableHead className="text-right">Pontos</TableHead>
+                        <TableHead>Inscrição</TableHead>
+                        <TableHead>Última Atividade</TableHead>
+                        <TableHead className="text-center">Ações</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -216,15 +240,15 @@ const LoyaltyPage = () => {
                           </TableCell>
                           <TableCell>
                             <Badge variant="outline" className={getTierColor(member.tier)}>
-                              {member.tier.charAt(0).toUpperCase() + member.tier.slice(1)}
+                              {translateTierName(member.tier)}
                             </Badge>
                           </TableCell>
                           <TableCell className="text-right font-medium">
                             {member.currentPoints.toLocaleString()}
                             <p className="text-xs text-muted-foreground">
                               {member.pointsToNextTier > 0 ? 
-                                `${member.pointsToNextTier} to next tier` : 
-                                "Max tier achieved"}
+                                `${member.pointsToNextTier} para próximo nível` : 
+                                "Nível máximo atingido"}
                             </p>
                           </TableCell>
                           <TableCell>
@@ -238,7 +262,7 @@ const LoyaltyPage = () => {
                             </span>
                           </TableCell>
                           <TableCell className="text-center">
-                            <Button variant="ghost" size="sm">Details</Button>
+                            <Button variant="ghost" size="sm">Detalhes</Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -247,21 +271,21 @@ const LoyaltyPage = () => {
                 </div>
               ) : (
                 <div className="text-center p-12 text-muted-foreground">
-                  <p className="text-lg mb-2">No members in this tier</p>
-                  <p>Select another tier or view all members.</p>
+                  <p className="text-lg mb-2">Nenhum membro neste nível</p>
+                  <p>Selecione outro nível ou visualize todos os membros.</p>
                 </div>
               )}
             </CardContent>
             <CardFooter className="border-t bg-slate-50 p-4 flex justify-between items-center">
               <p className="text-sm text-muted-foreground">
-                Showing {Math.min(10, filteredMembers.length)} of {filteredMembers.length} members
+                Mostrando {Math.min(10, filteredMembers.length)} de {filteredMembers.length} membros
               </p>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm">
-                  <UserPlus className="h-4 w-4 mr-2" /> Invite Customers
+                  <UserPlus className="h-4 w-4 mr-2" /> Convidar Clientes
                 </Button>
                 <Button size="sm">
-                  <Plus className="h-4 w-4 mr-2" /> Add Member
+                  <Plus className="h-4 w-4 mr-2" /> Adicionar Membro
                 </Button>
               </div>
             </CardFooter>
@@ -270,9 +294,9 @@ const LoyaltyPage = () => {
         <TabsContent value="rewards" className="space-y-4 pt-4">
           <Card>
             <CardHeader>
-              <CardTitle>Available Rewards</CardTitle>
+              <CardTitle>{translations.availableRewards}</CardTitle>
               <CardDescription>
-                Create and manage rewards that customers can redeem with their points.
+                Crie e gerencie recompensas que os clientes podem resgatar com seus pontos.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -289,24 +313,26 @@ const LoyaltyPage = () => {
                     <div className="p-4">
                       <div className="flex items-center justify-between">
                         <h3 className="font-medium">{reward.name}</h3>
-                        <Badge>{reward.pointCost} points</Badge>
+                        <Badge>{reward.pointCost} pontos</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground mt-1">{reward.description}</p>
                       <div className="flex justify-between items-center mt-3">
                         <Badge variant="outline" className="bg-blue-50 text-blue-700">
-                          {reward.category}
+                          {reward.category === "discount" ? "desconto" : 
+                           reward.category === "freebie" ? "brinde" :
+                           reward.category === "exclusive" ? "exclusivo" : "experiência"}
                         </Badge>
                         <p className="text-xs text-muted-foreground">
-                          {reward.redemptionCount} redemptions
+                          {reward.redemptionCount} resgates
                         </p>
                       </div>
                       {reward.limitedTime && (
                         <div className="flex items-center mt-2 text-xs text-amber-600">
                           <Clock className="h-3 w-3 mr-1" />
-                          Limited time offer
+                          Oferta por tempo limitado
                           {reward.expiryDate && (
                             <span className="ml-1">
-                              (Expires {formatDistanceToNow(reward.expiryDate, { addSuffix: true })})
+                              (Expira {formatDistanceToNow(reward.expiryDate, { addSuffix: true })})
                             </span>
                           )}
                         </div>
@@ -321,12 +347,12 @@ const LoyaltyPage = () => {
                     <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                       <Plus className="h-6 w-6 text-primary" />
                     </div>
-                    <h3 className="font-medium text-center">Create New Reward</h3>
+                    <h3 className="font-medium text-center">Criar Nova Recompensa</h3>
                     <p className="text-sm text-muted-foreground text-center mt-2">
-                      Design a new reward for your loyalty program members
+                      Desenhe uma nova recompensa para os membros do seu programa de fidelidade
                     </p>
                     <Button className="mt-4">
-                      <Award className="h-4 w-4 mr-2" /> Create Reward
+                      <Award className="h-4 w-4 mr-2" /> Criar Recompensa
                     </Button>
                   </div>
                 </div>
@@ -338,17 +364,17 @@ const LoyaltyPage = () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Point Transactions</CardTitle>
+                <CardTitle>{translations.pointTransactions}</CardTitle>
                 <CardDescription>
-                  Track points earned and redeemed by customers.
+                  Acompanhe pontos ganhos e resgatados pelos clientes.
                 </CardDescription>
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm">
-                  <Calendar className="h-4 w-4 mr-2" /> Filter by Date
+                  <Calendar className="h-4 w-4 mr-2" /> Filtrar por Data
                 </Button>
                 <Button size="sm">
-                  <Plus className="h-4 w-4 mr-2" /> Manual Adjustment
+                  <Plus className="h-4 w-4 mr-2" /> Ajuste Manual
                 </Button>
               </div>
             </CardHeader>
@@ -357,11 +383,11 @@ const LoyaltyPage = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Customer</TableHead>
-                      <TableHead>Transaction</TableHead>
-                      <TableHead className="text-right">Points</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Description</TableHead>
+                      <TableHead>Cliente</TableHead>
+                      <TableHead>Transação</TableHead>
+                      <TableHead className="text-right">Pontos</TableHead>
+                      <TableHead>Data</TableHead>
+                      <TableHead>Descrição</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -373,7 +399,7 @@ const LoyaltyPage = () => {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <span className="capitalize">{transaction.transactionType}</span>
+                          <span className="capitalize">{translateTransactionType(transaction.transactionType)}</span>
                         </TableCell>
                         <TableCell className={`text-right font-medium ${getTransactionTypeStyle(transaction.transactionType)}`}>
                           {formatPoints(transaction.points)}
@@ -396,7 +422,7 @@ const LoyaltyPage = () => {
             </CardContent>
             <CardFooter className="border-t bg-slate-50 p-4">
               <p className="text-sm text-muted-foreground">
-                Showing 10 of {samplePointTransactions.length} transactions
+                Mostrando 10 de {samplePointTransactions.length} transações
               </p>
             </CardFooter>
           </Card>

@@ -18,12 +18,14 @@ interface CustomerEditDialogProps {
   customer: Customer | null;
   isOpen: boolean;
   onClose: () => void;
+  onUpdate?: (customer: Customer) => void;
 }
 
 const CustomerEditDialog: React.FC<CustomerEditDialogProps> = ({
   customer,
   isOpen,
   onClose,
+  onUpdate
 }) => {
   const { toast } = useToast();
   const { translations } = useLanguage();
@@ -46,12 +48,19 @@ const CustomerEditDialog: React.FC<CustomerEditDialogProps> = ({
   };
 
   const handleSave = () => {
-    if (!customer) return;
+    if (!customer || !editedCustomer.id) return;
 
-    toast({
-      title: translations.customerUpdated || "Cliente atualizado",
-      description: `${editedCustomer.name} ${translations.wasUpdated || "foi atualizado com sucesso"}.`,
-    });
+    const updatedCustomer = { ...customer, ...editedCustomer } as Customer;
+    
+    if (onUpdate) {
+      onUpdate(updatedCustomer);
+    } else {
+      toast({
+        title: translations.customerUpdated || "Cliente atualizado",
+        description: `${editedCustomer.name} ${translations.wasUpdated || "foi atualizado com sucesso"}.`,
+      });
+    }
+    
     onClose();
   };
 

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
@@ -65,9 +64,17 @@ export interface Customer {
 
 interface CustomerListProps {
   customers: Customer[];
+  onDetailOpen?: (customer: Customer) => void;
+  onEditOpen?: (customer: Customer) => void;
+  onDelete?: (customer: Customer) => void;
 }
 
-const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
+const CustomerList: React.FC<CustomerListProps> = ({ 
+  customers,
+  onDetailOpen,
+  onEditOpen,
+  onDelete
+}) => {
   const { toast } = useToast();
   const { translations } = useLanguage();
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
@@ -98,20 +105,34 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
   };
 
   const openCustomerDetails = (customer: Customer) => {
-    setSelectedCustomer(customer);
-    setIsDetailDialogOpen(true);
+    if (onDetailOpen) {
+      onDetailOpen(customer);
+    } else {
+      setSelectedCustomer(customer);
+      setIsDetailDialogOpen(true);
+    }
   };
 
   const openCustomerEdit = (customer: Customer, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    setSelectedCustomer(customer);
-    setIsEditDialogOpen(true);
+    
+    if (onEditOpen) {
+      onEditOpen(customer);
+    } else {
+      setSelectedCustomer(customer);
+      setIsEditDialogOpen(true);
+    }
   };
 
   const openCustomerDelete = (customer: Customer, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    setSelectedCustomer(customer);
-    setIsDeleteDialogOpen(true);
+    
+    if (onDelete) {
+      onDelete(customer);
+    } else {
+      setSelectedCustomer(customer);
+      setIsDeleteDialogOpen(true);
+    }
   };
 
   const handleQuickMessage = (customer: Customer, e?: React.MouseEvent) => {
@@ -444,13 +465,15 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
 
       <DataTable columns={columns} data={customers} />
       
-      <CustomerDetailDialog 
-        customer={selectedCustomer}
-        isOpen={isDetailDialogOpen}
-        onClose={() => setIsDetailDialogOpen(false)}
-      />
+      {!onDetailOpen && (
+        <CustomerDetailDialog 
+          customer={selectedCustomer}
+          isOpen={isDetailDialogOpen}
+          onClose={() => setIsDetailDialogOpen(false)}
+        />
+      )}
 
-      {isEditDialogOpen && (
+      {!onEditOpen && isEditDialogOpen && (
         <CustomerEditDialog 
           customer={selectedCustomer}
           isOpen={isEditDialogOpen}

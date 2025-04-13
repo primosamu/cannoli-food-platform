@@ -2,8 +2,6 @@
 import React, { createContext, useContext } from 'react';
 import { Translations } from '../types/language';
 import ptTranslations from '../translations/pt';
-import enTranslations from '../translations/en';
-import esTranslations from '../translations/es';
 
 interface LanguageContextProps {
   translations: Translations;

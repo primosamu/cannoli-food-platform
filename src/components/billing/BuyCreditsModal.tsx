@@ -113,9 +113,9 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
   
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[700px]">
-        <DialogHeader>
-          <DialogTitle>{translations.buyCredits || "Comprar Créditos"}</DialogTitle>
+      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-auto">
+        <DialogHeader className="text-center sm:text-left">
+          <DialogTitle className="text-xl">{translations.buyCredits || "Comprar Créditos"}</DialogTitle>
           <DialogDescription>
             {translations.selectPackageOrCredits || "Selecione um pacote ou tipo específico de créditos para comprar"}
           </DialogDescription>
@@ -123,12 +123,12 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
         
         <div className="py-4 space-y-6">
           <Tabs defaultValue="packages" value={selectedTab} onValueChange={setSelectedTab}>
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-2 mb-4">
               <TabsTrigger value="packages">{translations.creditPackages || "Pacotes de Créditos"}</TabsTrigger>
               <TabsTrigger value="specific">{translations.specificCredits || "Créditos Específicos"}</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="packages" className="space-y-4 pt-4">
+            <TabsContent value="packages" className="space-y-6 pt-2">
               <CreditCards 
                 onBuyCredits={() => {}}
                 showPackages={true}
@@ -142,16 +142,16 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
               />
             </TabsContent>
             
-            <TabsContent value="specific" className="space-y-4 pt-4">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <TabsContent value="specific" className="space-y-6 pt-2">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {["phone", "message", "campaign", "rcs"].map((type) => (
                   <Card 
                     key={type}
-                    className={`cursor-pointer ${selectedType === type ? 'border-primary ring-1 ring-primary' : ''}`}
+                    className={`cursor-pointer transition-all hover:shadow-md ${selectedType === type ? 'border-primary ring-1 ring-primary bg-primary/5' : ''}`}
                     onClick={() => handleSelectType(type as CreditType)}
                   >
                     <CardHeader className="p-4">
-                      <CardTitle className="text-sm">
+                      <CardTitle className="text-sm text-center">
                         {type === "phone" && (translations.phoneEnrichment || "Enriquecimento")}
                         {type === "message" && "SMS"}
                         {type === "campaign" && (translations.campaignsCreated || "Campanhas")}
@@ -181,11 +181,11 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
           />
         </div>
         
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+        <DialogFooter className="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t">
+          <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
             {translations.cancel || "Cancelar"}
           </Button>
-          <Button onClick={handlePurchase}>
+          <Button onClick={handlePurchase} className="w-full sm:w-auto">
             {translations.proceedToCheckout || "Prosseguir para Pagamento"}
           </Button>
         </DialogFooter>

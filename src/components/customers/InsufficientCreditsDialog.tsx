@@ -54,11 +54,11 @@ export const InsufficientCreditsDialog: React.FC<InsufficientCreditsDialogProps>
             ></div>
           </div>
         </div>
-        <DialogFooter className="gap-2 sm:gap-0">
-          <Button variant="outline" onClick={onClose}>
+        <DialogFooter className="flex flex-col sm:flex-row gap-3 sm:gap-0">
+          <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
             {translations.cancel}
           </Button>
-          <Button onClick={onBuyCredits} className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600">
+          <Button onClick={onBuyCredits} className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600">
             {translations.buyCredits || "Comprar Créditos"}
           </Button>
         </DialogFooter>

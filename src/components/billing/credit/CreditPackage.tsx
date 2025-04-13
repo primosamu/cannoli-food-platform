@@ -28,14 +28,14 @@ export const CreditPackage: React.FC<CreditPackageProps> = ({
       }`}
       onClick={onSelect}
     >
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between text-xl">
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center justify-between text-lg">
           <span>R$ {value.toLocaleString()}</span>
           {isSelected && <CircleDollarSign className="h-5 w-5 text-primary" />}
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-3">
+      <CardContent className="pt-1">
+        <div className="space-y-2">
           <div className="flex justify-between items-center">
             <span className="text-sm text-muted-foreground">{translations.credits || "Créditos"}</span>
             <span className="font-medium">{credits.toLocaleString()}</span>
@@ -46,7 +46,7 @@ export const CreditPackage: React.FC<CreditPackageProps> = ({
               <span className="font-medium text-green-600">+{bonus.toLocaleString()}</span>
             </div>
           )}
-          <div className="flex justify-between items-center pt-3 border-t border-border">
+          <div className="flex justify-between items-center pt-2 mt-1 border-t border-border">
             <span className="text-sm font-medium">{translations.total || "Total"}</span>
             <span className="font-bold">{(credits + bonus).toLocaleString()}</span>
           </div>

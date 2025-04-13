@@ -46,4 +46,8 @@ export const customerTranslations: CustomerTranslations = {
   apiWillUse: 'A API usará o CPF do cliente para buscar números de celulares válidos de nosso provedor de dados confiável.',
   proceedWithEnrichment: 'Prosseguir com Enriquecimento',
   cancel: 'Cancelar',
+  maximumOf: 'Máximo de',
+  totalOrders: 'Total de Pedidos',
+  popularTags: 'Etiquetas Populares',
+  averageOrderValue: 'Valor Médio do Pedido',
 };

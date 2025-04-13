@@ -44,4 +44,8 @@ export interface CustomerTranslations {
   apiWillUse: string;
   proceedWithEnrichment: string;
   cancel: string;
+  maximumOf: string;
+  totalOrders: string;
+  popularTags: string;
+  averageOrderValue: string;
 }

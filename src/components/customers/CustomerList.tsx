@@ -14,7 +14,10 @@ import {
   Database,
   Users,
   Check,
-  Tags
+  Tags,
+  PieChart,
+  DollarSign,
+  ShoppingCart
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -154,6 +157,12 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
     setIsPhoneEnrichmentOpen(true);
   };
 
+  const handleEnrichmentCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value) || 0;
+    const validValue = Math.min(Math.max(1, value), maxEnrichmentCount);
+    setEnrichmentCount(validValue);
+  };
+
   const confirmPhoneEnrichment = () => {
     if (selectedCustomersForEnrichment.length === 0) return;
 
@@ -210,6 +219,35 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
         : [...prev, tag]
     );
   };
+
+  const customerStatistics = React.useMemo(() => {
+    if (!selectedCustomersForEnrichment.length) return null;
+    
+    const totalOrders = selectedCustomersForEnrichment.reduce((sum, customer) => sum + customer.orderCount, 0);
+    const totalSpent = selectedCustomersForEnrichment.reduce((sum, customer) => sum + customer.totalSpent, 0);
+    
+    const tagCounts = selectedCustomersForEnrichment.reduce((acc, customer) => {
+      customer.tags.forEach(tag => {
+        acc[tag] = (acc[tag] || 0) + 1;
+      });
+      return acc;
+    }, {} as Record<string, number>);
+    
+    const topTags = Object.entries(tagCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([tag, count]) => ({ tag, count }));
+      
+    const averageOrderValue = totalOrders > 0 ? totalSpent / totalOrders : 0;
+    
+    return {
+      totalOrders,
+      totalSpent,
+      topTags,
+      averageOrderValue,
+      averageOrdersPerCustomer: totalOrders / selectedCustomersForEnrichment.length
+    };
+  }, [selectedCustomersForEnrichment]);
 
   const columns: ColumnDef<Customer>[] = [
     {
@@ -478,32 +516,44 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
                     <span>{translations.numberOfContactsToEnrich || "Number of contacts to enrich"}:</span>
                     <span className="font-semibold">{enrichmentCount}</span>
                   </div>
-                  <Slider 
-                    value={[enrichmentCount]} 
-                    min={1}
-                    max={maxEnrichmentCount}
-                    step={1}
-                    onValueChange={([value]) => setEnrichmentCount(value)}
-                  />
-                </div>
-                <div className="bg-muted p-4 rounded-md">
-                  <p className="text-sm font-medium mb-2">
-                    {translations.selectedContacts || "Selected contacts"}: {selectedCustomersForEnrichment.length}
-                  </p>
-                  <div className="max-h-32 overflow-y-auto space-y-1">
-                    {selectedCustomersForEnrichment.slice(0, 5).map(customer => (
-                      <div key={customer.id} className="text-sm flex items-center gap-2">
-                        <Check className="h-3 w-3 text-green-500" />
-                        {customer.name}
-                      </div>
-                    ))}
-                    {selectedCustomersForEnrichment.length > 5 && (
-                      <div className="text-sm text-muted-foreground">
-                        + {selectedCustomersForEnrichment.length - 5} {translations.moreContacts || "more contacts"}
-                      </div>
-                    )}
+                  <div className="flex items-center">
+                    <Input
+                      type="number"
+                      value={enrichmentCount}
+                      onChange={handleEnrichmentCountChange}
+                      min={1}
+                      max={maxEnrichmentCount}
+                      className="w-32"
+                    />
+                    <span className="ml-2 text-sm text-muted-foreground">
+                      {translations.maximumOf || "Maximum of"}: {maxEnrichmentCount}
+                    </span>
                   </div>
                 </div>
+                
+                {customerStatistics && (
+                  <div className="bg-muted p-4 rounded-md">
+                    <p className="text-sm font-medium mb-3">
+                      {translations.selectedContacts || "Selected contacts"}: {selectedCustomersForEnrichment.length}
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="flex items-center gap-2">
+                        <ShoppingCart className="h-4 w-4 text-blue-500" />
+                        <div>
+                          <p className="text-sm font-medium">{translations.totalOrders || "Total Orders"}</p>
+                          <p className="text-lg font-semibold">{customerStatistics.totalOrders}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <DollarSign className="h-4 w-4 text-green-500" />
+                        <div>
+                          <p className="text-sm font-medium">{translations.totalSpent || "Total Spent"}</p>
+                          <p className="text-lg font-semibold">R$ {customerStatistics.totalSpent.toFixed(2)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </TabsContent>
 
               <TabsContent value="filter" className="space-y-4 mt-4">
@@ -566,24 +616,29 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
                   </div>
                 </div>
 
-                <div className="bg-muted p-4 rounded-md">
-                  <p className="text-sm font-medium mb-2">
-                    {translations.selectedContacts || "Selected contacts"}: {selectedCustomersForEnrichment.length}
-                  </p>
-                  <div className="max-h-32 overflow-y-auto space-y-1">
-                    {selectedCustomersForEnrichment.slice(0, 5).map(customer => (
-                      <div key={customer.id} className="text-sm flex items-center gap-2">
-                        <Check className="h-3 w-3 text-green-500" />
-                        {customer.name}
+                {customerStatistics && (
+                  <div className="bg-muted p-4 rounded-md">
+                    <p className="text-sm font-medium mb-3">
+                      {translations.selectedContacts || "Selected contacts"}: {selectedCustomersForEnrichment.length}
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm font-medium">{translations.popularTags || "Popular Tags"}</p>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {customerStatistics.topTags.map(({ tag, count }) => (
+                            <Badge key={tag} variant="secondary">
+                              {tag} ({count})
+                            </Badge>
+                          ))}
+                        </div>
                       </div>
-                    ))}
-                    {selectedCustomersForEnrichment.length > 5 && (
-                      <div className="text-sm text-muted-foreground">
-                        + {selectedCustomersForEnrichment.length - 5} {translations.moreContacts || "more contacts"}
+                      <div>
+                        <p className="text-sm font-medium">{translations.averageOrderValue || "Average Order Value"}</p>
+                        <p className="text-lg font-semibold">R$ {customerStatistics.averageOrderValue.toFixed(2)}</p>
                       </div>
-                    )}
+                    </div>
                   </div>
-                </div>
+                )}
               </TabsContent>
             </Tabs>
 

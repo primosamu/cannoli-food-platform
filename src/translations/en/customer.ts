@@ -46,4 +46,8 @@ export const customerTranslations: CustomerTranslations = {
   apiWillUse: 'The API will use the customer CPF to fetch valid mobile phone numbers from our trusted data provider.',
   proceedWithEnrichment: 'Proceed with Enrichment',
   cancel: 'Cancel',
+  maximumOf: 'Maximum of',
+  totalOrders: 'Total Orders',
+  popularTags: 'Popular Tags',
+  averageOrderValue: 'Average Order Value',
 };

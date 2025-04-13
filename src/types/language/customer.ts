@@ -48,4 +48,76 @@ export interface CustomerTranslations {
   totalOrders: string;
   popularTags: string;
   averageOrderValue: string;
+  maximumAvailable: string;
+  
+  // Customer actions
+  customer: string;
+  customers: string;
+  orders: string;
+  actions: string;
+  sendMessage: string;
+  sendEmail: string;
+  openMenu: string;
+  viewCustomerDetails: string;
+  editCustomer: string;
+  deleteCustomer: string;
+  confirmDeletion: string;
+  deleteCustomerConfirmation: string;
+  actionCannotBeUndone: string;
+  delete: string;
+  noPhone: string;
+  typeYourMessage: string;
+  customerNoPhoneEnrichment: string;
+  subject: string;
+  emailContent: string;
+  sendMessageTo: string;
+  sendEmailTo: string;
+  noPhoneNumber: string;
+  
+  // Customer edit
+  name: string;
+  email: string;
+  address: string;
+  notes: string;
+  save: string;
+  customerUpdated: string;
+  wasUpdated: string;
+  customerDeleted: string;
+  wasRemoved: string;
+  
+  // Customer details
+  overview: string;
+  purchaseHistory: string;
+  campaignHistory: string;
+  customerInformation: string;
+  phone: string;
+  joinDate: string;
+  recentActivity: string;
+  recentPurchase: string;
+  lastCampaign: string;
+  sendWhatsAppSms: string;
+  noPhoneAvailable: string;
+  usePhoneEnrichment: string;
+  emailBody: string;
+  orderId: string;
+  date: string;
+  items: string;
+  amount: string;
+  campaign: string;
+  type: string;
+  status: string;
+  close: string;
+  customerSince: string;
+  delivered: string;
+  opened: string;
+  clicked: string;
+  error: string;
+  pleaseEnterMessage: string;
+  messageSent: string;
+  messageQueuedFor: string;
+  pleaseEnterSubjectAndBody: string;
+  emailSent: string;
+  emailQueuedFor: string;
+  enterYourMessage: string;
+  noOrdersYet: string;
 }

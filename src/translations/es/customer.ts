@@ -50,6 +50,7 @@ export const customerTranslations: CustomerTranslations = {
   totalOrders: 'Total de Pedidos',
   popularTags: 'Etiquetas Populares',
   averageOrderValue: 'Valor Promedio de Pedido',
+  maximumAvailable: 'Disponible',
   
   // Customer actions
   customer: 'Cliente',
@@ -70,7 +71,9 @@ export const customerTranslations: CustomerTranslations = {
   customerNoPhoneEnrichment: 'Este cliente no tiene un número de teléfono. Considere usar el enriquecimiento de teléfono.',
   subject: 'Asunto',
   emailContent: 'Contenido del email',
-  maximumAvailable: 'Disponible',
+  sendMessageTo: 'Enviar mensaje a',
+  sendEmailTo: 'Enviar email a',
+  noPhoneNumber: 'Sin número de teléfono',
   
   // Customer edit
   name: 'Nombre',
@@ -117,5 +120,5 @@ export const customerTranslations: CustomerTranslations = {
   emailSent: 'Email enviado',
   emailQueuedFor: 'Su email ha sido puesto en cola para enviarse a',
   enterYourMessage: 'Introduzca su mensaje',
-  noPhoneNumber: 'Sin número de teléfono',
+  noOrdersYet: 'Sin pedidos aún',
 };

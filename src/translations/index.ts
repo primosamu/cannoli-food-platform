@@ -1,13 +1,17 @@
 
 import ptTranslations from './pt';
-import { Translations } from '../types/language';
+import enTranslations from './en';
+import esTranslations from './es';
+import { Language, Translations } from '../types/language';
 
-const translations = {
-  pt: ptTranslations
+const translations: Record<Language, Translations> = {
+  pt: ptTranslations,
+  en: enTranslations,
+  es: esTranslations
 };
 
-export const getTranslations = () => {
-  return ptTranslations;
+export const getTranslations = (language: Language = 'pt'): Translations => {
+  return translations[language] || ptTranslations;
 };
 
 export default translations;

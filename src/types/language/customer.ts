@@ -4,7 +4,6 @@ export interface CustomerTranslations {
   customerManagement: string;
   manageCustomerInfo: string;
   connectedCustomers: string;
-  customerRetention: string;
   allCustomers: string;
   newCustomer: string;
   vipCustomer: string;
@@ -52,7 +51,6 @@ export interface CustomerTranslations {
   
   // Customer actions
   customer: string;
-  customers: string;
   orders: string;
   actions: string;
   sendMessage: string;

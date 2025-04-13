@@ -119,3 +119,4 @@ export interface CustomerTranslations {
   enterYourMessage: string;
   noOrdersYet: string;
 }
+

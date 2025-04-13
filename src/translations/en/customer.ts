@@ -6,7 +6,6 @@ export const customerTranslations: CustomerTranslations = {
   customerManagement: 'Customer Management',
   manageCustomerInfo: 'Manage your customer information and contact details',
   connectedCustomers: 'Connected Customers',
-  customerRetention: 'Customer Retention',
   allCustomers: 'All Customers',
   newCustomer: 'New',
   vipCustomer: 'VIP',
@@ -122,3 +121,4 @@ export const customerTranslations: CustomerTranslations = {
   enterYourMessage: 'Enter your message',
   noOrdersYet: 'No orders yet',
 };
+

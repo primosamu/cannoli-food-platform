@@ -1,4 +1,3 @@
-
 import { CustomerTranslations } from "../../types/language/customer";
 
 export const customerTranslations: CustomerTranslations = {
@@ -6,7 +5,6 @@ export const customerTranslations: CustomerTranslations = {
   customerManagement: 'Gestão de Clientes',
   manageCustomerInfo: 'Gerencie as informações e detalhes de contato dos seus clientes',
   connectedCustomers: 'Clientes Conectados',
-  customerRetention: 'Retenção de Clientes',
   allCustomers: 'Todos os Clientes',
   newCustomer: 'Novo',
   vipCustomer: 'VIP',

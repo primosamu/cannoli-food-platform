@@ -53,5 +53,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 };
 
-// Fix the re-export with 'export type'
+// Re-export types from the new modular structure
 export type { Language, Translations };
+

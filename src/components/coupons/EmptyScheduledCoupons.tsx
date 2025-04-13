@@ -16,11 +16,11 @@ export const EmptyScheduledCoupons: React.FC<EmptyScheduledCouponsProps> = ({
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
       <p className="text-muted-foreground">
-        {translations.noScheduledCoupons || "No scheduled coupons found."}
+        {translations.noScheduledCoupons}
       </p>
       <Button className="mt-4" onClick={onCreateClick}>
         <PlusCircle className="mr-2 h-4 w-4" /> 
-        {translations.scheduleNewCoupon || "Schedule New Coupon"}
+        {translations.scheduleNewCoupon}
       </Button>
     </div>
   );

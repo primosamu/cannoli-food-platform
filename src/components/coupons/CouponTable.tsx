@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Coupon } from "./CouponSchema";
 import { ColumnDef } from "@tanstack/react-table";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CouponTableProps {
   data: Coupon[];
@@ -23,6 +24,8 @@ export const CouponTable: React.FC<CouponTableProps> = ({
   data, 
   filter = "active"
 }) => {
+  const { translations } = useLanguage();
+  
   const filteredData = filter === "active" 
     ? data.filter(coupon => coupon.active)
     : filter === "inactive" 
@@ -32,53 +35,53 @@ export const CouponTable: React.FC<CouponTableProps> = ({
   const columns: ColumnDef<Coupon>[] = [
     {
       accessorKey: "name",
-      header: "Coupon Name",
+      header: "Nome do Cupom",
     },
     {
       accessorKey: "code",
-      header: "Code",
+      header: "Código",
     },
     {
       accessorKey: "type",
-      header: "Type",
+      header: "Tipo",
       cell: ({ row }) => {
         const type = row.getValue("type");
         return (
           <span className="capitalize">
             {type === "fixed"
-              ? "Fixed Amount"
+              ? "Valor Fixo"
               : type === "percentage"
-              ? "Percentage"
+              ? "Porcentagem"
               : type === "shipping"
-              ? "Free Shipping"
-              : "Freebie"}
+              ? "Frete Grátis"
+              : "Item Grátis"}
           </span>
         );
       },
     },
     {
       accessorKey: "value",
-      header: "Value",
+      header: "Valor",
       cell: ({ row }) => {
         const type = row.getValue("type");
         const value = row.getValue("value");
         const freebie = row.original.freebie;
 
         return type === "fixed"
-          ? `$${value}`
+          ? `R$${value}`
           : type === "percentage"
           ? `${value}%`
           : type === "shipping"
-          ? "Free Shipping"
-          : `Free ${freebie}`;
+          ? "Frete Grátis"
+          : `${freebie} Grátis`;
       },
     },
     {
       accessorKey: "minimumPurchase",
-      header: "Min. Purchase",
+      header: "Compra Mínima",
       cell: ({ row }) => {
         const amount = parseFloat(row.getValue("minimumPurchase"));
-        return `$${amount.toFixed(2)}`;
+        return `R$${amount.toFixed(2)}`;
       },
     },
     {
@@ -91,12 +94,12 @@ export const CouponTable: React.FC<CouponTableProps> = ({
             {isActive ? (
               <>
                 <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                <span>Active</span>
+                <span>Ativo</span>
               </>
             ) : (
               <>
                 <AlertCircle className="h-4 w-4 text-red-500 mr-2" />
-                <span>Inactive</span>
+                <span>Inativo</span>
               </>
             )}
           </div>
@@ -105,31 +108,31 @@ export const CouponTable: React.FC<CouponTableProps> = ({
     },
     {
       accessorKey: "usageCount",
-      header: "Usage",
+      header: "Usos",
     },
     {
       accessorKey: "expiresAt",
-      header: "Expires",
+      header: "Expira em",
     },
     {
       id: "actions",
-      header: "Actions",
+      header: "Ações",
       cell: ({ row }) => {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only">Abrir menu</span>
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>Edit Coupon</DropdownMenuItem>
-              <DropdownMenuItem>View Usage History</DropdownMenuItem>
+              <DropdownMenuLabel>Ações</DropdownMenuLabel>
+              <DropdownMenuItem>Editar Cupom</DropdownMenuItem>
+              <DropdownMenuItem>Ver Histórico de Uso</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-red-600">
-                Delete Coupon
+                Excluir Cupom
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

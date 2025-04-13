@@ -9,17 +9,14 @@ import {
   DialogTitle 
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-interface CreditPackage {
-  id: string;
-  name: string;
-  credits: number;
-  price: number;
-}
+import { CreditPackageSelector } from "./credits/CreditPackageSelector";
+import { CreditPackageDetails } from "./credits/CreditPackageDetails";
+import { CreditQuantitySelector } from "./credits/CreditQuantitySelector";
+import { CreditCostsInfo } from "./credits/CreditCostsInfo";
+import { CreditSummary } from "./credits/CreditSummary";
+import { CreditType, CreditPackage, CreditPackagesData, CreditCosts } from "./credits/types";
 
 interface BuyCreditsModalProps {
   open: boolean;
@@ -33,12 +30,12 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
   onPurchase
 }) => {
   const { translations } = useLanguage();
-  const [selectedTab, setSelectedTab] = useState("phone");
+  const [selectedTab, setSelectedTab] = useState<CreditType>("phone");
   const [selectedPackage, setSelectedPackage] = useState<string>("small");
   const [quantity, setQuantity] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   
-  const creditPackages: Record<string, CreditPackage[]> = {
+  const creditPackages: CreditPackagesData = {
     phone: [
       { id: "phone-small", name: "Small", credits: 100, price: 9.99 },
       { id: "phone-medium", name: "Medium", credits: 500, price: 39.99 },
@@ -56,7 +53,7 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
     ],
   };
 
-  const creditCosts = {
+  const creditCosts: CreditCosts = {
     phone: 0.10,  // $0.10 per phone enrichment
     message: 0.05, // $0.05 per message
     campaign: 10.00 // $10.00 per campaign
@@ -77,7 +74,7 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
     }
   }, [currentPackage, quantity]);
   
-  const handleTabChange = (value: string) => {
+  const handleTabChange = (value: CreditType) => {
     setSelectedTab(value);
   };
   
@@ -103,89 +100,37 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
         </DialogHeader>
         
         <div className="py-4 space-y-6">
-          <Tabs defaultValue="phone" value={selectedTab} onValueChange={handleTabChange}>
+          <Tabs defaultValue="phone" value={selectedTab} onValueChange={(value) => handleTabChange(value as CreditType)}>
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="phone">{translations.phoneEnrichment}</TabsTrigger>
               <TabsTrigger value="message">{translations.messagesSent}</TabsTrigger>
               <TabsTrigger value="campaign">{translations.campaignsCreated}</TabsTrigger>
             </TabsList>
             
-            <div className="mt-4">
-              <div className="flex justify-between text-sm mb-2">
-                <span>{translations.creditCosts}</span>
-                <span className="font-medium">
-                  ${creditCosts[selectedTab as keyof typeof creditCosts]} 
-                  {selectedTab === 'phone' && translations.eachPhoneEnrichment}
-                  {selectedTab === 'message' && translations.eachMessageSent}
-                  {selectedTab === 'campaign' && translations.eachCampaignCreated}
-                </span>
-              </div>
-            </div>
+            <CreditCostsInfo selectedTab={selectedTab} costs={creditCosts} />
             
-            <div className="grid grid-cols-3 gap-3 my-4">
-              {["small", "medium", "large"].map((size) => (
-                <Button
-                  key={size}
-                  variant={selectedPackage === size ? "default" : "outline"}
-                  onClick={() => handlePackageChange(size)}
-                  className="w-full"
-                >
-                  {size.charAt(0).toUpperCase() + size.slice(1)}
-                </Button>
-              ))}
-            </div>
+            <CreditPackageSelector 
+              packageSizes={["small", "medium", "large"]}
+              selectedPackage={selectedPackage}
+              onPackageChange={handlePackageChange}
+            />
             
             {currentPackage && (
               <>
-                <div className="bg-muted/50 p-3 rounded-md my-4 space-y-2">
-                  <div className="flex justify-between">
-                    <span>{translations.creditPackage}</span>
-                    <span className="font-medium">{currentPackage.name}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>{translations.credits}</span>
-                    <span className="font-medium">{currentPackage.credits}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>{translations.pricePerCredit}</span>
-                    <span className="font-medium">
-                      ${(currentPackage.price / currentPackage.credits).toFixed(3)}
-                    </span>
-                  </div>
-                </div>
+                <CreditPackageDetails currentPackage={currentPackage} />
                 
-                <div className="space-y-3">
-                  <Label htmlFor="quantity">{translations.selectQuantity}: {quantity}</Label>
-                  <Slider 
-                    id="quantity"
-                    value={[quantity]} 
-                    min={1} 
-                    max={10} 
-                    step={1} 
-                    onValueChange={(values) => setQuantity(values[0])} 
-                  />
-                  <div className="flex justify-between text-sm">
-                    <span>1</span>
-                    <span>5</span>
-                    <span>10</span>
-                  </div>
-                </div>
+                <CreditQuantitySelector 
+                  quantity={quantity}
+                  onQuantityChange={setQuantity}
+                />
               </>
             )}
           </Tabs>
           
-          <div className="bg-primary/10 p-4 rounded-md">
-            <div className="flex justify-between items-center">
-              <h3 className="font-medium">{translations.total}</h3>
-              <div className="text-2xl font-bold">${total.toFixed(2)}</div>
-            </div>
-            
-            {currentPackage && (
-              <div className="text-sm text-muted-foreground mt-1">
-                {quantity * currentPackage.credits} {translations.credits}
-              </div>
-            )}
-          </div>
+          <CreditSummary 
+            total={total} 
+            totalCredits={currentPackage ? quantity * currentPackage.credits : 0} 
+          />
         </div>
         
         <DialogFooter>

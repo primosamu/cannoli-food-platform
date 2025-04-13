@@ -9,12 +9,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CustomerEnrichmentDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onProceed: () => void;
-  // This prop is used in Customers.tsx but was missing in the interface
   customersWithoutPhone?: any[];
 }
 
@@ -24,35 +24,36 @@ export const CustomerEnrichmentDialog: React.FC<CustomerEnrichmentDialogProps> =
   onProceed,
   customersWithoutPhone,
 }) => {
+  const { translations } = useLanguage();
+  
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Phone Enrichment</DialogTitle>
+          <DialogTitle>{translations.phoneEnrichment}</DialogTitle>
           <DialogDescription>
-            Complete missing phone numbers
+            {translations.completeMissingPhoneNumbers}
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <p className="text-sm text-muted-foreground">
-            The API will use the customer's CPF to obtain valid phone numbers from our trusted data provider.
+            {translations.apiWillUse}
             {customersWithoutPhone && (
               <span className="block mt-2">
-                {customersWithoutPhone.length} customers will be processed.
+                {customersWithoutPhone.length} {translations.customersWithoutPhone}.
               </span>
             )}
           </p>
         </div>
         <DialogFooter className="gap-2 sm:gap-0">
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {translations.cancel}
           </Button>
           <Button onClick={onProceed}>
-            Proceed with Enrichment
+            {translations.proceedWithEnrichment}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
-

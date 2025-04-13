@@ -1,14 +1,10 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-// Fix import to use default export instead of named export
 import CustomerList from "@/components/customers/CustomerList";
-// Fix import to use default export instead of named export
 import CustomerDetailDialog from "@/components/customers/CustomerDetailDialog";
-// Fix import to use default export instead of named export
 import CustomerEditDialog from "@/components/customers/CustomerEditDialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,12 +12,11 @@ import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescript
 import { CustomerEnrichmentDialog } from "@/components/customers/CustomerEnrichmentDialog";
 import { InsufficientCreditsDialog } from "@/components/customers/InsufficientCreditsDialog";
 
-// Fix incorrect import - Export is not available, use FileUp or Upload instead
-import { Plus, Import, FileUp, Users, TagIcon } from "lucide-react";
+import { Plus, FileUp, Users, TagIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-// Remove incorrect tag import
 import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const sampleCustomers = [
   {
@@ -95,6 +90,7 @@ export const Customers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterTab, setFilterTab] = useState("all");
   const navigate = useNavigate();
+  const { translations } = useLanguage();
 
   const availablePhoneCredits = 150;
   const minimumCreditsRequired = 200;
@@ -130,8 +126,7 @@ export const Customers = () => {
   const confirmDelete = () => {
     setCustomers(customers.filter(c => c.id !== selectedCustomer.id));
     setIsDeleteConfirmOpen(false);
-    // Fix toast usage - use proper format without title property
-    toast("Customer was removed successfully");
+    toast(translations.wasRemoved);
   };
 
   const handleCustomerUpdate = (updatedCustomer: any) => {
@@ -139,8 +134,7 @@ export const Customers = () => {
       c.id === updatedCustomer.id ? updatedCustomer : c
     ));
     setIsEditOpen(false);
-    // Fix toast usage
-    toast("Customer updated successfully");
+    toast(translations.customerUpdated);
   };
 
   const handleEnrichmentClick = () => {
@@ -152,8 +146,7 @@ export const Customers = () => {
   };
 
   const handleProceedWithEnrichment = () => {
-    // Fix toast usage
-    toast("The enrichment process has started and you will be notified when it is complete.");
+    toast(translations.enrichmentProcessStarted);
     setIsEnrichmentDialogOpen(false);
   };
 
@@ -161,9 +154,9 @@ export const Customers = () => {
     <div className="space-y-4 p-8 pt-6 max-w-7xl mx-auto">
       <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Customer Management</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{translations.customerManagement}</h2>
           <p className="text-muted-foreground">
-            Manage your customer information and contact details
+            {translations.manageCustomerInfo}
           </p>
         </div>
         
@@ -174,8 +167,8 @@ export const Customers = () => {
             onClick={handleEnrichmentClick}
           >
             <PlusCircle className="h-3.5 w-3.5" />
-            <span className="hidden sm:block">Complete Missing Phone Numbers</span>
-            <span className="block sm:hidden">Add Phones</span>
+            <span className="hidden sm:block">{translations.completeMissingPhoneNumbers}</span>
+            <span className="block sm:hidden">{translations.phone}</span>
             <Badge variant="secondary" className="ml-1">
               {customersWithoutPhone.length}
             </Badge>
@@ -183,11 +176,11 @@ export const Customers = () => {
           
           <Button className="h-8 gap-1">
             <Plus className="h-3.5 w-3.5" />
-            <span>Add Customer</span>
+            <span>{translations.addCustomer}</span>
           </Button>
           
           <Button variant="outline" size="icon" className="h-8 w-8">
-            <Import className="h-3.5 w-3.5" />
+            <FileUp className="h-3.5 w-3.5" />
           </Button>
           
           <Button variant="outline" size="icon" className="h-8 w-8">
@@ -199,7 +192,7 @@ export const Customers = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">All Customers</CardTitle>
+            <CardTitle className="text-sm font-medium">{translations.allCustomers}</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -209,7 +202,7 @@ export const Customers = () => {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">VIP Customers</CardTitle>
+            <CardTitle className="text-sm font-medium">{translations.vipCustomer}</CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -232,7 +225,7 @@ export const Customers = () => {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+            <CardTitle className="text-sm font-medium">{translations.newCustomer}</CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -257,7 +250,7 @@ export const Customers = () => {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Popular Tags</CardTitle>
+            <CardTitle className="text-sm font-medium">{translations.popularTags}</CardTitle>
             <TagIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="space-y-2">
@@ -275,7 +268,7 @@ export const Customers = () => {
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Input
-            placeholder="Search customers..."
+            placeholder={translations.searchCustomers}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="max-w-sm"
@@ -288,16 +281,16 @@ export const Customers = () => {
           >
             <TabsList>
               <TabsTrigger value="all" className="text-xs">
-                All
+                {translations.allCustomers}
               </TabsTrigger>
               <TabsTrigger value="new" className="text-xs">
-                New
+                {translations.newCustomer}
               </TabsTrigger>
               <TabsTrigger value="vip" className="text-xs">
-                VIP
+                {translations.vipCustomer}
               </TabsTrigger>
               <TabsTrigger value="phone-missing" className="text-xs">
-                No Phone
+                {translations.noPhone}
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -329,25 +322,25 @@ export const Customers = () => {
       <AlertDialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm deletion</AlertDialogTitle>
+            <AlertDialogTitle>{translations.confirmDeletion}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete {selectedCustomer?.name}? This action cannot be undone.
+              {translations.deleteCustomerConfirmation} {selectedCustomer?.name}? {translations.actionCannotBeUndone}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{translations.cancel}</AlertDialogCancel>
             <Button variant="destructive" onClick={confirmDelete}>
-              Delete
+              {translations.delete}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Fix component props to match interface definition */}
       <CustomerEnrichmentDialog
         isOpen={isEnrichmentDialogOpen}
         onClose={() => setIsEnrichmentDialogOpen(false)}
         onProceed={handleProceedWithEnrichment}
+        customersWithoutPhone={customersWithoutPhone}
       />
 
       <InsufficientCreditsDialog

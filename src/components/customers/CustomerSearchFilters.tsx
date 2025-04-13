@@ -22,7 +22,7 @@ export const CustomerSearchFilters: React.FC<CustomerSearchFiltersProps> = ({
         <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           type="search"
-          placeholder={translations.searchCustomers || "Buscar clientes..."}
+          placeholder={translations.searchCustomers}
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="pl-9"
@@ -31,7 +31,7 @@ export const CustomerSearchFilters: React.FC<CustomerSearchFiltersProps> = ({
       <div>
         <Button variant="outline" className="w-full">
           <Tag className="mr-2 h-4 w-4" />
-          {translations.tags || "Tags"}
+          {translations.tags}
         </Button>
       </div>
     </div>

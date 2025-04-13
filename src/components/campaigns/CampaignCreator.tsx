@@ -35,7 +35,7 @@ import { Badge } from "@/components/ui/badge";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Nome da campanha é obrigatório" }),
-  type: z.enum(["whatsapp", "sms", "email", "paid"] as const),
+  type: z.enum(["whatsapp", "sms", "email", "paid", "rcs"] as const),
   subject: z.string().optional(),
   content: z.string().min(5, { message: "Conteúdo é obrigatório" }),
   imageUrl: z.string().optional(),
@@ -296,6 +296,7 @@ const CampaignCreator = ({
                           <SelectItem value="sms">SMS</SelectItem>
                           <SelectItem value="email">Email</SelectItem>
                           <SelectItem value="paid">Tráfego Pago</SelectItem>
+                          <SelectItem value="rcs">RCS</SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>

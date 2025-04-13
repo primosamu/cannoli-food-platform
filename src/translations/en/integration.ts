@@ -9,4 +9,15 @@ export const integrationTranslations: IntegrationTranslations = {
   deliveryMarketplaces: 'Delivery Marketplaces',
   socialMedia: 'Social Media',
   marketingTools: 'Marketing Tools',
+  
+  // Messaging platforms
+  messagingPlatforms: 'Messaging Platforms',
+  messagingIntegration: 'Integrate with messaging providers to send SMS, WhatsApp and RCS',
+  smsProvider: 'SMS Provider',
+  whatsappProvider: 'WhatsApp Provider',
+  rcsProvider: 'RCS Provider',
+  zenviaIntegration: 'Zenvia Integration',
+  evolutionApiIntegration: 'Evolution API Integration',
+  officialMetaApi: 'Official WhatsApp API (Meta)',
+  unofficialWhatsappApi: 'Alternative WhatsApp API',
 };

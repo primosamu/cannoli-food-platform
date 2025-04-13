@@ -49,6 +49,7 @@ export interface CustomerTranslations {
   averageOrderValue: string;
   maximumAvailable: string;
   enrichmentInProgress: string;
+  enrichmentProcessStarted: string; // Added missing translation key
   
   // Customer actions
   customer: string;

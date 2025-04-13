@@ -1,3 +1,4 @@
+
 import { CustomerTranslations } from "../../types/language/customer";
 
 export const customerTranslations: CustomerTranslations = {
@@ -50,6 +51,7 @@ export const customerTranslations: CustomerTranslations = {
   averageOrderValue: 'Average Order Value',
   maximumAvailable: 'Available',
   enrichmentInProgress: 'The enrichment process has started and you will be notified when it is complete.',
+  enrichmentProcessStarted: 'The enrichment process has started',
   
   // Customer actions
   customer: 'Customer',

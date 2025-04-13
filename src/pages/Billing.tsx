@@ -8,6 +8,7 @@ import { BillingHeader } from "@/components/billing/BillingHeader";
 import { CreditCards } from "@/components/billing/CreditCards";
 import { CreditHistory } from "@/components/billing/CreditHistory";
 import { PlansSection } from "@/components/billing/PlansSection";
+import { CreditTransaction } from "@/components/billing/CreditHistoryTable";
 
 const BillingPage = () => {
   const { translations } = useLanguage();
@@ -33,7 +34,7 @@ const BillingPage = () => {
   const totalCredits = creditUsageData.reduce((sum, item) => sum + item.value, 0);
 
   // Sample data for recent transactions
-  const recentTransactions = [
+  const recentTransactions: CreditTransaction[] = [
     {
       id: '1',
       date: '2025-04-12',

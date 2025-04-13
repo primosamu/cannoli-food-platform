@@ -9,6 +9,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { BuyCreditsModal } from "@/components/billing/BuyCreditsModal";
+import { CreditType } from "@/components/billing/credits/types";
 import { 
   User, 
   Building, 
@@ -30,7 +32,8 @@ import {
   CheckCircle2,
   CircleDollarSign,
   Receipt,
-  CreditCard as CreditCardIcon
+  CreditCard as CreditCardIcon,
+  PlusCircle
 } from "lucide-react";
 import { StoreSelector, Store as StoreType } from "@/components/dashboard/StoreSelector"; 
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -107,6 +110,8 @@ const SettingsPage = () => {
 
   const [isTeamDialogOpen, setIsTeamDialogOpen] = useState(false);
   const [isStoreDialogOpen, setIsStoreDialogOpen] = useState(false);
+  const [buyCreditsModalOpen, setBuyCreditsModalOpen] = useState(false);
+  const [creditType, setCreditType] = useState<CreditType>('phone');
   
   const [selectedStores, setSelectedStores] = useState<string[]>([]);
   const storeOptions: StoreType[] = stores.map((store) => ({
@@ -221,6 +226,11 @@ const SettingsPage = () => {
         stores: stores.map(store => store.id)
       });
     }
+  };
+
+  const handleBuyCredits = (type: CreditType) => {
+    setCreditType(type);
+    setBuyCreditsModalOpen(true);
   };
 
   return (
@@ -751,6 +761,19 @@ const SettingsPage = () => {
           </div>
         </div>
       </Tabs>
+
+      <BuyCreditsModal
+        open={buyCreditsModalOpen}
+        onClose={() => setBuyCreditsModalOpen(false)}
+        onPurchase={(packageId, quantity) => {
+          toast({
+            title: "Compra Realizada",
+            description: `Você comprou ${quantity} pacote(s) de créditos.`,
+          });
+          setBuyCreditsModalOpen(false);
+        }}
+        creditType={creditType}
+      />
     </div>
   );
 };

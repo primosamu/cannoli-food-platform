@@ -7,4 +7,6 @@ export interface CouponTranslations {
   inactiveCoupons: string;
   scheduledCoupons: string;
   campaignsCoupons: string;
+  noScheduledCoupons?: string;
+  scheduleNewCoupon?: string;
 }

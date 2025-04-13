@@ -9,4 +9,6 @@ export const couponTranslations: CouponTranslations = {
   inactiveCoupons: 'Cupons Inativos',
   scheduledCoupons: 'Cupons Agendados',
   campaignsCoupons: 'Campanhas e Cupons',
+  noScheduledCoupons: 'Nenhum cupom agendado encontrado.',
+  scheduleNewCoupon: 'Agendar Novo Cupom',
 };

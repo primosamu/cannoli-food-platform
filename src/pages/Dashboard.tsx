@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -35,12 +34,12 @@ const stores: StoreType[] = [
   { id: "store-3", name: "Filial Oeste" },
 ];
 
-// Customer segment data
+// Customer segment data - Translated to Portuguese
 const customerSegmentData = [
   { name: "Campeões", value: 200 },
   { name: "Fiéis", value: 350 },
   { name: "Promissores", value: 125 },
-  { name: "Atenção Necessária", value: 180 },
+  { name: "Necessitam Atenção", value: 180 },
   { name: "Em Risco", value: 95 },
 ];
 
@@ -155,9 +154,7 @@ const Dashboard = () => {
         <div>
           <h2 className="text-3xl font-bold tracking-tight">{translations.dashboard}</h2>
           <p className="text-muted-foreground">
-            {translations.language === 'Portuguese' ? 
-              'Visão geral do desempenho do seu restaurante e dados de clientes.' : 
-              'Overview of your restaurant\'s performance and customer data.'}
+            Visão geral do desempenho do seu restaurante e dados de clientes.
           </p>
         </div>
         <StoreSelector 
@@ -169,35 +166,35 @@ const Dashboard = () => {
 
       <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="overview">{translations.language === 'Portuguese' ? 'Visão Geral' : 'Overview'}</TabsTrigger>
-          <TabsTrigger value="detailed">{translations.language === 'Portuguese' ? 'Análise Detalhada' : 'Detailed Analytics'}</TabsTrigger>
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="detailed">Análise Detalhada</TabsTrigger>
         </TabsList>
         
         <TabsContent value="overview" className="space-y-6">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{translations.language === 'Portuguese' ? 'Receita Total' : 'Total Revenue'}</CardTitle>
+                <CardTitle className="text-sm font-medium">Receita Total</CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">R$ 45.231,89</div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <ArrowUp className="mr-1 h-4 w-4 text-green-500" />
-                  <span className="text-green-500">+20,1%</span> {translations.language === 'Portuguese' ? 'em relação ao mês passado' : 'from last month'}
+                  <span className="text-green-500">+20,1%</span> em relação ao mês passado
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{translations.language === 'Portuguese' ? 'Clientes Ativos' : 'Active Customers'}</CardTitle>
+                <CardTitle className="text-sm font-medium">Clientes Ativos</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">+2.350</div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <ArrowUp className="mr-1 h-4 w-4 text-green-500" />
-                  <span className="text-green-500">+180</span> {translations.language === 'Portuguese' ? 'novos este mês' : 'new this month'}
+                  <span className="text-green-500">+180</span> novos este mês
                 </div>
               </CardContent>
             </Card>
@@ -210,20 +207,20 @@ const Dashboard = () => {
                 <div className="text-2xl font-bold">+12.234</div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <ArrowUp className="mr-1 h-4 w-4 text-green-500" />
-                  <span className="text-green-500">+19%</span> {translations.language === 'Portuguese' ? 'em relação ao mês passado' : 'from last month'}
+                  <span className="text-green-500">+19%</span> em relação ao mês passado
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{translations.language === 'Portuguese' ? 'Campanhas Ativas' : 'Active Campaigns'}</CardTitle>
+                <CardTitle className="text-sm font-medium">Campanhas Ativas</CardTitle>
                 <Package className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{translations.language === 'Portuguese' ? '7 campanhas' : '7 campaigns'}</div>
+                <div className="text-2xl font-bold">7 campanhas</div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <Calendar className="mr-1 h-4 w-4" />
-                  <span>{translations.language === 'Portuguese' ? 'Próxima campanha em 3 dias' : 'Next campaign in 3 days'}</span>
+                  <span>Próxima campanha em 3 dias</span>
                 </div>
               </CardContent>
             </Card>
@@ -234,25 +231,19 @@ const Dashboard = () => {
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <div>
-                    <CardTitle>{translations.language === 'Portuguese' ? 'Visão Geral de Vendas' : 'Sales Overview'}</CardTitle>
+                    <CardTitle>Visão Geral de Vendas</CardTitle>
                     <CardDescription>
                       {selectedStores.length === 1 
-                        ? translations.language === 'Portuguese' 
-                          ? `Desempenho de vendas para ${stores.find(s => s.id === selectedStores[0])?.name}`
-                          : `Sales performance for ${stores.find(s => s.id === selectedStores[0])?.name}`
-                        : translations.language === 'Portuguese'
-                          ? `Vendas combinadas de ${selectedStores.length} lojas`
-                          : `Combined sales across ${selectedStores.length} stores`}
+                        ? `Desempenho de vendas para ${stores.find(s => s.id === selectedStores[0])?.name}`
+                        : `Vendas combinadas de ${selectedStores.length} lojas`}
                     </CardDescription>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Store className="h-4 w-4 text-muted-foreground mr-1" />
                     <span className="text-xs text-muted-foreground">
                       {selectedStores.length === stores.length 
-                        ? translations.language === 'Portuguese' ? "Todas as Lojas" : "All Stores" 
-                        : translations.language === 'Portuguese' 
-                          ? `${selectedStores.length} de ${stores.length} Lojas`
-                          : `${selectedStores.length} of ${stores.length} Stores`}
+                        ? "Todas as Lojas" 
+                        : `${selectedStores.length} de ${stores.length} Lojas`}
                     </span>
                   </div>
                 </div>
@@ -261,8 +252,8 @@ const Dashboard = () => {
                 <Tabs defaultValue="monthly" onValueChange={setSalesPeriod}>
                   <div className="flex justify-between items-center">
                     <TabsList>
-                      <TabsTrigger value="monthly">{translations.language === 'Portuguese' ? 'Mensal' : 'Monthly'}</TabsTrigger>
-                      <TabsTrigger value="total">{translations.language === 'Portuguese' ? 'Total' : 'Total'}</TabsTrigger>
+                      <TabsTrigger value="monthly">Mensal</TabsTrigger>
+                      <TabsTrigger value="total">Total</TabsTrigger>
                     </TabsList>
                     <RefreshCcw className="h-4 w-4 text-muted-foreground cursor-pointer" />
                   </div>
@@ -284,13 +275,11 @@ const Dashboard = () => {
                           <Tooltip />
                           <Legend 
                             formatter={(value) => 
-                              value === "delivery" 
-                                ? translations.language === 'Portuguese' ? "Entrega" : "Delivery" 
-                                : translations.language === 'Portuguese' ? "No Local" : "Dine In"
+                              value === "delivery" ? "Entrega" : "No Local"
                             }
                           />
-                          <Bar dataKey="delivery" name={translations.language === 'Portuguese' ? "Entrega" : "Delivery"} fill="#26A69A" radius={[4, 4, 0, 0]} />
-                          <Bar dataKey="dineIn" name={translations.language === 'Portuguese' ? "No Local" : "Dine In"} fill="#5C6BC0" radius={[4, 4, 0, 0]} />
+                          <Bar dataKey="delivery" name="Entrega" fill="#26A69A" radius={[4, 4, 0, 0]} />
+                          <Bar dataKey="dineIn" name="No Local" fill="#5C6BC0" radius={[4, 4, 0, 0]} />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
@@ -315,7 +304,7 @@ const Dashboard = () => {
                           <Line 
                             type="monotone" 
                             dataKey="total" 
-                            name={translations.language === 'Portuguese' ? "Total" : "Total"}
+                            name="Total"
                             stroke="#EC407A" 
                             strokeWidth={2} 
                             dot={{ r: 4 }} 
@@ -329,9 +318,9 @@ const Dashboard = () => {
             </Card>
             <Card className="col-span-3">
               <CardHeader>
-                <CardTitle>{translations.language === 'Portuguese' ? 'Segmentação de Clientes' : 'Customer Segmentation'}</CardTitle>
+                <CardTitle>Segmentação de Clientes</CardTitle>
                 <CardDescription>
-                  {translations.language === 'Portuguese' ? 'Distribuição entre segmentos de clientes' : 'Distribution across customer segments'}
+                  Distribuição entre segmentos de clientes
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -341,12 +330,12 @@ const Dashboard = () => {
                       cx="50%" 
                       cy="50%" 
                       innerRadius="20%" 
-                      outerRadius="80%" 
+                      outerRadius="70%" 
                       barSize={20} 
                       data={customerSegmentData}
                     >
                       <RadialBar
-                        label={{ position: 'insideStart', fill: '#fff', fontWeight: 600 }}
+                        label={{ position: 'insideStart', fill: '#fff', fontWeight: 600, fontSize: 12 }}
                         background
                         dataKey="value"
                       >
@@ -354,13 +343,18 @@ const Dashboard = () => {
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </RadialBar>
-                      <Legend
-                        iconSize={10}
-                        layout="vertical"
-                        verticalAlign="middle"
+                      <Legend 
+                        layout="vertical" 
+                        verticalAlign="middle" 
+                        wrapperStyle={{ right: -10, top: '45%', transform: 'translate(0, -45%)' }} 
                         align="right"
+                        iconSize={10}
+                        iconType="circle"
                       />
-                      <Tooltip />
+                      <Tooltip 
+                        formatter={(value, name) => [`${value} clientes`, `${name}`]}
+                        labelFormatter={() => 'Segmento de Cliente'} 
+                      />
                     </RadialBarChart>
                   </ResponsiveContainer>
                 </div>
@@ -371,8 +365,8 @@ const Dashboard = () => {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>Top Performing Menu Items</CardTitle>
-                <CardDescription>Weekly sales by menu item</CardDescription>
+                <CardTitle>Itens de Menu Populares</CardTitle>
+                <CardDescription>Vendas semanais por item de menu</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[250px]">
@@ -399,60 +393,60 @@ const Dashboard = () => {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Campaign Performance</CardTitle>
-                <CardDescription>Recent campaign metrics</CardDescription>
+                <CardTitle>Desempenho de Campanhas</CardTitle>
+                <CardDescription>Métricas de campanhas recentes</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="space-y-1">
-                      <p className="text-sm font-medium">Weekend Special Offer</p>
-                      <p className="text-xs text-muted-foreground">Sent to 1,204 customers</p>
+                      <p className="text-sm font-medium">Oferta Especial de Fim de Semana</p>
+                      <p className="text-xs text-muted-foreground">Enviado para 1.204 clientes</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium">38% open rate</p>
+                      <p className="text-sm font-medium">38% taxa de abertura</p>
                       <p className="text-xs text-green-500 flex items-center justify-end">
                         <ArrowUp className="h-4 w-4 mr-1" />
-                        12% conversion
+                        12% conversão
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="space-y-1">
-                      <p className="text-sm font-medium">New Menu Launch</p>
-                      <p className="text-xs text-muted-foreground">Sent to 2,530 customers</p>
+                      <p className="text-sm font-medium">Lançamento de Novo Menu</p>
+                      <p className="text-xs text-muted-foreground">Enviado para 2.530 clientes</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium">42% open rate</p>
+                      <p className="text-sm font-medium">42% taxa de abertura</p>
                       <p className="text-xs text-green-500 flex items-center justify-end">
                         <ArrowUp className="h-4 w-4 mr-1" />
-                        18% conversion
+                        18% conversão
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="space-y-1">
-                      <p className="text-sm font-medium">Customer Loyalty Reward</p>
-                      <p className="text-xs text-muted-foreground">Sent to 845 customers</p>
+                      <p className="text-sm font-medium">Recompensa de Fidelidade</p>
+                      <p className="text-xs text-muted-foreground">Enviado para 845 clientes</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium">62% open rate</p>
+                      <p className="text-sm font-medium">62% taxa de abertura</p>
                       <p className="text-xs text-green-500 flex items-center justify-end">
                         <ArrowUp className="h-4 w-4 mr-1" />
-                        24% conversion
+                        24% conversão
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="space-y-1">
-                      <p className="text-sm font-medium">Lapsed Customer Recovery</p>
-                      <p className="text-xs text-muted-foreground">Sent to 578 customers</p>
+                      <p className="text-sm font-medium">Recuperação de Clientes Inativos</p>
+                      <p className="text-xs text-muted-foreground">Enviado para 578 clientes</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium">28% open rate</p>
+                      <p className="text-sm font-medium">28% taxa de abertura</p>
                       <p className="text-xs text-amber-500 flex items-center justify-end">
                         <ArrowDown className="h-4 w-4 mr-1" />
-                        8% conversion
+                        8% conversão
                       </p>
                     </div>
                   </div>
@@ -469,11 +463,11 @@ const Dashboard = () => {
                 <TabsList>
                   <TabsTrigger value="orders-summary" className="flex items-center gap-2">
                     <BarChartIcon className="h-4 w-4" />
-                    {translations.language === 'Portuguese' ? 'Resumo de Pedidos' : 'Order Summary'}
+                    Resumo de Pedidos
                   </TabsTrigger>
                   <TabsTrigger value="customer-behavior" className="flex items-center gap-2">
                     <PieChartIcon className="h-4 w-4" />
-                    {translations.language === 'Portuguese' ? 'Comportamento do Cliente' : 'Customer Behavior'}
+                    Comportamento do Cliente
                   </TabsTrigger>
                 </TabsList>
                 
@@ -486,7 +480,7 @@ const Dashboard = () => {
                   />
                   <Button variant="outline" size="sm">
                     <RefreshCcw className="h-4 w-4 mr-2" />
-                    {translations.language === 'Portuguese' ? 'Atualizar Dados' : 'Refresh Data'}
+                    Atualizar Dados
                   </Button>
                 </div>
               </div>

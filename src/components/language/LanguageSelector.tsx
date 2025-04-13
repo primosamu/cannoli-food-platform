@@ -19,7 +19,7 @@ export const LanguageSelector = () => {
     <Select value="pt" disabled>
       <SelectTrigger className="w-[180px]">
         <Globe className="h-4 w-4 mr-2" />
-        <SelectValue placeholder={translations.language} />
+        <SelectValue placeholder={translations.portuguese} />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="pt">{translations.portuguese}</SelectItem>

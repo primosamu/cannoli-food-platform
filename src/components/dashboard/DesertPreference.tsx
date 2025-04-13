@@ -4,10 +4,10 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 const data = [
-  { name: 'Never', value: 35 },
-  { name: 'Always', value: 20 },
-  { name: 'Rarely', value: 25 },
-  { name: 'Often', value: 15 },
+  { name: 'Nunca', value: 35 },
+  { name: 'Sempre', value: 20 },
+  { name: 'Raramente', value: 25 },
+  { name: 'Frequentemente', value: 15 },
   { name: 'N/A', value: 5 },
 ];
 
@@ -17,8 +17,8 @@ export const DesertPreference: React.FC = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Dessert Preference</CardTitle>
-        <CardDescription>How often customers order dessert</CardDescription>
+        <CardTitle>Preferência de Sobremesa</CardTitle>
+        <CardDescription>Com que frequência os clientes pedem sobremesa</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
@@ -38,7 +38,7 @@ export const DesertPreference: React.FC = () => {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip formatter={(value) => [`${value} clientes`, 'Quantidade']} />
               <Legend />
             </PieChart>
           </ResponsiveContainer>

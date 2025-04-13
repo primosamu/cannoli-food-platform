@@ -20,4 +20,28 @@ export interface CustomerTranslations {
   adjustSearchFilter: string;
   viewAndManageCustomer: string;
   tags: string;
+  
+  // Phone enrichment
+  completeMissingPhoneNumbers: string;
+  customersWithoutPhone: string;
+  phoneEnrichment: string;
+  noEnrichmentNeeded: string;
+  allCustomersHavePhones: string;
+  phoneEnrichmentComplete: string;
+  successfullyEnriched: string;
+  customerPhones: string;
+  byQuantity: string;
+  byFilters: string;
+  numberOfContactsToEnrich: string;
+  selectedContacts: string;
+  moreContacts: string;
+  minimumOrderCount: string;
+  minimumTotalSpent: string;
+  customerTags: string;
+  serviceCost: string;
+  perCustomer: string;
+  customers: string;
+  apiWillUse: string;
+  proceedWithEnrichment: string;
+  cancel: string;
 }

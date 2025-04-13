@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
@@ -13,6 +12,9 @@ import {
   Calendar,
   Phone,
   Database,
+  Users,
+  Check,
+  Tags
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -29,6 +31,16 @@ import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export interface Customer {
   id: string;
@@ -62,6 +74,13 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
   const [emailBody, setEmailBody] = useState("");
   const [isPhoneEnrichmentOpen, setIsPhoneEnrichmentOpen] = useState(false);
   const [selectedCustomersForEnrichment, setSelectedCustomersForEnrichment] = useState<Customer[]>([]);
+  
+  const [enrichmentCount, setEnrichmentCount] = useState(10);
+  const [enrichmentTab, setEnrichmentTab] = useState("count");
+  const [minOrderCount, setMinOrderCount] = useState(0);
+  const [minTotalSpent, setMinTotalSpent] = useState(0);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [maxEnrichmentCount, setMaxEnrichmentCount] = useState(0);
 
   const getInitials = (name: string) => {
     return name
@@ -116,13 +135,22 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
 
     if (customersWithoutPhone.length === 0) {
       toast({
-        title: "No enrichment needed",
-        description: "All customers already have phone numbers."
+        title: translations.noEnrichmentNeeded || "No enrichment needed",
+        description: translations.allCustomersHavePhones || "All customers already have phone numbers."
       });
       return;
     }
 
-    setSelectedCustomersForEnrichment(customersWithoutPhone);
+    setMaxEnrichmentCount(customersWithoutPhone.length);
+    
+    setEnrichmentCount(Math.min(10, customersWithoutPhone.length));
+    
+    setMinOrderCount(0);
+    setMinTotalSpent(0);
+    setSelectedTags([]);
+    
+    setSelectedCustomersForEnrichment(customersWithoutPhone.slice(0, enrichmentCount));
+    
     setIsPhoneEnrichmentOpen(true);
   };
 
@@ -130,11 +158,57 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
     if (selectedCustomersForEnrichment.length === 0) return;
 
     toast({
-      title: "Phone enrichment complete",
-      description: `Successfully enriched ${selectedCustomersForEnrichment.length} customer phone numbers.`,
+      title: translations.phoneEnrichmentComplete || "Phone enrichment complete",
+      description: `${translations.successfullyEnriched || "Successfully enriched"} ${selectedCustomersForEnrichment.length} ${translations.customerPhones || "customer phone numbers"}.`,
     });
     
     setIsPhoneEnrichmentOpen(false);
+  };
+
+  const updateSelectedCustomersForEnrichment = () => {
+    let filteredCustomers = customers.filter(c => !c.phone || c.phone === "");
+    
+    if (enrichmentTab === "filter") {
+      if (minOrderCount > 0) {
+        filteredCustomers = filteredCustomers.filter(c => c.orderCount >= minOrderCount);
+      }
+      
+      if (minTotalSpent > 0) {
+        filteredCustomers = filteredCustomers.filter(c => c.totalSpent >= minTotalSpent);
+      }
+      
+      if (selectedTags.length > 0) {
+        filteredCustomers = filteredCustomers.filter(c => 
+          selectedTags.some(tag => c.tags.includes(tag))
+        );
+      }
+      
+      setSelectedCustomersForEnrichment(filteredCustomers);
+    } else {
+      setSelectedCustomersForEnrichment(filteredCustomers.slice(0, enrichmentCount));
+    }
+  };
+
+  React.useEffect(() => {
+    if (isPhoneEnrichmentOpen) {
+      updateSelectedCustomersForEnrichment();
+    }
+  }, [enrichmentCount, minOrderCount, minTotalSpent, selectedTags, enrichmentTab, isPhoneEnrichmentOpen]);
+
+  const allTags = React.useMemo(() => {
+    const tagsSet = new Set<string>();
+    customers.forEach(customer => {
+      customer.tags.forEach(tag => tagsSet.add(tag));
+    });
+    return Array.from(tagsSet);
+  }, [customers]);
+
+  const toggleTagSelection = (tag: string) => {
+    setSelectedTags(prev => 
+      prev.includes(tag) 
+        ? prev.filter(t => t !== tag) 
+        : [...prev, tag]
+    );
   };
 
   const columns: ColumnDef<Customer>[] = [
@@ -291,13 +365,13 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
         <div>
           <p className="text-sm text-muted-foreground">
             {customers.filter(c => !c.phone || c.phone === "").length > 0 && 
-              `${customers.filter(c => !c.phone || c.phone === "").length} customers without phone numbers`
+              `${customers.filter(c => !c.phone || c.phone === "").length} ${translations.customersWithoutPhone || "customers without phone numbers"}`
             }
           </p>
         </div>
         <Button variant="outline" onClick={handlePhoneEnrichment}>
           <Database className="mr-2 h-4 w-4" />
-          Complete Missing Phone Numbers
+          {translations.completeMissingPhoneNumbers || "Complete Missing Phone Numbers"}
         </Button>
       </div>
 
@@ -381,26 +455,154 @@ const CustomerList: React.FC<CustomerListProps> = ({ customers }) => {
       </Dialog>
 
       <Dialog open={isPhoneEnrichmentOpen} onOpenChange={setIsPhoneEnrichmentOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-3xl">
           <DialogHeader>
-            <DialogTitle>Phone Number Enrichment</DialogTitle>
+            <DialogTitle>{translations.phoneEnrichment || "Phone Number Enrichment"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <p>
-              Using our data enrichment service, we can retrieve phone numbers for {selectedCustomersForEnrichment.length} customer(s) based on their CPF.
-            </p>
-            <p className="font-medium">This service will cost:</p>
+            <Tabs value={enrichmentTab} onValueChange={setEnrichmentTab} className="w-full">
+              <TabsList className="grid grid-cols-2 w-full">
+                <TabsTrigger value="count">
+                  <Users className="mr-2 h-4 w-4" />
+                  {translations.byQuantity || "By Quantity"}
+                </TabsTrigger>
+                <TabsTrigger value="filter">
+                  <Tags className="mr-2 h-4 w-4" />
+                  {translations.byFilters || "By Filters"}
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="count" className="space-y-4 mt-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span>{translations.numberOfContactsToEnrich || "Number of contacts to enrich"}:</span>
+                    <span className="font-semibold">{enrichmentCount}</span>
+                  </div>
+                  <Slider 
+                    value={[enrichmentCount]} 
+                    min={1}
+                    max={maxEnrichmentCount}
+                    step={1}
+                    onValueChange={([value]) => setEnrichmentCount(value)}
+                  />
+                </div>
+                <div className="bg-muted p-4 rounded-md">
+                  <p className="text-sm font-medium mb-2">
+                    {translations.selectedContacts || "Selected contacts"}: {selectedCustomersForEnrichment.length}
+                  </p>
+                  <div className="max-h-32 overflow-y-auto space-y-1">
+                    {selectedCustomersForEnrichment.slice(0, 5).map(customer => (
+                      <div key={customer.id} className="text-sm flex items-center gap-2">
+                        <Check className="h-3 w-3 text-green-500" />
+                        {customer.name}
+                      </div>
+                    ))}
+                    {selectedCustomersForEnrichment.length > 5 && (
+                      <div className="text-sm text-muted-foreground">
+                        + {selectedCustomersForEnrichment.length - 5} {translations.moreContacts || "more contacts"}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="filter" className="space-y-4 mt-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">
+                        {translations.minimumOrderCount || "Minimum Order Count"}
+                      </label>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-muted-foreground">≥ {minOrderCount}</span>
+                      </div>
+                      <Slider 
+                        value={[minOrderCount]} 
+                        min={0}
+                        max={50}
+                        step={1}
+                        onValueChange={([value]) => setMinOrderCount(value)}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">
+                        {translations.minimumTotalSpent || "Minimum Total Spent"}
+                      </label>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-muted-foreground">≥ R$ {minTotalSpent}</span>
+                      </div>
+                      <Slider 
+                        value={[minTotalSpent]} 
+                        min={0}
+                        max={1000}
+                        step={10}
+                        onValueChange={([value]) => setMinTotalSpent(value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="text-sm font-medium block">
+                      {translations.customerTags || "Customer Tags"}
+                    </label>
+                    <div className="max-h-48 overflow-y-auto p-2 border rounded-md">
+                      {allTags.map(tag => (
+                        <div key={tag} className="flex items-center space-x-2 mb-2">
+                          <Checkbox 
+                            id={`tag-${tag}`} 
+                            checked={selectedTags.includes(tag)}
+                            onCheckedChange={() => toggleTagSelection(tag)}
+                          />
+                          <label 
+                            htmlFor={`tag-${tag}`}
+                            className="text-sm cursor-pointer"
+                          >
+                            {tag}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-muted p-4 rounded-md">
+                  <p className="text-sm font-medium mb-2">
+                    {translations.selectedContacts || "Selected contacts"}: {selectedCustomersForEnrichment.length}
+                  </p>
+                  <div className="max-h-32 overflow-y-auto space-y-1">
+                    {selectedCustomersForEnrichment.slice(0, 5).map(customer => (
+                      <div key={customer.id} className="text-sm flex items-center gap-2">
+                        <Check className="h-3 w-3 text-green-500" />
+                        {customer.name}
+                      </div>
+                    ))}
+                    {selectedCustomersForEnrichment.length > 5 && (
+                      <div className="text-sm text-muted-foreground">
+                        + {selectedCustomersForEnrichment.length - 5} {translations.moreContacts || "more contacts"}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
+
             <div className="bg-muted p-4 rounded-md">
+              <p className="font-medium">{translations.serviceCost || "This service will cost"}:</p>
               <p className="text-lg font-bold">R$ {(selectedCustomersForEnrichment.length * 0.50).toFixed(2)}</p>
-              <p className="text-sm text-muted-foreground">R$ 0.50 per customer × {selectedCustomersForEnrichment.length} customers</p>
+              <p className="text-sm text-muted-foreground">R$ 0.50 {translations.perCustomer || "per customer"} × {selectedCustomersForEnrichment.length} {translations.customers || "customers"}</p>
             </div>
             <p className="text-sm text-muted-foreground">
-              The API will use the customer CPF to fetch valid mobile phone numbers from our trusted data provider.
+              {translations.apiWillUse || "The API will use the customer CPF to fetch valid mobile phone numbers from our trusted data provider."}
             </p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsPhoneEnrichmentOpen(false)}>Cancel</Button>
-            <Button onClick={confirmPhoneEnrichment}>Proceed with Enrichment</Button>
+            <Button variant="outline" onClick={() => setIsPhoneEnrichmentOpen(false)}>
+              {translations.cancel || "Cancel"}
+            </Button>
+            <Button onClick={confirmPhoneEnrichment}>
+              {translations.proceedWithEnrichment || "Proceed with Enrichment"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

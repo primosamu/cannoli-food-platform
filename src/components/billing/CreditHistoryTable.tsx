@@ -71,19 +71,19 @@ export const CreditHistoryTable: React.FC<CreditHistoryTableProps> = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{translations.settings.creditHistory}</CardTitle>
+        <CardTitle>{translations.creditHistory}</CardTitle>
         <CardDescription>
-          {translations.settings.creditsUsage}
+          {translations.creditsUsage}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{translations.settings.date}</TableHead>
-              <TableHead>{translations.settings.description}</TableHead>
-              <TableHead className="text-right">{translations.settings.amount}</TableHead>
-              <TableHead>{translations.settings.status}</TableHead>
+              <TableHead>{translations.date}</TableHead>
+              <TableHead>{translations.description}</TableHead>
+              <TableHead className="text-right">{translations.amount}</TableHead>
+              <TableHead>{translations.status}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -112,7 +112,7 @@ export const CreditHistoryTable: React.FC<CreditHistoryTableProps> = ({
       {showViewAll && (
         <CardFooter className="flex justify-center">
           <Button variant="outline">
-            {translations.settings.viewAllHistory}
+            {translations.viewAllHistory}
           </Button>
         </CardFooter>
       )}

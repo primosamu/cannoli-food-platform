@@ -22,9 +22,9 @@ const BillingPage = () => {
 
   // Sample data - in a real application, this would come from an API
   const creditUsageData = [
-    { type: translations.settings.phoneEnrichmentCredits, value: 2500, color: '#9b87f5' },
-    { type: translations.settings.messagingCredits, value: 5000, color: '#7E69AB' },
-    { type: translations.settings.campaignCredits, value: 500, color: '#1EAEDB' },
+    { type: translations.phoneEnrichmentCredits, value: 2500, color: '#9b87f5' },
+    { type: translations.messagingCredits, value: 5000, color: '#7E69AB' },
+    { type: translations.campaignCredits, value: 500, color: '#1EAEDB' },
   ];
 
   const totalCredits = creditUsageData.reduce((sum, item) => sum + item.value, 0);
@@ -67,7 +67,7 @@ const BillingPage = () => {
   const plans: PlanDetails[] = [
     {
       id: 'basic',
-      name: translations.settings.basicPlan,
+      name: translations.basicPlan,
       monthlyPrice: 29,
       annualPrice: 279,
       phoneEnrichmentCredits: 500,
@@ -84,7 +84,7 @@ const BillingPage = () => {
     },
     {
       id: 'pro',
-      name: translations.settings.proPlan,
+      name: translations.proPlan,
       monthlyPrice: 79,
       annualPrice: 759,
       phoneEnrichmentCredits: 2000,
@@ -102,7 +102,7 @@ const BillingPage = () => {
     },
     {
       id: 'enterprise',
-      name: translations.settings.enterprisePlan,
+      name: translations.enterprisePlan,
       monthlyPrice: 199,
       annualPrice: 1919,
       phoneEnrichmentCredits: 10000,
@@ -122,7 +122,7 @@ const BillingPage = () => {
   const handlePlanSelect = (plan: PlanDetails) => {
     if (plan.isCurrent) {
       toast({
-        title: translations.settings.currentPlan,
+        title: translations.currentPlan,
         description: `You are already on the ${plan.name} plan.`,
       });
     } else {
@@ -154,9 +154,9 @@ const BillingPage = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">{translations.settings.billing}</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{translations.billing}</h2>
           <p className="text-muted-foreground">
-            {translations.settings.billingAndCredits}
+            {translations.billingAndCredits}
           </p>
         </div>
         <div className="flex items-center">
@@ -174,17 +174,17 @@ const BillingPage = () => {
           <CardHeader className="pb-2">
             <div className="flex items-center space-x-2">
               <CircleDollarSign className="h-5 w-5 text-primary" />
-              <CardTitle>{translations.settings.phoneEnrichmentCredits}</CardTitle>
+              <CardTitle>{translations.phoneEnrichmentCredits}</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">2,500</div>
-            <p className="text-xs text-muted-foreground">{translations.settings.credits}</p>
+            <p className="text-xs text-muted-foreground">{translations.credits}</p>
           </CardContent>
           <CardFooter>
             <Button variant="outline" className="w-full" onClick={() => handleBuyCredits('phone')}>
               <PlusCircle className="h-4 w-4 mr-2" />
-              {translations.settings.buyMore}
+              {translations.buyMore}
             </Button>
           </CardFooter>
         </Card>
@@ -193,17 +193,17 @@ const BillingPage = () => {
           <CardHeader className="pb-2">
             <div className="flex items-center space-x-2">
               <Wallet className="h-5 w-5 text-primary" />
-              <CardTitle>{translations.settings.messagingCredits}</CardTitle>
+              <CardTitle>{translations.messagingCredits}</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">5,000</div>
-            <p className="text-xs text-muted-foreground">{translations.settings.credits}</p>
+            <p className="text-xs text-muted-foreground">{translations.credits}</p>
           </CardContent>
           <CardFooter>
             <Button variant="outline" className="w-full" onClick={() => handleBuyCredits('message')}>
               <PlusCircle className="h-4 w-4 mr-2" />
-              {translations.settings.buyMore}
+              {translations.buyMore}
             </Button>
           </CardFooter>
         </Card>
@@ -212,17 +212,17 @@ const BillingPage = () => {
           <CardHeader className="pb-2">
             <div className="flex items-center space-x-2">
               <Store className="h-5 w-5 text-primary" />
-              <CardTitle>{translations.settings.campaignCredits}</CardTitle>
+              <CardTitle>{translations.campaignCredits}</CardTitle>
             </div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">500</div>
-            <p className="text-xs text-muted-foreground">{translations.settings.credits}</p>
+            <p className="text-xs text-muted-foreground">{translations.credits}</p>
           </CardContent>
           <CardFooter>
             <Button variant="outline" className="w-full" onClick={() => handleBuyCredits('campaign')}>
               <PlusCircle className="h-4 w-4 mr-2" />
-              {translations.settings.buyMore}
+              {translations.buyMore}
             </Button>
           </CardFooter>
         </Card>
@@ -239,25 +239,25 @@ const BillingPage = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>{translations.settings.plans}</CardTitle>
+          <CardTitle>{translations.plans}</CardTitle>
           <div className="flex items-center space-x-2 mt-2">
             <Button
               variant={isAnnual ? "outline" : "default"}
               size="sm"
               onClick={() => setIsAnnual(false)}
             >
-              {translations.settings.monthlySubscription}
+              {translations.monthlySubscription}
             </Button>
             <Button
               variant={isAnnual ? "default" : "outline"}
               size="sm"
               onClick={() => setIsAnnual(true)}
             >
-              {translations.settings.annualSubscription}
+              {translations.annualSubscription}
             </Button>
             {isAnnual && (
               <span className="text-xs text-primary font-medium">
-                {translations.settings.saveWithAnnual}
+                {translations.saveWithAnnual}
               </span>
             )}
           </div>

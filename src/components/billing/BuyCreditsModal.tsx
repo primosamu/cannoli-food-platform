@@ -96,28 +96,28 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>{translations.settings.buyCredits}</DialogTitle>
+          <DialogTitle>{translations.buyCredits}</DialogTitle>
           <DialogDescription>
-            {translations.settings.selectQuantity}
+            {translations.selectQuantity}
           </DialogDescription>
         </DialogHeader>
         
         <div className="py-4 space-y-6">
           <Tabs defaultValue="phone" value={selectedTab} onValueChange={handleTabChange}>
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="phone">{translations.settings.phoneEnrichment}</TabsTrigger>
-              <TabsTrigger value="message">{translations.settings.messagesSent}</TabsTrigger>
-              <TabsTrigger value="campaign">{translations.settings.campaignsCreated}</TabsTrigger>
+              <TabsTrigger value="phone">{translations.phoneEnrichment}</TabsTrigger>
+              <TabsTrigger value="message">{translations.messagesSent}</TabsTrigger>
+              <TabsTrigger value="campaign">{translations.campaignsCreated}</TabsTrigger>
             </TabsList>
             
             <div className="mt-4">
               <div className="flex justify-between text-sm mb-2">
-                <span>{translations.settings.creditCosts}</span>
+                <span>{translations.creditCosts}</span>
                 <span className="font-medium">
                   ${creditCosts[selectedTab as keyof typeof creditCosts]} 
-                  {selectedTab === 'phone' && translations.settings.eachPhoneEnrichment}
-                  {selectedTab === 'message' && translations.settings.eachMessageSent}
-                  {selectedTab === 'campaign' && translations.settings.eachCampaignCreated}
+                  {selectedTab === 'phone' && translations.eachPhoneEnrichment}
+                  {selectedTab === 'message' && translations.eachMessageSent}
+                  {selectedTab === 'campaign' && translations.eachCampaignCreated}
                 </span>
               </div>
             </div>
@@ -139,15 +139,15 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
               <>
                 <div className="bg-muted/50 p-3 rounded-md my-4 space-y-2">
                   <div className="flex justify-between">
-                    <span>{translations.settings.creditPackage}</span>
+                    <span>{translations.creditPackage}</span>
                     <span className="font-medium">{currentPackage.name}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>{translations.settings.credits}</span>
+                    <span>{translations.credits}</span>
                     <span className="font-medium">{currentPackage.credits}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>{translations.settings.pricePerCredit}</span>
+                    <span>{translations.pricePerCredit}</span>
                     <span className="font-medium">
                       ${(currentPackage.price / currentPackage.credits).toFixed(3)}
                     </span>
@@ -155,7 +155,7 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
                 </div>
                 
                 <div className="space-y-3">
-                  <Label htmlFor="quantity">{translations.settings.selectQuantity}: {quantity}</Label>
+                  <Label htmlFor="quantity">{translations.selectQuantity}: {quantity}</Label>
                   <Slider 
                     id="quantity"
                     value={[quantity]} 
@@ -176,13 +176,13 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
           
           <div className="bg-primary/10 p-4 rounded-md">
             <div className="flex justify-between items-center">
-              <h3 className="font-medium">{translations.settings.total}</h3>
+              <h3 className="font-medium">{translations.total}</h3>
               <div className="text-2xl font-bold">${total.toFixed(2)}</div>
             </div>
             
             {currentPackage && (
               <div className="text-sm text-muted-foreground mt-1">
-                {quantity * currentPackage.credits} {translations.settings.credits}
+                {quantity * currentPackage.credits} {translations.credits}
               </div>
             )}
           </div>
@@ -190,10 +190,10 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
         
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            {translations.settings.cancel}
+            {translations.cancel}
           </Button>
           <Button onClick={handlePurchase}>
-            {translations.settings.proceedToCheckout}
+            {translations.proceedToCheckout}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -31,14 +31,14 @@ interface PlanCardProps {
 export const PlanCard: React.FC<PlanCardProps> = ({ plan, isAnnual, onSelect }) => {
   const { translations } = useLanguage();
   const price = isAnnual ? plan.annualPrice : plan.monthlyPrice;
-  const periodText = isAnnual ? translations.settings.perYear : translations.settings.perMonth;
+  const periodText = isAnnual ? translations.perYear : translations.perMonth;
   
   return (
     <Card className={`flex flex-col ${plan.isCurrent ? 'border-primary shadow-lg' : ''}`}>
       <CardHeader>
         {plan.isCurrent && (
           <div className="px-3 py-1 text-xs bg-primary text-white w-fit rounded-full mb-2">
-            {translations.settings.currentPlan}
+            {translations.currentPlan}
           </div>
         )}
         <CardTitle>{plan.name}</CardTitle>
@@ -50,25 +50,25 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, isAnnual, onSelect }) 
       <CardContent className="flex-1">
         <div className="space-y-4">
           <div>
-            <h4 className="font-medium mb-2">{translations.settings.creditsIncluded}</h4>
+            <h4 className="font-medium mb-2">{translations.creditsIncluded}</h4>
             <ul className="space-y-2 text-sm">
               <li className="flex justify-between">
-                <span>{translations.settings.phoneEnrichment}:</span>
+                <span>{translations.phoneEnrichment}:</span>
                 <span className="font-medium">{plan.phoneEnrichmentCredits}</span>
               </li>
               <li className="flex justify-between">
-                <span>{translations.settings.messagesSent}:</span>
+                <span>{translations.messagesSent}:</span>
                 <span className="font-medium">{plan.messagingCredits}</span>
               </li>
               <li className="flex justify-between">
-                <span>{translations.settings.campaignsCreated}:</span>
+                <span>{translations.campaignsCreated}:</span>
                 <span className="font-medium">{plan.campaignCredits}</span>
               </li>
             </ul>
           </div>
           
           <div>
-            <h4 className="font-medium mb-2">{translations.settings.planFeatures}</h4>
+            <h4 className="font-medium mb-2">{translations.planFeatures}</h4>
             <ul className="space-y-2">
               {plan.features.map((feature, index) => (
                 <li key={index} className={`flex items-start text-sm ${!feature.included ? 'text-muted-foreground' : ''}`}>
@@ -86,7 +86,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, isAnnual, onSelect }) 
           variant={plan.isCurrent ? "outline" : "default"}
           onClick={() => onSelect(plan)}
         >
-          {plan.isCurrent ? translations.settings.currentPlanDetails : translations.settings.changePlan}
+          {plan.isCurrent ? translations.currentPlanDetails : translations.changePlan}
         </Button>
       </CardFooter>
     </Card>

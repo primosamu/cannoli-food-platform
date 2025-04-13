@@ -19,7 +19,7 @@ import { IntegrationTranslations } from './integration';
 import { SettingTranslations } from './setting';
 import { DataInsightTranslations } from './data-insight';
 
-export type Language = 'en' | 'pt' | 'es';
+export type Language = 'pt';
 
 export interface Translations extends
   GeneralTranslations,

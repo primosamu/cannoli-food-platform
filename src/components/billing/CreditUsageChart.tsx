@@ -21,8 +21,8 @@ export const CreditUsageChart: React.FC<CreditUsageChartProps> = ({ data, total 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{translations.settings.creditsUsage}</CardTitle>
-        <CardDescription>{translations.settings.availableCredits}: {total}</CardDescription>
+        <CardTitle>{translations.creditsUsage}</CardTitle>
+        <CardDescription>{translations.availableCredits}: {total}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
@@ -44,7 +44,7 @@ export const CreditUsageChart: React.FC<CreditUsageChartProps> = ({ data, total 
                 ))}
               </Pie>
               <Legend />
-              <Tooltip formatter={(value) => [`${value} ${translations.settings.credits}`, ""]} />
+              <Tooltip formatter={(value) => [`${value} ${translations.credits}`, ""]} />
             </PieChart>
           </ResponsiveContainer>
         </div>

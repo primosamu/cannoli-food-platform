@@ -13,16 +13,15 @@ import { useLanguage } from '@/contexts/LanguageContext';
 export const LanguageSelector = () => {
   const { translations } = useLanguage();
   
-  // Since we're now fixed to Portuguese, this is just a display component
-  // that doesn't allow changing the language
+  // Portuguese only, no language switching
   return (
     <Select value="pt" disabled>
       <SelectTrigger className="w-[180px]">
         <Globe className="h-4 w-4 mr-2" />
-        <SelectValue placeholder={translations.portuguese} />
+        <SelectValue placeholder="Português" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="pt">{translations.portuguese}</SelectItem>
+        <SelectItem value="pt">Português</SelectItem>
       </SelectContent>
     </Select>
   );

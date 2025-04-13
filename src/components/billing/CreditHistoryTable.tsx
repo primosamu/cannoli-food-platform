@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   Table,
@@ -55,34 +56,49 @@ export const CreditHistoryTable: React.FC<CreditHistoryTableProps> = ({
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'phone':
-        return "🔍"; // Magnifying glass for phone enrichment
+        return "🔍"; // Lupa para enriquecimento de telefone
       case 'message':
-        return "💬"; // Message bubble
+        return "💬"; // Bolha de mensagem
       case 'campaign':
-        return "📣"; // Megaphone for campaigns
+        return "📣"; // Megafone para campanhas
       case 'purchase':
-        return "💰"; // Money bag for purchases
+        return "💰"; // Saco de dinheiro para compras
+      case 'rcs':
+        return "📱"; // Celular para RCS
       default:
-        return "📋"; // Default icon
+        return "📋"; // Ícone padrão
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return "Concluído";
+      case 'pending':
+        return "Pendente";
+      case 'failed':
+        return "Falhou";
+      default:
+        return status;
     }
   };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{translations.creditHistory}</CardTitle>
+        <CardTitle>{translations.creditHistory || "Histórico de Créditos"}</CardTitle>
         <CardDescription>
-          {translations.creditsUsage}
+          {translations.creditsUsage || "Uso de Créditos"}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{translations.date}</TableHead>
-              <TableHead>{translations.description}</TableHead>
-              <TableHead className="text-right">{translations.amount}</TableHead>
-              <TableHead>{translations.status}</TableHead>
+              <TableHead>{translations.date || "Data"}</TableHead>
+              <TableHead>{translations.description || "Descrição"}</TableHead>
+              <TableHead className="text-right">{translations.amount || "Valor"}</TableHead>
+              <TableHead>{translations.status || "Status"}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -100,7 +116,7 @@ export const CreditHistoryTable: React.FC<CreditHistoryTableProps> = ({
                 </TableCell>
                 <TableCell>
                   <span className={getStatusBadgeClass(transaction.status)}>
-                    {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
+                    {getStatusText(transaction.status)}
                   </span>
                 </TableCell>
               </TableRow>
@@ -111,7 +127,7 @@ export const CreditHistoryTable: React.FC<CreditHistoryTableProps> = ({
       {showViewAll && (
         <CardFooter className="flex justify-center">
           <Button variant="outline">
-            {translations.viewAllHistory}
+            {translations.viewAllHistory || "Ver Todo Histórico"}
           </Button>
         </CardFooter>
       )}

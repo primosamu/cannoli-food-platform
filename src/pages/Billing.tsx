@@ -19,8 +19,8 @@ const BillingPage = () => {
 
   // Sample data for store options
   const storeOptions = [
-    { id: 'store-1', name: 'Downtown Store' },
-    { id: 'store-2', name: 'Uptown Store' }
+    { id: 'store-1', name: 'Loja Centro' },
+    { id: 'store-2', name: 'Loja Zona Norte' }
   ];
 
   // Sample data for credit usage chart
@@ -28,7 +28,7 @@ const BillingPage = () => {
     { type: translations.phoneEnrichmentCredits, value: 2500, color: '#9b87f5' },
     { type: translations.messagingCredits, value: 5000, color: '#7E69AB' },
     { type: translations.campaignCredits, value: 500, color: '#1EAEDB' },
-    { type: 'RCS Credits', value: 1000, color: '#6A5ACD' },
+    { type: translations.rcsCredits, value: 1000, color: '#6A5ACD' },
   ];
 
   const totalCredits = creditUsageData.reduce((sum, item) => sum + item.value, 0);
@@ -38,7 +38,7 @@ const BillingPage = () => {
     {
       id: '1',
       date: '2025-04-12',
-      description: 'Phone enrichment batch #1234',
+      description: 'Enriquecimento de telefone lote #1234',
       amount: 100,
       type: 'phone',
       status: 'completed',
@@ -46,7 +46,7 @@ const BillingPage = () => {
     {
       id: '2',
       date: '2025-04-10',
-      description: 'SMS campaign to VIP customers',
+      description: 'Campanha SMS para clientes VIP',
       amount: 250,
       type: 'message',
       status: 'completed',
@@ -54,7 +54,7 @@ const BillingPage = () => {
     {
       id: '3',
       date: '2025-04-07',
-      description: 'Marketing campaign - Easter promotion',
+      description: 'Campanha de marketing - Promoção de Páscoa',
       amount: 1,
       type: 'campaign',
       status: 'completed',
@@ -62,7 +62,7 @@ const BillingPage = () => {
     {
       id: '4',
       date: '2025-04-01',
-      description: 'Credit package purchase',
+      description: 'Compra de pacote de créditos',
       amount: 1000,
       type: 'purchase',
       status: 'completed',
@@ -70,7 +70,7 @@ const BillingPage = () => {
     {
       id: '5',
       date: '2025-04-13',
-      description: 'RCS campaign to loyalty customers',
+      description: 'Campanha RCS para clientes fidelizados',
       amount: 50,
       type: 'rcs',
       status: 'completed',
@@ -88,12 +88,12 @@ const BillingPage = () => {
       messagingCredits: 1000,
       campaignCredits: 2,
       features: [
-        { name: 'Customer management', included: true },
-        { name: 'Basic reporting', included: true },
-        { name: 'Email support', included: true },
-        { name: 'API access', included: false },
-        { name: 'Priority support', included: false },
-        { name: 'Advanced analytics', included: false },
+        { name: 'Gerenciamento de clientes', included: true },
+        { name: 'Relatórios básicos', included: true },
+        { name: 'Suporte por e-mail', included: true },
+        { name: 'Acesso à API', included: false },
+        { name: 'Suporte prioritário', included: false },
+        { name: 'Análises avançadas', included: false },
       ],
     },
     {
@@ -105,12 +105,12 @@ const BillingPage = () => {
       messagingCredits: 5000,
       campaignCredits: 10,
       features: [
-        { name: 'Customer management', included: true },
-        { name: 'Basic reporting', included: true },
-        { name: 'Email support', included: true },
-        { name: 'API access', included: true },
-        { name: 'Priority support', included: true },
-        { name: 'Advanced analytics', included: false },
+        { name: 'Gerenciamento de clientes', included: true },
+        { name: 'Relatórios básicos', included: true },
+        { name: 'Suporte por e-mail', included: true },
+        { name: 'Acesso à API', included: true },
+        { name: 'Suporte prioritário', included: true },
+        { name: 'Análises avançadas', included: false },
       ],
       isCurrent: true,
     },
@@ -123,12 +123,12 @@ const BillingPage = () => {
       messagingCredits: 50000,
       campaignCredits: 50,
       features: [
-        { name: 'Customer management', included: true },
-        { name: 'Basic reporting', included: true },
-        { name: 'Email support', included: true },
-        { name: 'API access', included: true },
-        { name: 'Priority support', included: true },
-        { name: 'Advanced analytics', included: true },
+        { name: 'Gerenciamento de clientes', included: true },
+        { name: 'Relatórios básicos', included: true },
+        { name: 'Suporte por e-mail', included: true },
+        { name: 'Acesso à API', included: true },
+        { name: 'Suporte prioritário', included: true },
+        { name: 'Análises avançadas', included: true },
       ],
     },
   ];
@@ -140,9 +140,10 @@ const BillingPage = () => {
 
   const handlePurchase = (packageId: string, quantity: number) => {
     toast({
-      title: "Purchase Successful",
-      description: `You have purchased ${quantity} credit package(s).`,
+      title: "Compra Realizada",
+      description: `Você comprou ${quantity} pacote(s) de créditos.`,
     });
+    setBuyCreditsModalOpen(false);
   };
 
   return (
@@ -167,6 +168,7 @@ const BillingPage = () => {
         open={buyCreditsModalOpen}
         onClose={() => setBuyCreditsModalOpen(false)}
         onPurchase={handlePurchase}
+        creditType={creditType}
       />
     </div>
   );

@@ -22,18 +22,26 @@ interface BuyCreditsModalProps {
   open: boolean;
   onClose: () => void;
   onPurchase: (packageId: string, quantity: number) => void;
+  creditType: CreditType;
 }
 
 export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({ 
   open, 
   onClose,
-  onPurchase
+  onPurchase,
+  creditType
 }) => {
   const { translations } = useLanguage();
-  const [selectedTab, setSelectedTab] = useState<CreditType>("phone");
+  const [selectedTab, setSelectedTab] = useState<CreditType>(creditType);
   const [selectedPackage, setSelectedPackage] = useState<string>("small");
   const [quantity, setQuantity] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
+  
+  useEffect(() => {
+    if (creditType) {
+      setSelectedTab(creditType);
+    }
+  }, [creditType]);
   
   const creditPackages: CreditPackagesData = {
     phone: [
@@ -105,7 +113,7 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
         </DialogHeader>
         
         <div className="py-4 space-y-6">
-          <Tabs defaultValue="phone" value={selectedTab} onValueChange={(value) => handleTabChange(value as CreditType)}>
+          <Tabs defaultValue={selectedTab} value={selectedTab} onValueChange={(value) => handleTabChange(value as CreditType)}>
             <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="phone">{translations.phoneEnrichment || "Enriquecimento"}</TabsTrigger>
               <TabsTrigger value="message">SMS</TabsTrigger>

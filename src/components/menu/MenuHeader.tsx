@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const MenuTypeButton = ({ 
   type, 
@@ -75,11 +76,13 @@ export const MenuHeader = () => {
     activeMenuType,
     setActiveMenuType
   } = useMenu();
+
+  const { translations } = useLanguage();
   
   const menuTypes = [
-    { type: "in_person" as MenuType, label: "In-Store", icon: <Store size={18} /> },
+    { type: "in_person" as MenuType, label: translations.inStore, icon: <Store size={18} /> },
     { type: "delivery" as MenuType, label: "Delivery", icon: <Truck size={18} /> },
-    { type: "qr_table" as MenuType, label: "QR Table", icon: <QrCode size={18} /> },
+    { type: "qr_table" as MenuType, label: "QR Mesa", icon: <QrCode size={18} /> },
     { type: "self_service" as MenuType, label: "Self-Service", icon: <UtensilsCrossed size={18} /> }
   ];
 
@@ -87,9 +90,9 @@ export const MenuHeader = () => {
     <div className="space-y-4">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Menu Management</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{translations.menuManagement}</h1>
           <p className="text-sm text-muted-foreground">
-            Create and manage your menu items across different channels
+            {translations.createAndManageMenu}
           </p>
         </div>
         
@@ -101,7 +104,7 @@ export const MenuHeader = () => {
             className="gap-1"
           >
             <PlusCircle size={16} />
-            <span>Category</span>
+            <span>{translations.category}</span>
           </Button>
           
           <Button
@@ -110,7 +113,7 @@ export const MenuHeader = () => {
             className="gap-1"
           >
             <PlusCircle size={16} />
-            <span>Menu Item</span>
+            <span>{translations.menuItems}</span>
           </Button>
         </div>
       </div>
@@ -133,7 +136,7 @@ export const MenuHeader = () => {
           <div className="relative flex-1 sm:w-64">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search menu..."
+              placeholder="Buscar cardápio..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="pl-8"
@@ -142,25 +145,25 @@ export const MenuHeader = () => {
           
           <Select onValueChange={(value) => console.log(value)}>
             <SelectTrigger className="w-auto">
-              <SelectValue placeholder="Actions" />
+              <SelectValue placeholder="Ações" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="import" onSelect={() => setImportModalOpen(true)}>
                 <div className="flex items-center gap-2">
                   <FileUp size={16} />
-                  <span>Import Menu</span>
+                  <span>Importar Cardápio</span>
                 </div>
               </SelectItem>
               <SelectItem value="export" onSelect={() => setExportModalOpen(true)}>
                 <div className="flex items-center gap-2">
                   <FileDown size={16} />
-                  <span>Export Menu</span>
+                  <span>Exportar Cardápio</span>
                 </div>
               </SelectItem>
               <SelectItem value="sync">
                 <div className="flex items-center gap-2">
                   <RefreshCw size={16} />
-                  <span>Sync with Platforms</span>
+                  <span>Sincronizar com Plataformas</span>
                 </div>
               </SelectItem>
             </SelectContent>

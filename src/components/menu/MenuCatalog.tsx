@@ -17,6 +17,7 @@ import {
   ShoppingBasket,
   Filter,
 } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const MenuCatalog = () => {
   const { 
@@ -26,8 +27,11 @@ export const MenuCatalog = () => {
     searchQuery,
     activeMenuType,
     activePlatformFilter,
-    setActivePlatformFilter
+    setActivePlatformFilter,
+    setItemModalOpen
   } = useMenu();
+
+  const { translations } = useLanguage();
   
   // Filter logic
   const filteredItems = menuItems.filter(item => {
@@ -59,9 +63,9 @@ export const MenuCatalog = () => {
   ];
   
   const getCurrentCategoryName = () => {
-    if (selectedCategory === 'all') return 'All Items';
+    if (selectedCategory === 'all') return translations.allItems;
     const category = categories.find(c => c.id === selectedCategory);
-    return category ? category.name : 'Unknown Category';
+    return category ? category.name : "Categoria Desconhecida";
   };
   
   return (
@@ -70,7 +74,7 @@ export const MenuCatalog = () => {
         <h3 className="font-medium flex items-center gap-2">
           {getCurrentCategoryName()}
           <span className="text-muted-foreground text-sm font-normal">
-            ({filteredItems.length} items)
+            ({filteredItems.length} itens)
           </span>
         </h3>
         
@@ -79,17 +83,17 @@ export const MenuCatalog = () => {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm" className="h-8">
                 <Filter className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Filter</span>
+                <span className="hidden sm:inline">Filtrar</span>
                 {activePlatformFilter !== 'all' && (
                   <span className="ml-1 h-2 w-2 rounded-full bg-primary"></span>
                 )}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
-              <DropdownMenuLabel>Platform</DropdownMenuLabel>
+              <DropdownMenuLabel>Plataforma</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => setActivePlatformFilter('all')}>
-                All Platforms
+                Todas as Plataformas
                 {activePlatformFilter === 'all' && (
                   <span className="ml-auto">✓</span>
                 )}
@@ -125,19 +129,19 @@ export const MenuCatalog = () => {
           <div className="flex flex-1 items-center justify-center p-8 text-center">
             <div className="max-w-md space-y-2">
               <ShoppingBasket className="mx-auto h-12 w-12 text-muted-foreground/50" />
-              <h3 className="text-lg font-semibold">No menu items found</h3>
+              <h3 className="text-lg font-semibold">Nenhum item encontrado</h3>
               <p className="text-muted-foreground">
                 {searchQuery 
-                  ? `No results match "${searchQuery}". Try a different search.` 
+                  ? `Nenhum resultado para "${searchQuery}". Tente uma busca diferente.` 
                   : selectedCategory !== 'all'
-                    ? "This category doesn't have any items yet. Add your first item!"
-                    : "Your menu is empty. Add your first item to get started."}
+                    ? "Esta categoria não possui itens ainda. Adicione seu primeiro item!"
+                    : "Seu cardápio está vazio. Adicione seu primeiro item para começar."}
               </p>
               <Button 
-                onClick={() => useMenu().setItemModalOpen(true)}
+                onClick={() => setItemModalOpen(true)}
                 className="mt-4"
               >
-                Add Menu Item
+                Adicionar Item ao Cardápio
               </Button>
             </div>
           </div>

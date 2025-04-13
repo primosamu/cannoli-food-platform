@@ -32,17 +32,17 @@ const StatusIndicator = ({ status }: { status: MenuItem["status"] }) => {
   const statusConfig = {
     available: {
       icon: <CheckCircle2 className="h-4 w-4 text-green-500" />,
-      label: "Available",
+      label: "Disponível",
       class: "text-green-500 bg-green-50"
     },
     out_of_stock: {
       icon: <AlertCircle className="h-4 w-4 text-amber-500" />,
-      label: "Out of stock",
+      label: "Fora de estoque",
       class: "text-amber-500 bg-amber-50"
     },
     coming_soon: {
       icon: <Clock className="h-4 w-4 text-blue-500" />,
-      label: "Coming soon",
+      label: "Em breve",
       class: "text-blue-500 bg-blue-50"
     }
   };
@@ -81,7 +81,7 @@ export const MenuCard = ({ item, activeMenuType }: MenuCardProps) => {
   
   const getCategoryName = () => {
     const category = categories.find(c => c.id === item.category);
-    return category ? category.name : "Uncategorized";
+    return category ? category.name : "Sem Categoria";
   };
   
   const getActivePrice = () => {
@@ -120,13 +120,13 @@ export const MenuCard = ({ item, activeMenuType }: MenuCardProps) => {
           />
         ) : (
           <div className="w-full h-full bg-muted flex items-center justify-center">
-            <p className="text-muted-foreground text-sm">No image</p>
+            <p className="text-muted-foreground text-sm">Sem imagem</p>
           </div>
         )}
         
         <div className="absolute top-2 right-2 flex gap-1">
           {item.featured && (
-            <Badge className="bg-primary">Featured</Badge>
+            <Badge className="bg-primary">Destaque</Badge>
           )}
         </div>
         
@@ -143,7 +143,11 @@ export const MenuCard = ({ item, activeMenuType }: MenuCardProps) => {
           </div>
           <div className="text-right">
             <p className="font-medium">{formatPrice(getActivePrice())}</p>
-            <p className="text-xs text-muted-foreground capitalize">{activeMenuType.replace('_', ' ')}</p>
+            <p className="text-xs text-muted-foreground capitalize">
+              {activeMenuType === 'in_person' ? 'Presencial' : 
+               activeMenuType === 'delivery' ? 'Delivery' :
+               activeMenuType === 'qr_table' ? 'QR Mesa' : 'Self-Service'}
+            </p>
           </div>
         </div>
         
@@ -166,7 +170,7 @@ export const MenuCard = ({ item, activeMenuType }: MenuCardProps) => {
             className="text-xs"
             onClick={toggleActive}
           >
-            {item.active ? "Disable" : "Enable"}
+            {item.active ? "Desativar" : "Ativar"}
           </Button>
           
           <DropdownMenu>
@@ -177,17 +181,17 @@ export const MenuCard = ({ item, activeMenuType }: MenuCardProps) => {
                 className="h-8 w-8"
               >
                 <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">Ações</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={handleEdit}>
                 <Edit className="h-4 w-4 mr-2" />
-                Edit
+                Editar
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => duplicateMenuItem(item.id)}>
                 <Copy className="h-4 w-4 mr-2" />
-                Duplicate
+                Duplicar
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem 
@@ -195,7 +199,7 @@ export const MenuCard = ({ item, activeMenuType }: MenuCardProps) => {
                 className="text-destructive focus:text-destructive"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                Delete
+                Excluir
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

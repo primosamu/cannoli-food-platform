@@ -5,85 +5,85 @@ import { randomBool, randomInt, randomItem } from "@/utils/dataGenerationUtils";
 // Generate a more comprehensive menu dataset
 export const generateMenuCategories = (): MenuCategory[] => {
   return [
-    { id: "1", name: "Appetizers", description: "Start your meal right", active: true, order: 1 },
-    { id: "2", name: "Main Courses", description: "Our signature dishes", active: true, order: 2 },
-    { id: "3", name: "Pastas", description: "Italian specialties", active: true, order: 3 },
-    { id: "4", name: "Pizzas", description: "Hand-crafted pizzas", active: true, order: 4 },
-    { id: "5", name: "Desserts", description: "Sweet endings", active: true, order: 5 },
-    { id: "6", name: "Beverages", description: "Drinks and refreshments", active: true, order: 6 },
-    { id: "7", name: "Seafood", description: "Fresh from the ocean", active: true, order: 7 },
-    { id: "8", name: "Salads", description: "Healthy greens", active: true, order: 8 },
-    { id: "9", name: "Kids Menu", description: "For the little ones", active: true, order: 9 },
-    { id: "10", name: "Chef's Specials", description: "Exclusive creations", active: true, order: 10 },
-    { id: "11", name: "Vegan Options", description: "Plant-based dishes", active: true, order: 11 },
-    { id: "12", name: "Seasonal Items", description: "Limited time offerings", active: false, order: 12 },
+    { id: "1", name: "Entradas", description: "Comece sua refeição bem", active: true, order: 1 },
+    { id: "2", name: "Pratos Principais", description: "Nossos pratos especiais", active: true, order: 2 },
+    { id: "3", name: "Massas", description: "Especialidades italianas", active: true, order: 3 },
+    { id: "4", name: "Pizzas", description: "Pizzas artesanais", active: true, order: 4 },
+    { id: "5", name: "Sobremesas", description: "Finais doces", active: true, order: 5 },
+    { id: "6", name: "Bebidas", description: "Bebidas e refrescos", active: true, order: 6 },
+    { id: "7", name: "Frutos do Mar", description: "Frescos do oceano", active: true, order: 7 },
+    { id: "8", name: "Saladas", description: "Opções saudáveis", active: true, order: 8 },
+    { id: "9", name: "Menu Infantil", description: "Para os pequenos", active: true, order: 9 },
+    { id: "10", name: "Especiais do Chef", description: "Criações exclusivas", active: true, order: 10 },
+    { id: "11", name: "Opções Veganas", description: "Pratos à base de plantas", active: true, order: 11 },
+    { id: "12", name: "Itens Sazonais", description: "Ofertas por tempo limitado", active: false, order: 12 },
   ];
 };
 
 // Sample appetizers
 const appetizers: Partial<MenuItem>[] = [
-  { name: "Garlic Bread", description: "Toasted bread with garlic butter and herbs", category: "1", featured: true },
-  { name: "Bruschetta", description: "Toasted bread topped with diced tomatoes, basil, and balsamic glaze", category: "1" },
-  { name: "Calamari Fritti", description: "Crispy fried calamari served with marinara sauce", category: "1" },
-  { name: "Mozzarella Sticks", description: "Breaded and fried mozzarella with marinara dipping sauce", category: "1" },
-  { name: "Spinach Artichoke Dip", description: "Creamy spinach and artichoke dip with tortilla chips", category: "1" },
-  { name: "Buffalo Wings", description: "Spicy chicken wings with blue cheese dip", category: "1" },
-  { name: "Shrimp Cocktail", description: "Chilled jumbo shrimp with cocktail sauce", category: "1" }
+  { name: "Pão de Alho", description: "Pão tostado com manteiga de alho e ervas", category: "1", featured: true },
+  { name: "Bruschetta", description: "Torradas cobertas com tomate picado, manjericão e vinagre balsâmico", category: "1" },
+  { name: "Lula à Dorê", description: "Lula crocante frita servida com molho marinara", category: "1" },
+  { name: "Palitos de Queijo", description: "Palitos de queijo empanados e fritos com molho marinara", category: "1" },
+  { name: "Pasta de Espinafre com Alcachofra", description: "Pasta cremosa de espinafre e alcachofra com chips de tortilha", category: "1" },
+  { name: "Asinhas de Frango", description: "Asinhas de frango apimentadas com molho de queijo azul", category: "1" },
+  { name: "Coquetel de Camarão", description: "Camarões grandes gelados com molho cocktail", category: "1" }
 ];
 
 // Sample main courses
 const mainCourses: Partial<MenuItem>[] = [
-  { name: "Filet Mignon", description: "8oz tenderloin steak with garlic butter", category: "2", featured: true },
-  { name: "Grilled Salmon", description: "Fresh Atlantic salmon with lemon herb sauce", category: "2" },
-  { name: "Chicken Parmesan", description: "Breaded chicken topped with marinara and mozzarella", category: "2" },
-  { name: "Roast Duck", description: "Half duck with orange glaze and seasonal vegetables", category: "2", featured: true },
-  { name: "Lamb Chops", description: "Grilled lamb chops with mint sauce", category: "2" },
-  { name: "Pork Tenderloin", description: "Herb-crusted pork with apple compote", category: "2" },
-  { name: "Beef Bourguignon", description: "Classic French beef stew with red wine", category: "2" }
+  { name: "Filé Mignon", description: "Filé mignon de 230g com manteiga de alho", category: "2", featured: true },
+  { name: "Salmão Grelhado", description: "Salmão fresco do Atlântico com molho de limão e ervas", category: "2" },
+  { name: "Frango à Parmegiana", description: "Frango empanado com molho marinara e mussarela", category: "2" },
+  { name: "Pato Assado", description: "Meio pato com molho de laranja e legumes da estação", category: "2", featured: true },
+  { name: "Costeletas de Cordeiro", description: "Costeletas de cordeiro grelhadas com molho de menta", category: "2" },
+  { name: "Lombo de Porco", description: "Lombo de porco com crosta de ervas e compota de maçã", category: "2" },
+  { name: "Boeuf Bourguignon", description: "Clássico ensopado francês de carne com vinho tinto", category: "2" }
 ];
 
 // Sample pastas
 const pastas: Partial<MenuItem>[] = [
-  { name: "Spaghetti Carbonara", description: "Spaghetti with creamy sauce, bacon, and parmesan", category: "3" },
-  { name: "Fettuccine Alfredo", description: "Fettuccine in rich creamy sauce", category: "3" },
-  { name: "Lasagna", description: "Layered pasta with meat sauce and cheeses", category: "3", featured: true },
-  { name: "Penne alla Vodka", description: "Penne pasta in creamy tomato vodka sauce", category: "3" },
-  { name: "Linguine with Clams", description: "Linguine with fresh clams in white wine sauce", category: "3" },
-  { name: "Ravioli", description: "Cheese-filled ravioli with tomato sauce", category: "3" },
-  { name: "Gnocchi", description: "Potato dumplings in sage butter sauce", category: "3" }
+  { name: "Espaguete à Carbonara", description: "Espaguete com molho cremoso, bacon e parmesão", category: "3" },
+  { name: "Fettuccine Alfredo", description: "Fettuccine em molho cremoso", category: "3" },
+  { name: "Lasanha", description: "Camadas de massa com molho de carne e queijos", category: "3", featured: true },
+  { name: "Penne ao Molho Vodka", description: "Massa penne em molho cremoso de tomate com vodka", category: "3" },
+  { name: "Linguine com Vôngole", description: "Linguine com vôngoles frescos em molho de vinho branco", category: "3" },
+  { name: "Ravioli", description: "Ravioli recheado com queijo ao molho de tomate", category: "3" },
+  { name: "Nhoque", description: "Nhoque de batata ao molho de manteiga e sálvia", category: "3" }
 ];
 
 // Sample pizzas
 const pizzas: Partial<MenuItem>[] = [
-  { name: "Margherita Pizza", description: "Classic pizza with tomato sauce, mozzarella, and fresh basil", category: "4" },
-  { name: "Pepperoni Pizza", description: "Pizza with tomato sauce, mozzarella, and pepperoni", category: "4", featured: true },
-  { name: "Vegetarian Pizza", description: "Pizza with assorted vegetables and mozzarella", category: "4" },
-  { name: "Quattro Formaggi", description: "Four cheese pizza with mozzarella, gorgonzola, parmesan, and ricotta", category: "4" },
-  { name: "Hawaiian Pizza", description: "Pizza with ham and pineapple", category: "4" },
-  { name: "BBQ Chicken Pizza", description: "Pizza with BBQ sauce, chicken, and red onions", category: "4" },
-  { name: "Mushroom Truffle Pizza", description: "Pizza with mushrooms and truffle oil", category: "4", featured: true }
+  { name: "Pizza Margherita", description: "Pizza clássica com molho de tomate, muçarela e manjericão fresco", category: "4" },
+  { name: "Pizza de Pepperoni", description: "Pizza com molho de tomate, muçarela e pepperoni", category: "4", featured: true },
+  { name: "Pizza Vegetariana", description: "Pizza com legumes variados e muçarela", category: "4" },
+  { name: "Quatro Queijos", description: "Pizza com quatro queijos: muçarela, gorgonzola, parmesão e ricota", category: "4" },
+  { name: "Pizza Havaiana", description: "Pizza com presunto e abacaxi", category: "4" },
+  { name: "Pizza de Frango com BBQ", description: "Pizza com molho barbecue, frango e cebola roxa", category: "4" },
+  { name: "Pizza de Cogumelos e Trufa", description: "Pizza com cogumelos e óleo de trufa", category: "4", featured: true }
 ];
 
 // Sample desserts
 const desserts: Partial<MenuItem>[] = [
-  { name: "Tiramisu", description: "Italian coffee-flavored dessert with mascarpone", category: "5" },
-  { name: "Chocolate Lava Cake", description: "Warm chocolate cake with molten center", category: "5", featured: true },
-  { name: "New York Cheesecake", description: "Classic cheesecake with graham cracker crust", category: "5" },
-  { name: "Crème Brûlée", description: "Vanilla custard with caramelized sugar top", category: "5" },
-  { name: "Apple Pie", description: "Traditional apple pie with cinnamon", category: "5" },
-  { name: "Panna Cotta", description: "Italian cream dessert with berry coulis", category: "5" },
-  { name: "Cannoli", description: "Sicilian pastry tubes filled with sweet ricotta", category: "5", featured: true }
+  { name: "Tiramisu", description: "Sobremesa italiana com café e mascarpone", category: "5" },
+  { name: "Bolo de Lava de Chocolate", description: "Bolo de chocolate quente com centro derretido", category: "5", featured: true },
+  { name: "Cheesecake de Nova York", description: "Cheesecake clássico com base de biscoito", category: "5" },
+  { name: "Crème Brûlée", description: "Creme de baunilha com topo de açúcar caramelizado", category: "5" },
+  { name: "Torta de Maçã", description: "Torta tradicional de maçã com canela", category: "5" },
+  { name: "Panna Cotta", description: "Sobremesa italiana de creme com calda de frutas vermelhas", category: "5" },
+  { name: "Cannoli", description: "Tubos de massa siciliana recheados com ricota doce", category: "5", featured: true }
 ];
 
 // Sample beverages
 const beverages: Partial<MenuItem>[] = [
-  { name: "Sparkling Water", description: "Refreshing carbonated water", category: "6" },
-  { name: "House Red Wine", description: "Glass of our house red wine", category: "6" },
-  { name: "House White Wine", description: "Glass of our house white wine", category: "6" },
-  { name: "Draft Beer", description: "Pint of local draft beer", category: "6" },
-  { name: "Espresso", description: "Single shot of rich espresso", category: "6" },
-  { name: "Cappuccino", description: "Espresso with steamed milk foam", category: "6" },
-  { name: "Fresh Orange Juice", description: "Freshly squeezed orange juice", category: "6" }
+  { name: "Água com Gás", description: "Água gaseificada refrescante", category: "6" },
+  { name: "Vinho Tinto da Casa", description: "Taça do nosso vinho tinto da casa", category: "6" },
+  { name: "Vinho Branco da Casa", description: "Taça do nosso vinho branco da casa", category: "6" },
+  { name: "Chopp", description: "Chopp artesanal local", category: "6" },
+  { name: "Café Espresso", description: "Dose única de café espresso encorpado", category: "6" },
+  { name: "Cappuccino", description: "Espresso com espuma de leite vaporizado", category: "6" },
+  { name: "Suco de Laranja", description: "Suco de laranja natural", category: "6" }
 ];
 
 // Combine all menu items
@@ -106,18 +106,18 @@ const generateCompleteMenuItem = (item: Partial<MenuItem>, index: number): MenuI
     status: randomBool(0.95) ? "available" : randomBool(0.5) ? "out_of_stock" : "coming_soon",
     variants: item.variants || (randomBool(0.3) ? [
       { id: `var-${item.category}-${index}-1`, name: "Regular", priceAdjustment: 0 },
-      { id: `var-${item.category}-${index}-2`, name: "Large", priceAdjustment: randomInt(5, 15) }
+      { id: `var-${item.category}-${index}-2`, name: "Grande", priceAdjustment: randomInt(5, 15) }
     ] : undefined),
     additionalOptions: item.additionalOptions || (randomBool(0.4) ? [
-      { id: `opt-${item.category}-${index}-1`, name: "Extra cheese", price: 3, maxSelections: 1 },
-      { id: `opt-${item.category}-${index}-2`, name: "Extra sauce", price: 2, maxSelections: 1 }
+      { id: `opt-${item.category}-${index}-1`, name: "Queijo extra", price: 3, maxSelections: 1 },
+      { id: `opt-${item.category}-${index}-2`, name: "Molho extra", price: 2, maxSelections: 1 }
     ] : undefined),
     allergens: item.allergens || (randomBool(0.6) ? 
       randomItem([
-        ["gluten", "dairy"],
-        ["nuts"],
-        ["shellfish"],
-        ["soy", "gluten"],
+        ["glúten", "laticínios"],
+        ["nozes"],
+        ["frutos do mar"],
+        ["soja", "glúten"],
         []
       ]) : undefined),
     nutritionalInfo: item.nutritionalInfo || (randomBool(0.3) ? {
@@ -137,11 +137,11 @@ const generateCompleteMenuItem = (item: Partial<MenuItem>, index: number): MenuI
     },
     tags: item.tags || (randomBool(0.5) ? 
       randomItem([
-        ["spicy", "popular"],
-        ["vegetarian"],
-        ["vegan"],
-        ["gluten-free"],
-        ["chef's choice"]
+        ["picante", "popular"],
+        ["vegetariano"],
+        ["vegano"],
+        ["sem glúten"],
+        ["escolha do chef"]
       ]) : undefined)
   };
 };
@@ -159,47 +159,47 @@ export const generateMenuItems = (): MenuItem[] => {
   
   // Add some seafood items
   const seafoodItems = [
-    { name: "Grilled Octopus", description: "Tender grilled octopus with olive oil and herbs", category: "7" },
-    { name: "Lobster Tail", description: "Broiled lobster tail with drawn butter", category: "7", featured: true },
-    { name: "Shrimp Scampi", description: "Shrimp sautéed in garlic butter and white wine", category: "7" },
-    { name: "Fish and Chips", description: "Beer-battered cod with french fries", category: "7" },
-    { name: "Mussels Marinière", description: "Steamed mussels in white wine sauce", category: "7" }
+    { name: "Polvo Grelhado", description: "Polvo grelhado macio com azeite e ervas", category: "7" },
+    { name: "Cauda de Lagosta", description: "Cauda de lagosta grelhada com manteiga derretida", category: "7", featured: true },
+    { name: "Camarão ao Alho", description: "Camarão refogado em manteiga de alho e vinho branco", category: "7" },
+    { name: "Peixe e Batatas", description: "Bacalhau empanado em cerveja com batatas fritas", category: "7" },
+    { name: "Mexilhões à Marinière", description: "Mexilhões no vapor com molho de vinho branco", category: "7" }
   ].map((item, i) => generateCompleteMenuItem(item, i + 600));
   
   // Add some salads
   const salads = [
-    { name: "Caesar Salad", description: "Fresh romaine lettuce with Caesar dressing, croutons, and parmesan", category: "8" },
-    { name: "Greek Salad", description: "Mixed greens with feta, olives, and red onions", category: "8" },
-    { name: "Caprese Salad", description: "Tomatoes, fresh mozzarella, and basil with balsamic glaze", category: "8", featured: true },
-    { name: "Cobb Salad", description: "Mixed greens with chicken, bacon, egg, avocado, and blue cheese", category: "8" }
+    { name: "Salada Caesar", description: "Alface romana fresca com molho Caesar, croutons e parmesão", category: "8" },
+    { name: "Salada Grega", description: "Mix de folhas com queijo feta, azeitonas e cebola roxa", category: "8" },
+    { name: "Salada Caprese", description: "Tomate, muçarela fresca e manjericão com vinagre balsâmico", category: "8", featured: true },
+    { name: "Salada Cobb", description: "Mix de folhas com frango, bacon, ovo, abacate e queijo azul", category: "8" }
   ].map((item, i) => generateCompleteMenuItem(item, i + 700));
   
   // Add kids menu
   const kidsMenu = [
-    { name: "Chicken Fingers", description: "Breaded chicken tenders with french fries", category: "9" },
-    { name: "Mac and Cheese", description: "Creamy macaroni and cheese", category: "9" },
-    { name: "Mini Pizza", description: "Personal pizza with cheese or pepperoni", category: "9" },
-    { name: "Spaghetti with Meatballs", description: "Kid-sized portion of spaghetti and meatballs", category: "9" }
+    { name: "Tiras de Frango", description: "Tiras de frango empanadas com batatas fritas", category: "9" },
+    { name: "Macarrão com Queijo", description: "Macarrão cremoso com queijo", category: "9" },
+    { name: "Mini Pizza", description: "Pizza pessoal de queijo ou pepperoni", category: "9" },
+    { name: "Espaguete com Almôndegas", description: "Porção infantil de espaguete com almôndegas", category: "9" }
   ].map((item, i) => generateCompleteMenuItem(item, i + 800));
   
   // Chef's specials
   const chefsSpecials = [
-    { name: "Beef Wellington", description: "Filet mignon wrapped in puff pastry with mushroom duxelles", category: "10", featured: true },
-    { name: "Truffle Risotto", description: "Creamy risotto with black truffle and parmesan", category: "10" },
-    { name: "Surf and Turf", description: "Filet mignon and lobster tail", category: "10", featured: true }
+    { name: "Wellington de Filé", description: "Filé mignon em massa folhada com duxelles de cogumelos", category: "10", featured: true },
+    { name: "Risoto de Trufas", description: "Risoto cremoso com trufas negras e parmesão", category: "10" },
+    { name: "Surf and Turf", description: "Filé mignon e cauda de lagosta", category: "10", featured: true }
   ].map((item, i) => generateCompleteMenuItem(item, i + 900));
   
   // Vegan options
   const veganOptions = [
-    { name: "Beyond Burger", description: "Plant-based burger with vegan cheese and toppings", category: "11" },
-    { name: "Vegan Pad Thai", description: "Rice noodles with tofu and vegetables in tamarind sauce", category: "11" },
-    { name: "Mushroom Risotto", description: "Creamy risotto with assorted mushrooms", category: "11", featured: true }
+    { name: "Hambúrguer de Plantas", description: "Hambúrguer à base de plantas com queijo vegano e acompanhamentos", category: "11" },
+    { name: "Pad Thai Vegano", description: "Macarrão de arroz com tofu e legumes em molho de tamarindo", category: "11" },
+    { name: "Risoto de Cogumelos", description: "Risoto cremoso com cogumelos variados", category: "11", featured: true }
   ].map((item, i) => generateCompleteMenuItem(item, i + 1000));
   
   // Seasonal items
   const seasonalItems = [
-    { name: "Summer Berry Salad", description: "Mixed greens with fresh berries and citrus vinaigrette", category: "12" },
-    { name: "Pumpkin Ravioli", description: "Pumpkin-filled pasta with sage brown butter", category: "12", featured: true }
+    { name: "Salada de Frutas Vermelhas", description: "Mix de folhas com frutas vermelhas frescas e vinagrete cítrico", category: "12" },
+    { name: "Ravioli de Abóbora", description: "Massa recheada com abóbora e manteiga de sálvia", category: "12", featured: true }
   ].map((item, i) => generateCompleteMenuItem(item, i + 1100));
   
   return [

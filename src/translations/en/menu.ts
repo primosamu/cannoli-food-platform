@@ -1,5 +1,4 @@
 
-
 import { MenuTranslations } from "../../types/language/menu";
 
 export const menuTranslations: MenuTranslations = {
@@ -37,6 +36,11 @@ export const menuTranslations: MenuTranslations = {
   changeImage: 'Change Image',
   removeImage: 'Remove Image',
   // Additional image options
-  optimizeImage: 'Optimize Image'
+  optimizeImage: 'Optimize Image',
+  // Image optimizer options
+  optimizeWithAI: 'Optimize with AI',
+  optimizing: 'Optimizing...',
+  upload: 'Upload',
+  imageOptimized: 'Image optimized',
+  imageOptimizedDesc: 'Your image has been optimized successfully'
 };
-

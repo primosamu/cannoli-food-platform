@@ -189,8 +189,8 @@ export const MenuItemFormModal = () => {
       // In a real application, we would send the image to an AI service
       // and get back an optimized version. For now, we'll just pretend.
       setIsOptimizing(false);
-      toast.success(translations.imageOptimizer.imageOptimized, {
-        description: translations.imageOptimizer.imageOptimizedDesc,
+      toast.success(translations.menu.imageOptimized, {
+        description: translations.menu.imageOptimizedDesc,
       });
     }, 2000);
   };
@@ -415,7 +415,7 @@ export const MenuItemFormModal = () => {
                         variant="outline"
                       >
                         <Wand2 className="h-4 w-4 mr-2" />
-                        {translations.imageOptimizer.optimizeWithAI}
+                        {translations.menu.optimizeWithAI}
                       </Button>
                     )}
                     {isOptimizing && (
@@ -426,7 +426,7 @@ export const MenuItemFormModal = () => {
                         disabled
                       >
                         <span className="animate-spin mr-2">⏳</span>
-                        {translations.imageOptimizer.optimizing}
+                        {translations.menu.optimizing}
                       </Button>
                     )}
                   </div>
@@ -450,7 +450,7 @@ export const MenuItemFormModal = () => {
                           }}
                           className="w-full"
                         >
-                          {translations.imageOptimizer.upload}
+                          {translations.menu.upload}
                         </Button>
                       </div>
                     ) : (
@@ -458,13 +458,13 @@ export const MenuItemFormModal = () => {
                         <div className="flex flex-col items-center">
                           <ImagePlus className="h-10 w-10 text-gray-400" />
                           <p className="mt-2 text-sm text-gray-500">
-                            {translations.imageOptimizer.uploadImage}
+                            {translations.menu.uploadImage}
                           </p>
                         </div>
                         <div>
                           <label htmlFor="image-upload" className="cursor-pointer">
                             <Button type="button" variant="outline" className="w-full">
-                              {translations.imageOptimizer.upload}
+                              {translations.menu.upload}
                             </Button>
                             <Input
                               id="image-upload"
@@ -509,4 +509,3 @@ export const MenuItemFormModal = () => {
     </Dialog>
   );
 };
-

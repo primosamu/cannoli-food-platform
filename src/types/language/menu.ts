@@ -1,5 +1,4 @@
 
-
 export interface MenuTranslations {
   // Menu Management
   menuManagement: string;
@@ -36,5 +35,10 @@ export interface MenuTranslations {
   removeImage: string;
   // Additional image options
   optimizeImage: string;
+  // Image optimizer options
+  optimizeWithAI: string;
+  optimizing: string;
+  upload: string;
+  imageOptimized: string;
+  imageOptimizedDesc: string;
 }
-

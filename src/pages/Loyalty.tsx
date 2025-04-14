@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,6 +22,71 @@ import { AddMemberDialog } from "@/components/loyalty/AddMemberDialog";
 import { CreateRewardDialog } from "@/components/loyalty/CreateRewardDialog";
 import { TransactionFiltersDialog, TransactionFilters } from "@/components/loyalty/TransactionFiltersDialog";
 import { ManualAdjustmentDialog } from "@/components/loyalty/ManualAdjustmentDialog";
+
+// Helper functions
+const getTierColor = (tier: string) => {
+  switch (tier) {
+    case 'platinum':
+      return 'bg-purple-100 text-purple-800';
+    case 'gold':
+      return 'bg-amber-100 text-amber-800';
+    case 'silver':
+      return 'bg-slate-100 text-slate-800';
+    case 'bronze':
+    default:
+      return 'bg-stone-100 text-stone-800';
+  }
+};
+
+const translateTierName = (tier: string) => {
+  switch (tier) {
+    case 'platinum':
+      return 'Platina';
+    case 'gold':
+      return 'Ouro';
+    case 'silver':
+      return 'Prata';
+    case 'bronze':
+    default:
+      return 'Bronze';
+  }
+};
+
+const translateTransactionType = (type: string) => {
+  switch (type) {
+    case 'earn':
+      return 'Pontos ganhos';
+    case 'redeem':
+      return 'Resgate';
+    case 'expire':
+      return 'Expiração';
+    case 'adjustment':
+      return 'Ajuste';
+    case 'referral':
+      return 'Indicação';
+    default:
+      return type;
+  }
+};
+
+const getTransactionTypeStyle = (type: string) => {
+  switch (type) {
+    case 'earn':
+    case 'adjustment':
+    case 'referral':
+      return 'text-green-600';
+    case 'redeem':
+    case 'expire':
+      return 'text-red-600';
+    default:
+      return '';
+  }
+};
+
+const formatPoints = (points: number) => {
+  const prefix = points >= 0 ? '+' : '';
+  return `${prefix}${points}`;
+};
 
 const LoyaltyPage = () => {
   const [filterTier, setFilterTier] = useState<string | null>(null);

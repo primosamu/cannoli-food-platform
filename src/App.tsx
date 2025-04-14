@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import React from "react";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import DataInsightsPage from "./pages/DataInsights";
+import AdminPanel from "./pages/AdminPanel";
 
 function App() {
   // Create a client
@@ -45,6 +46,7 @@ function App() {
               <Route path="/settings" element={<Layout><SettingsPage /></Layout>} />
               <Route path="/billing" element={<Layout><BillingPage /></Layout>} />
               <Route path="/data-insights" element={<Layout><DataInsightsPage /></Layout>} />
+              <Route path="/admin" element={<Layout><AdminPanel /></Layout>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </HashRouter>

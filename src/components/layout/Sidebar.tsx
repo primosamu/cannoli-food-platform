@@ -16,9 +16,11 @@ import {
   Users,
   X,
   ShoppingBag,
+  Shield,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Separator } from '@/components/ui/separator';
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
@@ -87,6 +89,30 @@ export function Sidebar() {
                   </Link>
                 </li>
               ))}
+              
+              <Separator className="my-3" />
+              
+              <li>
+                <Link
+                  to="/admin"
+                  className={cn(
+                    "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-colors",
+                    location.pathname === "/admin"
+                      ? "bg-cannoli-200 text-cannoli-800 font-medium shadow-sm"
+                      : "text-gray-600 hover:bg-cannoli-100 hover:text-cannoli-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                  )}
+                >
+                  <span className={cn(
+                    "p-1.5 rounded-md",
+                    location.pathname === "/admin"
+                      ? "bg-cannoli-300 text-cannoli-800"
+                      : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+                  )}>
+                    <Shield className="h-5 w-5" />
+                  </span>
+                  <span>Painel Administrativo</span>
+                </Link>
+              </li>
             </ul>
           </nav>
 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,8 +10,7 @@ import {
   BarChart, 
   Calendar, 
   Filter,
-  Sparkles,
-  AlertCircle
+  Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -30,8 +30,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogFooter,
+  DialogTrigger
 } from "@/components/ui/dialog";
 import { getTemplatesByCategory } from "@/data/campaignTemplates";
 import { CampaignTemplate, CampaignEvent } from "@/types/campaign";
@@ -50,7 +49,6 @@ const CampaignsPage = () => {
   const [showReports, setShowReports] = useState(false);
   const [selectedCampaignId, setSelectedCampaignId] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<CampaignTemplate | null>(null);
-  const [showInsufficientCreditsDialog, setShowInsufficientCreditsDialog] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -60,9 +58,6 @@ const CampaignsPage = () => {
   const scheduledCampaigns = getScheduledCampaigns();
   const completedCampaigns = getCompletedCampaigns();
   const draftCampaigns = getDraftCampaigns();
-  
-  const availableCampaignCredits = 50; // Simulado como baixo para demonstração
-  const minimumCreditsRequired = 100;
 
   useEffect(() => {
     if (location.state && location.state.createCampaign) {
@@ -82,16 +77,7 @@ const CampaignsPage = () => {
     }
   }, [location]);
 
-  const checkSufficientCredits = () => {
-    return availableCampaignCredits >= minimumCreditsRequired;
-  };
-
   const handlePresetSelect = (template: CampaignTemplate) => {
-    if (!checkSufficientCredits()) {
-      setShowInsufficientCreditsDialog(true);
-      return;
-    }
-    
     setSelectedTemplate(template);
     setShowCreator(false);
     setShowPresets(false);
@@ -105,11 +91,6 @@ const CampaignsPage = () => {
   };
 
   const handleCreateCampaign = () => {
-    if (!checkSufficientCredits()) {
-      setShowInsufficientCreditsDialog(true);
-      return;
-    }
-
     setShowCreator(true);
     setShowPresets(false);
     setShowSettings(false);
@@ -127,21 +108,11 @@ const CampaignsPage = () => {
   };
 
   const handleViewCampaign = (campaignId: string) => {
-    if (!checkSufficientCredits()) {
-      setShowInsufficientCreditsDialog(true);
-      return;
-    }
-    
     setSelectedCampaignId(campaignId);
     setShowCreator(true);
     setShowPresets(false);
     setShowSettings(false);
     setShowReports(false);
-  };
-
-  const handleNavigateToBilling = () => {
-    navigate('/billing');
-    setShowInsufficientCreditsDialog(false);
   };
 
   const renderContent = () => {
@@ -515,41 +486,6 @@ const CampaignsPage = () => {
               Click on "Preset Campaigns" to quickly select a pre-configured campaign for common marketing needs.
             </p>
           </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={showInsufficientCreditsDialog} onOpenChange={setShowInsufficientCreditsDialog}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <AlertCircle className="h-5 w-5 text-orange-500" />
-              {translations.insufficientCredits || "Créditos insuficientes"}
-            </DialogTitle>
-            <DialogDescription>
-              {translations.buyCreditsToUseFeature || "Compre créditos para utilizar esta funcionalidade"}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            <p className="text-sm">
-              {`${translations.campaignCredits || "Créditos de campanhas"}: `}
-              <span className="font-semibold text-orange-500">{availableCampaignCredits}</span>
-              {` / ${minimumCreditsRequired} ${translations.credits || "créditos"}`}
-            </p>
-            <div className="h-2 bg-muted mt-2 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-orange-500" 
-                style={{ width: `${(availableCampaignCredits / minimumCreditsRequired) * 100}%` }}
-              ></div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowInsufficientCreditsDialog(false)}>
-              {translations.cancel || "Cancelar"}
-            </Button>
-            <Button onClick={handleNavigateToBilling}>
-              {translations.buyCredits || "Comprar Créditos"}
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

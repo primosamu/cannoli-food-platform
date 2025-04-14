@@ -41,7 +41,17 @@ export interface Translations extends
   IntegrationTranslations,
   SettingTranslations,
   DataInsightTranslations
-{}
+{
+  // Direct keys - these are the ones needed in MenuItemFormModal.tsx
+  image: string;
+  optimizeWithAI: string;
+  optimizing: string;
+  upload: string;
+  imageOptimized: string;
+  imageOptimizedDesc: string;
+  currentImage: string;
+  uploadImage: string;
+}
 
 export * from './general';
 export * from './navigation';

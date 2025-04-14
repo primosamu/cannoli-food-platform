@@ -40,6 +40,19 @@ const esTranslations: Translations = {
   ...integrationTranslations,
   ...settingTranslations,
   ...dataInsightTranslations,
+  
+  // Add direct keys needed by MenuItemFormModal.tsx
+  image: menuTranslations.image,
+  uploadImage: menuTranslations.uploadImage,
+  currentImage: menuTranslations.currentImage,
+  changeImage: menuTranslations.changeImage,
+  removeImage: menuTranslations.removeImage,
+  optimizeImage: menuTranslations.optimizeImage,
+  optimizeWithAI: menuTranslations.optimizeWithAI,
+  optimizing: menuTranslations.optimizing,
+  upload: menuTranslations.upload,
+  imageOptimized: menuTranslations.imageOptimized,
+  imageOptimizedDesc: menuTranslations.imageOptimizedDesc
 };
 
 export default esTranslations;

@@ -2,16 +2,18 @@
 import React, { createContext, useContext } from 'react';
 import { Translations } from '../types/language';
 import ptTranslations from '../translations/pt';
-import { menuTranslations } from '../translations/pt/menu';
+import enTranslations from '../translations/en';
+import esTranslations from '../translations/es';
 
+// Define the shape of our context
 interface LanguageContextProps {
-  translations: {
-    menuTranslations: typeof menuTranslations;
-  };
+  translations: Translations; // Use the full Translations type
 }
 
+// Create the context with undefined as initial value
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
+// Custom hook to access the language context
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (context === undefined) {
@@ -20,11 +22,10 @@ export const useLanguage = () => {
   return context;
 };
 
+// Language provider component
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Fixed to Portuguese translations
-  const translations = {
-    menuTranslations: menuTranslations,
-  };
+  // Use Portuguese translations as the default
+  const translations = ptTranslations;
 
   const value = {
     translations,
@@ -37,5 +38,5 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 };
 
-// Re-export types from the modular structure
+// Re-export types
 export type { Translations };

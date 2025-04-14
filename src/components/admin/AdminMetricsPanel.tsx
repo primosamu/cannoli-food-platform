@@ -5,7 +5,7 @@ import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContaine
 import { ArrowUp, ArrowDown, Users, CreditCard, ShoppingBag, DollarSign, Percent } from "lucide-react";
 import { sampleCustomers } from "@/data/sampleCustomers";
 import { sampleOrders } from "@/data/sampleOrders";
-import { sampleLoyaltyData } from "@/data/sampleLoyaltyData";
+import { sampleLoyaltyMembers } from "@/data/sampleLoyaltyData";
 
 // Dados para os gráficos
 const revenueData = [
@@ -40,9 +40,9 @@ export const AdminMetricsPanel: React.FC = () => {
   // Calcular métricas do sistema usando os dados de amostra
   const totalCustomers = sampleCustomers.length;
   const activeCustomers = sampleCustomers.filter(c => c.orderCount > 0).length;
-  const loyaltyMembers = sampleLoyaltyData.members.length;
+  const loyaltyMembers = sampleLoyaltyMembers.length;
   const totalOrders = sampleOrders.length;
-  const totalRevenue = sampleOrders.reduce((sum, order) => sum + order.total, 0);
+  const totalRevenue = sampleOrders.reduce((sum, order) => sum + order.totalAmount, 0);
   const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
   const loyaltyPercentage = totalCustomers > 0 ? (loyaltyMembers / totalCustomers) * 100 : 0;
   

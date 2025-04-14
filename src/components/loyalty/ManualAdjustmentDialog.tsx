@@ -16,13 +16,13 @@ import { toast } from "sonner";
 interface ManualAdjustmentDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedMember?: any; // Add the selectedMember prop
+  selectedMember?: any;
 }
 
 export const ManualAdjustmentDialog: React.FC<ManualAdjustmentDialogProps> = ({
   isOpen,
   onClose,
-  selectedMember, // Destructure the prop
+  selectedMember,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
@@ -79,7 +79,7 @@ export const ManualAdjustmentDialog: React.FC<ManualAdjustmentDialogProps> = ({
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <div className="flex">

@@ -117,7 +117,7 @@ export const AddMemberDialog = ({ isOpen, onClose, potentialMembers = [] }: AddM
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Adicionar Membro</DialogTitle>
         </DialogHeader>

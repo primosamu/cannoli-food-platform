@@ -35,4 +35,6 @@ export const menuTranslations: MenuTranslations = {
   currentImage: 'Imagem Atual',
   changeImage: 'Alterar Imagem',
   removeImage: 'Remover Imagem',
+  // Additional image options
+  optimizeImage: 'Otimizar Imagem'
 };

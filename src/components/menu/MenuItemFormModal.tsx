@@ -216,7 +216,7 @@ export const MenuItemFormModal = () => {
                 <TabsTrigger value="availability">Availability</TabsTrigger>
                 <TabsTrigger value="image">
                   <Image className="mr-2 h-4 w-4" />
-                  Image
+                  {translations.menu.image}
                 </TabsTrigger>
               </TabsList>
 
@@ -406,7 +406,7 @@ export const MenuItemFormModal = () => {
               <TabsContent value="image" className="space-y-4">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium">{translations.imageOptimizer.imageOptimizer}</h3>
+                    <h3 className="text-sm font-medium">{translations.menu.image}</h3>
                     {imagePreview && !isOptimizing && (
                       <Button 
                         type="button" 
@@ -450,7 +450,7 @@ export const MenuItemFormModal = () => {
                           }}
                           className="w-full"
                         >
-                          {translations.imageOptimizer.upload} {translations.general.other}
+                          {translations.imageOptimizer.upload}
                         </Button>
                       </div>
                     ) : (
@@ -481,7 +481,7 @@ export const MenuItemFormModal = () => {
 
                   {(selectedItem?.imageUrl && !imagePreview) && (
                     <div className="mt-4">
-                      <h4 className="text-sm font-medium mb-2">Current Image:</h4>
+                      <h4 className="text-sm font-medium mb-2">{translations.menu.currentImage}:</h4>
                       <div className="aspect-[4/3] relative overflow-hidden rounded-md">
                         <img 
                           src={selectedItem.imageUrl} 
@@ -509,3 +509,4 @@ export const MenuItemFormModal = () => {
     </Dialog>
   );
 };
+

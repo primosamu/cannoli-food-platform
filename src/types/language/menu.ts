@@ -33,4 +33,6 @@ export interface MenuTranslations {
   currentImage: string;
   changeImage: string;
   removeImage: string;
+  // Additional image options
+  optimizeImage: string;
 }

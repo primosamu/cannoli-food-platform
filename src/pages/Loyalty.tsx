@@ -1,9 +1,8 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Settings, CreditCard, Award, Users, Plus, Gift, Calendar, ArrowUpDown, UserPlus, Crown, Clock, Filter, PlusCircle, MinusCircle } from "lucide-react";
+import { Settings, CreditCard, Award, Users, Plus, Gift, Calendar, ArrowUpDown, UserPlus, Crown, Clock, Filter, PlusCircle, MinusCircle, ChevronUp, ChevronDown, Eye, MoreVertical, Edit, Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -15,6 +14,7 @@ import {
   samplePointTransactions,
   loyaltyProgramStats
 } from "@/data/sampleLoyaltyData";
+import { sampleCustomers } from "@/data/sampleCustomers";
 import { formatDistanceToNow } from "date-fns";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { InviteCustomersDialog } from "@/components/loyalty/InviteCustomersDialog";
@@ -22,8 +22,9 @@ import { AddMemberDialog } from "@/components/loyalty/AddMemberDialog";
 import { CreateRewardDialog } from "@/components/loyalty/CreateRewardDialog";
 import { TransactionFiltersDialog, TransactionFilters } from "@/components/loyalty/TransactionFiltersDialog";
 import { ManualAdjustmentDialog } from "@/components/loyalty/ManualAdjustmentDialog";
+import { MemberDetailDialog } from "@/components/loyalty/MemberDetailDialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
-// Helper functions
 const getTierColor = (tier: string) => {
   switch (tier) {
     case 'platinum':
@@ -88,20 +89,90 @@ const formatPoints = (points: number) => {
   return `${prefix}${points}`;
 };
 
+type SortField = 'name' | 'tier' | 'points' | 'enrollment' | 'activity';
+type SortOrder = 'asc' | 'desc';
+
+type SortConfig = {
+  field: SortField;
+  order: SortOrder;
+};
+
 const LoyaltyPage = () => {
   const [filterTier, setFilterTier] = useState<string | null>(null);
   const { translations } = useLanguage();
+  const [potentialMembers, setPotentialMembers] = useState<any[]>([]);
   
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
   const [isAddMemberDialogOpen, setIsAddMemberDialogOpen] = useState(false);
   const [isCreateRewardDialogOpen, setIsCreateRewardDialogOpen] = useState(false);
   const [isTransactionFiltersDialogOpen, setIsTransactionFiltersDialogOpen] = useState(false);
   const [isManualAdjustmentDialogOpen, setIsManualAdjustmentDialogOpen] = useState(false);
+  const [isMemberDetailDialogOpen, setIsMemberDetailDialogOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<any>(null);
   const [transactionFilters, setTransactionFilters] = useState<TransactionFilters>({});
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'name', order: 'asc' });
+  
+  useEffect(() => {
+    const memberCustomerIds = sampleLoyaltyMembers.map(member => member.customerId);
+    const nonMemberCustomers = sampleCustomers.filter(customer => !memberCustomerIds.includes(customer.id));
+    
+    setPotentialMembers(nonMemberCustomers);
+  }, []);
+  
+  const sortMembers = (members: any[]) => {
+    return [...members].sort((a, b) => {
+      let comparison = 0;
+      
+      switch (sortConfig.field) {
+        case 'name':
+          comparison = a.customerName.localeCompare(b.customerName);
+          break;
+        case 'tier':
+          const tierOrder = { platinum: 3, gold: 2, silver: 1, bronze: 0 };
+          comparison = (tierOrder[a.tier] || 0) - (tierOrder[b.tier] || 0);
+          break;
+        case 'points':
+          comparison = a.currentPoints - b.currentPoints;
+          break;
+        case 'enrollment':
+          comparison = a.enrollmentDate.getTime() - b.enrollmentDate.getTime();
+          break;
+        case 'activity':
+          comparison = a.lastActivityDate.getTime() - b.lastActivityDate.getTime();
+          break;
+        default:
+          comparison = 0;
+      }
+      
+      return sortConfig.order === 'asc' ? comparison : -comparison;
+    });
+  };
+  
+  const handleSort = (field: SortField) => {
+    setSortConfig(currentConfig => {
+      if (currentConfig.field === field) {
+        return { field, order: currentConfig.order === 'asc' ? 'desc' : 'asc' };
+      } else {
+        return { field, order: 'asc' };
+      }
+    });
+  };
+  
+  const getSortIcon = (field: SortField) => {
+    if (sortConfig.field !== field) return null;
+    return sortConfig.order === 'asc' ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />;
+  };
+  
+  const handleViewMemberDetails = (member: any) => {
+    setSelectedMember(member);
+    setIsMemberDetailDialogOpen(true);
+  };
   
   const filteredMembers = filterTier 
     ? sampleLoyaltyMembers.filter(member => member.tier === filterTier)
     : sampleLoyaltyMembers;
+    
+  const sortedMembers = sortMembers(filteredMembers);
   
   const filteredTransactions = samplePointTransactions.filter(transaction => {
     let matchesType = true;
@@ -259,21 +330,61 @@ const LoyaltyPage = () => {
               </div>
             </CardHeader>
             <CardContent>
-              {filteredMembers.length > 0 ? (
+              {sortedMembers.length > 0 ? (
                 <div className="rounded-md border">
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Membro</TableHead>
-                        <TableHead>Nível</TableHead>
-                        <TableHead className="text-right">Pontos</TableHead>
-                        <TableHead>Inscrição</TableHead>
-                        <TableHead>Última Atividade</TableHead>
+                        <TableHead 
+                          className="cursor-pointer hover:bg-muted/50"
+                          onClick={() => handleSort('name')}
+                        >
+                          <div className="flex items-center">
+                            Membro
+                            {getSortIcon('name')}
+                          </div>
+                        </TableHead>
+                        <TableHead 
+                          className="cursor-pointer hover:bg-muted/50" 
+                          onClick={() => handleSort('tier')}
+                        >
+                          <div className="flex items-center">
+                            Nível
+                            {getSortIcon('tier')}
+                          </div>
+                        </TableHead>
+                        <TableHead 
+                          className="text-right cursor-pointer hover:bg-muted/50" 
+                          onClick={() => handleSort('points')}
+                        >
+                          <div className="flex items-center justify-end">
+                            Pontos
+                            {getSortIcon('points')}
+                          </div>
+                        </TableHead>
+                        <TableHead 
+                          className="cursor-pointer hover:bg-muted/50"
+                          onClick={() => handleSort('enrollment')}
+                        >
+                          <div className="flex items-center">
+                            Inscrição
+                            {getSortIcon('enrollment')}
+                          </div>
+                        </TableHead>
+                        <TableHead 
+                          className="cursor-pointer hover:bg-muted/50"
+                          onClick={() => handleSort('activity')}
+                        >
+                          <div className="flex items-center">
+                            Última Atividade
+                            {getSortIcon('activity')}
+                          </div>
+                        </TableHead>
                         <TableHead className="text-center">Ações</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {filteredMembers.slice(0, 10).map((member) => (
+                      {sortedMembers.slice(0, 10).map((member) => (
                         <TableRow key={member.id}>
                           <TableCell>
                             <div className="flex items-center gap-3">
@@ -312,7 +423,32 @@ const LoyaltyPage = () => {
                             </span>
                           </TableCell>
                           <TableCell className="text-center">
-                            <Button variant="ghost" size="sm">Detalhes</Button>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                  <span className="sr-only">Abrir menu</span>
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => handleViewMemberDetails(member)}>
+                                  <Eye className="h-4 w-4 mr-2" />
+                                  Ver detalhes
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Edit className="h-4 w-4 mr-2" />
+                                  Editar membro
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setIsManualAdjustmentDialogOpen(true)}>
+                                  <PlusCircle className="h-4 w-4 mr-2" />
+                                  Ajustar pontos
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Send className="h-4 w-4 mr-2" />
+                                  Enviar mensagem
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -328,7 +464,7 @@ const LoyaltyPage = () => {
             </CardContent>
             <CardFooter className="border-t bg-slate-50 p-4 flex justify-between items-center">
               <p className="text-sm text-muted-foreground">
-                Mostrando {Math.min(10, filteredMembers.length)} de {filteredMembers.length} membros
+                Mostrando {Math.min(10, sortedMembers.length)} de {sortedMembers.length} membros
               </p>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => setIsInviteDialogOpen(true)}>
@@ -533,11 +669,13 @@ const LoyaltyPage = () => {
       <InviteCustomersDialog 
         isOpen={isInviteDialogOpen} 
         onClose={() => setIsInviteDialogOpen(false)} 
+        potentialMembers={potentialMembers}
       />
       
       <AddMemberDialog 
         isOpen={isAddMemberDialogOpen}
         onClose={() => setIsAddMemberDialogOpen(false)}
+        potentialMembers={potentialMembers}
       />
       
       <CreateRewardDialog
@@ -554,6 +692,13 @@ const LoyaltyPage = () => {
       <ManualAdjustmentDialog
         isOpen={isManualAdjustmentDialogOpen}
         onClose={() => setIsManualAdjustmentDialogOpen(false)}
+        selectedMember={selectedMember}
+      />
+      
+      <MemberDetailDialog
+        isOpen={isMemberDetailDialogOpen}
+        onClose={() => setIsMemberDetailDialogOpen(false)}
+        member={selectedMember}
       />
     </div>
   );

@@ -1,179 +1,115 @@
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { CheckSquare, UserPlus } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Search, Mail, UserPlus, X } from "lucide-react";
-import { sampleCustomers } from "@/data/sampleCustomers";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 interface InviteCustomersDialogProps {
   isOpen: boolean;
   onClose: () => void;
+  potentialMembers?: any[];
 }
 
-export const InviteCustomersDialog: React.FC<InviteCustomersDialogProps> = ({
-  isOpen,
-  onClose,
-}) => {
-  const [selectedTab, setSelectedTab] = useState<string>("existing");
-  const [searchQuery, setSearchQuery] = useState<string>("");
+export const InviteCustomersDialog = ({ isOpen, onClose, potentialMembers = [] }: InviteCustomersDialogProps) => {
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
-  const [emailInput, setEmailInput] = useState<string>("");
-  const [manualEmails, setManualEmails] = useState<string[]>([]);
-
-  const filteredCustomers = sampleCustomers.filter(customer => 
-    customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const handleToggleCustomer = (customerId: string) => {
-    if (selectedCustomers.includes(customerId)) {
-      setSelectedCustomers(selectedCustomers.filter(id => id !== customerId));
-    } else {
-      setSelectedCustomers([...selectedCustomers, customerId]);
-    }
+  const [customMessage, setCustomMessage] = useState("");
+  
+  const toggleSelection = (customerId: string) => {
+    setSelectedCustomers(prev => {
+      if (prev.includes(customerId)) {
+        return prev.filter(id => id !== customerId);
+      } else {
+        return [...prev, customerId];
+      }
+    });
   };
-
-  const handleAddEmail = () => {
-    if (emailInput && !manualEmails.includes(emailInput) && /\S+@\S+\.\S+/.test(emailInput)) {
-      setManualEmails([...manualEmails, emailInput]);
-      setEmailInput("");
-    }
+  
+  const handleInvite = () => {
+    toast.success(`Convites enviados para ${selectedCustomers.length} clientes`);
+    onClose();
   };
-
-  const handleRemoveEmail = (email: string) => {
-    setManualEmails(manualEmails.filter(e => e !== email));
-  };
-
-  const handleSendInvites = () => {
-    const totalInvites = selectedCustomers.length + manualEmails.length;
-    
-    if (totalInvites > 0) {
-      toast.success(`${totalInvites} convites enviados com sucesso!`);
-      onClose();
-    } else {
-      toast.error("Selecione pelo menos um cliente ou adicione um e-mail para enviar convites.");
-    }
-  };
-
+  
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md md:max-w-lg">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Convidar Clientes para o Programa de Fidelidade</DialogTitle>
+          <DialogTitle>Convidar Clientes</DialogTitle>
         </DialogHeader>
         
-        <Tabs defaultValue="existing" value={selectedTab} onValueChange={setSelectedTab}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="existing">Clientes Existentes</TabsTrigger>
-            <TabsTrigger value="manual">Adicionar E-mails</TabsTrigger>
-          </TabsList>
+        <div className="space-y-4 pt-2">
+          <p className="text-sm text-muted-foreground">
+            Selecione os clientes que você deseja convidar para seu programa de fidelidade.
+          </p>
           
-          <TabsContent value="existing" className="space-y-4">
-            <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Buscar clientes..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            
-            <ScrollArea className="h-[300px] pr-4">
-              {filteredCustomers.length > 0 ? (
-                filteredCustomers.map((customer) => (
-                  <div key={customer.id} className="flex items-center space-x-4 py-2 border-b">
+          {potentialMembers && potentialMembers.length > 0 ? (
+            <div className="border rounded-md p-2 max-h-60 overflow-y-auto space-y-2">
+              {potentialMembers.slice(0, 10).map((customer) => (
+                <div 
+                  key={customer.id}
+                  className="flex items-center justify-between p-2 rounded-md hover:bg-muted"
+                >
+                  <div className="flex items-center gap-2">
                     <Checkbox 
+                      id={customer.id}
                       checked={selectedCustomers.includes(customer.id)} 
-                      onCheckedChange={() => handleToggleCustomer(customer.id)}
+                      onCheckedChange={() => toggleSelection(customer.id)}
                     />
-                    <div className="flex items-center gap-3 flex-1">
-                      <Avatar>
-                        <AvatarFallback>
-                          {customer.name.split(" ").map(n => n[0]).join("")}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-medium">{customer.name}</p>
-                        <p className="text-sm text-muted-foreground">{customer.email}</p>
-                      </div>
+                    <Avatar>
+                      <AvatarFallback>
+                        {customer.name.split(" ").map((n: string) => n[0]).join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium text-sm">{customer.name}</p>
+                      <p className="text-xs text-muted-foreground">{customer.email}</p>
                     </div>
                   </div>
-                ))
-              ) : (
-                <div className="py-8 text-center text-muted-foreground">
-                  Nenhum cliente encontrado.
+                  
+                  <Badge variant="outline" className="text-xs">
+                    {customer.orderCount} pedidos
+                  </Badge>
                 </div>
-              )}
-            </ScrollArea>
-            
-            <div className="text-sm text-muted-foreground">
-              {selectedCustomers.length} clientes selecionados
+              ))}
             </div>
-          </TabsContent>
+          ) : (
+            <div className="text-center p-4 text-muted-foreground">
+              Todos os seus clientes já são membros do programa de fidelidade!
+            </div>
+          )}
           
-          <TabsContent value="manual" className="space-y-4">
-            <div className="flex items-end gap-2">
-              <div className="flex-1">
-                <Label htmlFor="email-input">E-mail</Label>
-                <Input
-                  id="email-input"
-                  type="email"
-                  placeholder="Digite um e-mail..."
-                  value={emailInput}
-                  onChange={(e) => setEmailInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleAddEmail();
-                    }
-                  }}
-                />
-              </div>
-              <Button type="button" onClick={handleAddEmail}>Adicionar</Button>
+          <div className="pt-2">
+            <Label htmlFor="customMessage">Mensagem personalizada (opcional)</Label>
+            <div className="mt-1">
+              <Input
+                id="customMessage"
+                placeholder="Escreva uma mensagem personalizada para o convite..."
+                value={customMessage}
+                onChange={(e) => setCustomMessage(e.target.value)}
+              />
             </div>
-            
-            <ScrollArea className="h-[300px] pr-4">
-              {manualEmails.length > 0 ? (
-                <div className="space-y-2">
-                  {manualEmails.map((email, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 border rounded-md bg-muted/40">
-                      <div className="flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-muted-foreground" />
-                        <span>{email}</span>
-                      </div>
-                      <Button variant="ghost" size="icon" onClick={() => handleRemoveEmail(email)}>
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="py-8 text-center text-muted-foreground">
-                  Nenhum e-mail adicionado.
-                </div>
-              )}
-            </ScrollArea>
-            
-            <div className="text-sm text-muted-foreground">
-              {manualEmails.length} e-mails adicionados
-            </div>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
         
-        <DialogFooter className="flex sm:justify-between">
-          <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button onClick={handleSendInvites}>
-            <UserPlus className="h-4 w-4 mr-2" />
-            Enviar Convites
-          </Button>
+        <DialogFooter className="flex items-center justify-between">
+          <div className="text-sm">
+            {selectedCustomers.length} clientes selecionados
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={onClose}>Cancelar</Button>
+            <Button 
+              onClick={handleInvite}
+              disabled={selectedCustomers.length === 0}
+            >
+              <UserPlus className="h-4 w-4 mr-2" />
+              Enviar Convites
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

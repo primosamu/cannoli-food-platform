@@ -1,185 +1,160 @@
 
-import React from 'react';
+import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UserPlus } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 interface AddMemberDialogProps {
   isOpen: boolean;
   onClose: () => void;
+  potentialMembers?: any[];
 }
 
-const formSchema = z.object({
-  name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
-  email: z.string().email("E-mail inválido"),
-  phone: z.string().optional(),
-  initialPoints: z.coerce.number().min(0, "Pontos não podem ser negativos").default(0),
-  tier: z.enum(["bronze", "silver", "gold", "platinum"]).default("bronze"),
-  sendWelcomeEmail: z.boolean().default(true),
-});
-
-type FormValues = z.infer<typeof formSchema>;
-
-export const AddMemberDialog: React.FC<AddMemberDialogProps> = ({
-  isOpen,
-  onClose,
-}) => {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      initialPoints: 0,
-      tier: "bronze",
-      sendWelcomeEmail: true,
-    },
-  });
-
-  const onSubmit = (data: FormValues) => {
-    console.log("Novo membro:", data);
-    toast.success(`Membro ${data.name} adicionado com sucesso!`);
+export const AddMemberDialog = ({ isOpen, onClose, potentialMembers = [] }: AddMemberDialogProps) => {
+  const [addMethod, setAddMethod] = useState<'existing' | 'new'>('existing');
+  const [selectedCustomer, setSelectedCustomer] = useState<string | null>(null);
+  
+  const handleAddMember = () => {
+    toast.success("Membro adicionado com sucesso!");
     onClose();
-    form.reset();
   };
-
+  
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Adicionar Novo Membro</DialogTitle>
+          <DialogTitle>Adicionar Membro</DialogTitle>
         </DialogHeader>
         
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nome</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Nome completo" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>E-mail</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="email@exemplo.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Telefone (opcional)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="(00) 00000-0000" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="initialPoints"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Pontos Iniciais</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="tier"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nível</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o nível" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="bronze">Bronze</SelectItem>
-                        <SelectItem value="silver">Prata</SelectItem>
-                        <SelectItem value="gold">Ouro</SelectItem>
-                        <SelectItem value="platinum">Platina</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        <div className="space-y-4 pt-4">
+          <RadioGroup 
+            defaultValue="existing" 
+            value={addMethod} 
+            onValueChange={(value) => setAddMethod(value as 'existing' | 'new')}
+            className="flex flex-col space-y-3"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="existing" id="existing" />
+              <Label htmlFor="existing">Cliente existente</Label>
             </div>
-            
-            <FormField
-              control={form.control}
-              name="sendWelcomeEmail"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                  <FormControl>
-                    <RadioGroup 
-                      onValueChange={(value) => field.onChange(value === "true")} 
-                      defaultValue={field.value ? "true" : "false"}
-                      className="flex space-x-4"
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="new" id="new" />
+              <Label htmlFor="new">Novo cliente</Label>
+            </div>
+          </RadioGroup>
+          
+          {addMethod === 'existing' && (
+            <div className="space-y-4">
+              <div className="text-sm text-muted-foreground mb-2">
+                Selecione um cliente da sua base de dados que ainda não é membro do programa de fidelidade
+              </div>
+              
+              {potentialMembers && potentialMembers.length > 0 ? (
+                <div className="border rounded-md p-2 max-h-60 overflow-y-auto space-y-2">
+                  {potentialMembers.slice(0, 10).map((customer) => (
+                    <div 
+                      key={customer.id}
+                      className={`flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-muted ${selectedCustomer === customer.id ? 'bg-muted' : ''}`}
+                      onClick={() => setSelectedCustomer(customer.id)}
                     >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="true" id="send-email" />
-                        <Label htmlFor="send-email">Enviar e-mail de boas-vindas</Label>
+                      <div className="flex items-center gap-2">
+                        <Avatar>
+                          <AvatarFallback>
+                            {customer.name.split(" ").map((n: string) => n[0]).join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium text-sm">{customer.name}</p>
+                          <p className="text-xs text-muted-foreground">{customer.email}</p>
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="false" id="no-email" />
-                        <Label htmlFor="no-email">Não enviar e-mail</Label>
-                      </div>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                      
+                      <Badge variant="outline" className="text-xs">
+                        {customer.orderCount} pedidos
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center p-4 text-muted-foreground">
+                  Todos os seus clientes já são membros do programa de fidelidade!
+                </div>
               )}
-            />
-            
-            <DialogFooter className="pt-4">
-              <Button variant="outline" onClick={onClose} type="button">
-                Cancelar
-              </Button>
-              <Button type="submit">
-                <UserPlus className="h-4 w-4 mr-2" />
-                Adicionar Membro
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+              
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="initialPoints">Pontos iniciais</Label>
+                  <Input id="initialPoints" type="number" defaultValue="100" />
+                </div>
+                
+                <div>
+                  <Label htmlFor="tier">Nível inicial</Label>
+                  <Select defaultValue="bronze">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o nível" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bronze">Bronze</SelectItem>
+                      <SelectItem value="silver">Prata</SelectItem>
+                      <SelectItem value="gold">Ouro</SelectItem>
+                      <SelectItem value="platinum">Platina</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {addMethod === 'new' && (
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="name">Nome</Label>
+                <Input id="name" />
+              </div>
+              
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" />
+              </div>
+              
+              <div>
+                <Label htmlFor="phone">Telefone</Label>
+                <Input id="phone" />
+              </div>
+              
+              <div>
+                <Label htmlFor="initialPoints">Pontos iniciais</Label>
+                <Input id="initialPoints" type="number" defaultValue="100" />
+              </div>
+              
+              <div>
+                <Label htmlFor="tier">Nível inicial</Label>
+                <Select defaultValue="bronze">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o nível" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="bronze">Bronze</SelectItem>
+                    <SelectItem value="silver">Prata</SelectItem>
+                    <SelectItem value="gold">Ouro</SelectItem>
+                    <SelectItem value="platinum">Platina</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>Cancelar</Button>
+          <Button onClick={handleAddMember}>Adicionar Membro</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

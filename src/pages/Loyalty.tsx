@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Settings, CreditCard, Award, Users, Plus, Gift, Calendar, ArrowUpDown, UserPlus, Crown, Clock } from "lucide-react";
+import { Settings, CreditCard, Award, Users, Plus, Gift, Calendar, ArrowUpDown, UserPlus, Crown, Clock, Filter, PlusMinusIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -17,6 +17,11 @@ import {
 } from "@/data/sampleLoyaltyData";
 import { formatDistanceToNow } from "date-fns";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { InviteCustomersDialog } from "@/components/loyalty/InviteCustomersDialog";
+import { AddMemberDialog } from "@/components/loyalty/AddMemberDialog";
+import { CreateRewardDialog } from "@/components/loyalty/CreateRewardDialog";
+import { TransactionFiltersDialog, TransactionFilters } from "@/components/loyalty/TransactionFiltersDialog";
+import { ManualAdjustmentDialog } from "@/components/loyalty/ManualAdjustmentDialog";
 
 // Helper function to get tier color
 const getTierColor = (tier: string) => {
@@ -71,10 +76,42 @@ const LoyaltyPage = () => {
   const [filterTier, setFilterTier] = useState<string | null>(null);
   const { translations } = useLanguage();
   
+  // Novos estados para os diálogos
+  const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
+  const [isAddMemberDialogOpen, setIsAddMemberDialogOpen] = useState(false);
+  const [isCreateRewardDialogOpen, setIsCreateRewardDialogOpen] = useState(false);
+  const [isTransactionFiltersDialogOpen, setIsTransactionFiltersDialogOpen] = useState(false);
+  const [isManualAdjustmentDialogOpen, setIsManualAdjustmentDialogOpen] = useState(false);
+  const [transactionFilters, setTransactionFilters] = useState<TransactionFilters>({});
+  
   // Filter members by tier if a filter is selected
   const filteredMembers = filterTier 
     ? sampleLoyaltyMembers.filter(member => member.tier === filterTier)
     : sampleLoyaltyMembers;
+  
+  // Filter transactions based on applied filters
+  const filteredTransactions = samplePointTransactions.filter(transaction => {
+    let matchesType = true;
+    let matchesDateRange = true;
+    
+    if (transactionFilters.transactionType && transactionFilters.transactionType !== "all") {
+      matchesType = transaction.transactionType === transactionFilters.transactionType;
+    }
+    
+    if (transactionFilters.dateRange?.from) {
+      const from = new Date(transactionFilters.dateRange.from);
+      from.setHours(0, 0, 0, 0);
+      matchesDateRange = transaction.createdAt >= from;
+      
+      if (transactionFilters.dateRange.to) {
+        const to = new Date(transactionFilters.dateRange.to);
+        to.setHours(23, 59, 59, 999);
+        matchesDateRange = matchesDateRange && transaction.createdAt <= to;
+      }
+    }
+    
+    return matchesType && matchesDateRange;
+  });
   
   return (
     <div className="space-y-6">
@@ -281,10 +318,10 @@ const LoyaltyPage = () => {
                 Mostrando {Math.min(10, filteredMembers.length)} de {filteredMembers.length} membros
               </p>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={() => setIsInviteDialogOpen(true)}>
                   <UserPlus className="h-4 w-4 mr-2" /> Convidar Clientes
                 </Button>
-                <Button size="sm">
+                <Button size="sm" onClick={() => setIsAddMemberDialogOpen(true)}>
                   <Plus className="h-4 w-4 mr-2" /> Adicionar Membro
                 </Button>
               </div>
@@ -341,8 +378,11 @@ const LoyaltyPage = () => {
                   </div>
                 ))}
                 
-                {/* Add new reward card */}
-                <div className="bg-white border rounded-lg overflow-hidden border-dashed">
+                {/* Add new reward card - Agora clicável para abrir o diálogo */}
+                <div 
+                  className="bg-white border rounded-lg overflow-hidden border-dashed cursor-pointer hover:bg-muted/20 transition-colors"
+                  onClick={() => setIsCreateRewardDialogOpen(true)}
+                >
                   <div className="h-full flex flex-col items-center justify-center p-8">
                     <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                       <Plus className="h-6 w-6 text-primary" />
@@ -370,15 +410,53 @@ const LoyaltyPage = () => {
                 </CardDescription>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setIsTransactionFiltersDialogOpen(true)}
+                >
                   <Calendar className="h-4 w-4 mr-2" /> Filtrar por Data
                 </Button>
-                <Button size="sm">
-                  <Plus className="h-4 w-4 mr-2" /> Ajuste Manual
+                <Button 
+                  size="sm"
+                  onClick={() => setIsManualAdjustmentDialogOpen(true)}
+                >
+                  <PlusMinusIcon className="h-4 w-4 mr-2" /> Ajuste Manual
                 </Button>
               </div>
             </CardHeader>
             <CardContent>
+              {/* Indicador de filtros ativos */}
+              {(transactionFilters.dateRange || transactionFilters.transactionType) && (
+                <div className="mb-4 p-2 rounded-md bg-muted/30 border flex justify-between items-center">
+                  <div className="flex items-center gap-1">
+                    <Filter className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Filtros aplicados</span>
+                    
+                    {transactionFilters.dateRange?.from && (
+                      <Badge variant="outline" className="ml-2">
+                        {transactionFilters.dateRange.from.toLocaleDateString('pt-BR')} 
+                        {transactionFilters.dateRange.to && ` - ${transactionFilters.dateRange.to.toLocaleDateString('pt-BR')}`}
+                      </Badge>
+                    )}
+                    
+                    {transactionFilters.transactionType && transactionFilters.transactionType !== "all" && (
+                      <Badge variant="outline" className="ml-1">
+                        {translateTransactionType(transactionFilters.transactionType)}
+                      </Badge>
+                    )}
+                  </div>
+                  
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => setTransactionFilters({})}
+                  >
+                    Limpar filtros
+                  </Button>
+                </div>
+              )}
+              
               <div className="rounded-md border">
                 <Table>
                   <TableHeader>
@@ -391,43 +469,78 @@ const LoyaltyPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {samplePointTransactions.slice(0, 10).map((transaction) => (
-                      <TableRow key={transaction.id}>
-                        <TableCell>
-                          <div>
-                            <p className="font-medium">{transaction.customerName}</p>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <span className="capitalize">{translateTransactionType(transaction.transactionType)}</span>
-                        </TableCell>
-                        <TableCell className={`text-right font-medium ${getTransactionTypeStyle(transaction.transactionType)}`}>
-                          {formatPoints(transaction.points)}
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-sm">
-                            {formatDistanceToNow(transaction.createdAt, { addSuffix: true })}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-sm text-muted-foreground">
-                            {transaction.description}
-                          </span>
+                    {filteredTransactions.length > 0 ? (
+                      filteredTransactions.slice(0, 10).map((transaction) => (
+                        <TableRow key={transaction.id}>
+                          <TableCell>
+                            <div>
+                              <p className="font-medium">{transaction.customerName}</p>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <span className="capitalize">{translateTransactionType(transaction.transactionType)}</span>
+                          </TableCell>
+                          <TableCell className={`text-right font-medium ${getTransactionTypeStyle(transaction.transactionType)}`}>
+                            {formatPoints(transaction.points)}
+                          </TableCell>
+                          <TableCell>
+                            <span className="text-sm">
+                              {formatDistanceToNow(transaction.createdAt, { addSuffix: true })}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <span className="text-sm text-muted-foreground">
+                              {transaction.description}
+                            </span>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={5} className="h-24 text-center">
+                          Nenhuma transação encontrada com os filtros aplicados.
                         </TableCell>
                       </TableRow>
-                    ))}
+                    )}
                   </TableBody>
                 </Table>
               </div>
             </CardContent>
             <CardFooter className="border-t bg-slate-50 p-4">
               <p className="text-sm text-muted-foreground">
-                Mostrando 10 de {samplePointTransactions.length} transações
+                Mostrando {Math.min(10, filteredTransactions.length)} de {filteredTransactions.length} transações
               </p>
             </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Diálogos */}
+      <InviteCustomersDialog 
+        isOpen={isInviteDialogOpen} 
+        onClose={() => setIsInviteDialogOpen(false)} 
+      />
+      
+      <AddMemberDialog 
+        isOpen={isAddMemberDialogOpen}
+        onClose={() => setIsAddMemberDialogOpen(false)}
+      />
+      
+      <CreateRewardDialog
+        isOpen={isCreateRewardDialogOpen}
+        onClose={() => setIsCreateRewardDialogOpen(false)}
+      />
+      
+      <TransactionFiltersDialog
+        isOpen={isTransactionFiltersDialogOpen}
+        onClose={() => setIsTransactionFiltersDialogOpen(false)}
+        onApplyFilters={setTransactionFilters}
+      />
+      
+      <ManualAdjustmentDialog
+        isOpen={isManualAdjustmentDialogOpen}
+        onClose={() => setIsManualAdjustmentDialogOpen(false)}
+      />
     </div>
   );
 };

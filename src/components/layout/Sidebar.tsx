@@ -30,7 +30,7 @@ export function Sidebar() {
   const menuItems = [
     { path: '/', label: translations.dashboard, icon: <BarChart3 className="h-5 w-5" /> },
     { path: '/menus', label: translations.menus, icon: <BookOpen className="h-5 w-5" /> },
-    { path: '/customers', label: translations.customers, icon: <Users className="h-5 w-5" /> },
+    { path: '/customers', label: translations.customers.charAt(0).toUpperCase() + translations.customers.slice(1), icon: <Users className="h-5 w-5" /> },
     { path: '/campaigns', label: translations.campaigns, icon: <MessageSquare className="h-5 w-5" /> },
     { path: '/orders', label: translations.orders, icon: <ShoppingBag className="h-5 w-5" /> },
     { path: '/calendar', label: translations.calendar, icon: <Calendar className="h-5 w-5" /> },
@@ -65,13 +65,13 @@ export function Sidebar() {
             <div className="mb-6">
               <h1 className="text-xl font-semibold text-cannoli-800 dark:text-white px-3">Cannoli Food Tech</h1>
             </div>
-            <ul className="space-y-1.5">
+            <ul className="space-y-1">
               {menuItems.map((item) => (
                 <li key={item.path}>
                   <Link
                     to={item.path}
                     className={cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-colors",
+                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                       location.pathname === item.path
                         ? "bg-cannoli-200 text-cannoli-800 font-medium shadow-sm"
                         : "text-gray-600 hover:bg-cannoli-100 hover:text-cannoli-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
@@ -90,13 +90,13 @@ export function Sidebar() {
                 </li>
               ))}
               
-              <Separator className="my-3" />
+              <Separator className="my-2" />
               
               <li>
                 <Link
                   to="/admin"
                   className={cn(
-                    "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-colors",
+                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                     location.pathname === "/admin"
                       ? "bg-cannoli-200 text-cannoli-800 font-medium shadow-sm"
                       : "text-gray-600 hover:bg-cannoli-100 hover:text-cannoli-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"

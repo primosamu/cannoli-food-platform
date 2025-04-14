@@ -199,7 +199,7 @@ export const CustomerManagementPanel: React.FC = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Todos os clientes</DropdownMenuItem>
                 <DropdownMenuItem>Membros do programa de fidelidade</DropdownMenuItem>
-                <DropdownMenuItem>Clientes ativos (>5 pedidos)</DropdownMenuItem>
+                <DropdownMenuItem>Clientes ativos (&gt;5 pedidos)</DropdownMenuItem>
                 <DropdownMenuItem>Novos clientes</DropdownMenuItem>
                 <DropdownMenuItem>Sem pedidos recentes</DropdownMenuItem>
               </DropdownMenuContent>

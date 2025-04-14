@@ -50,13 +50,13 @@ export const MenuSidePanel = () => {
   };
   
   return (
-    <div className="w-64 flex-shrink-0 border rounded-lg overflow-hidden flex flex-col bg-card">
-      <div className="p-3 border-b bg-muted/40 flex justify-between items-center">
+    <div className="w-64 flex-shrink-0 border rounded-xl overflow-hidden flex flex-col bg-background shadow-soft">
+      <div className="p-4 border-b bg-muted/40 flex justify-between items-center">
         <h3 className="font-medium">Categories</h3>
         <Button 
           variant="ghost" 
           size="sm" 
-          className="h-8 w-8 p-0" 
+          className="h-8 w-8 p-0 rounded-full hover:bg-muted" 
           onClick={() => {
             setSelectedCategoryId(null);
             setCategoryModalOpen(true);
@@ -68,19 +68,22 @@ export const MenuSidePanel = () => {
       </div>
       
       <ScrollArea className="flex-1">
-        <div className="p-2">
+        <div className="p-3">
           <Button
             variant={selectedCategory === 'all' ? "default" : "ghost"}
-            className="w-full justify-start font-normal mb-1"
+            className={cn(
+              "w-full justify-start font-normal mb-1 rounded-lg",
+              selectedCategory === 'all' ? "bg-cannoli-100 text-cannoli-800 hover:bg-cannoli-200 hover:text-cannoli-800" : ""
+            )}
             onClick={() => setSelectedCategory('all')}
           >
             All Items
-            <Badge variant="outline" className="ml-auto">
+            <Badge variant={selectedCategory === 'all' ? "default" : "outline"} className="ml-auto">
               {menuItems.length}
             </Badge>
           </Button>
           
-          <Separator className="my-2" />
+          <Separator className="my-3 opacity-70" />
           
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="categories">
@@ -115,11 +118,17 @@ export const MenuSidePanel = () => {
                             
                             <Button
                               variant={selectedCategory === category.id ? "default" : "ghost"}
-                              className="w-full justify-start font-normal text-sm h-9"
+                              className={cn(
+                                "w-full justify-start font-normal text-sm h-9 rounded-lg",
+                                selectedCategory === category.id ? "bg-cannoli-100 text-cannoli-800 hover:bg-cannoli-200 hover:text-cannoli-800" : ""
+                              )}
                               onClick={() => setSelectedCategory(category.id)}
                             >
                               <span className="truncate">{category.name}</span>
-                              <Badge variant="outline" className="ml-auto">
+                              <Badge 
+                                variant={selectedCategory === category.id ? "default" : "outline"} 
+                                className="ml-auto"
+                              >
                                 {getCategoryItemCount(category.id)}
                               </Badge>
                               <ChevronRight className="h-4 w-4 ml-1 opacity-50" />
@@ -129,13 +138,13 @@ export const MenuSidePanel = () => {
                               <DropdownMenuTrigger asChild>
                                 <Button
                                   variant="ghost"
-                                  className="p-0 h-8 w-8 opacity-0 group-hover:opacity-100"
+                                  className="p-0 h-8 w-8 opacity-0 group-hover:opacity-100 rounded-full"
                                 >
                                   <MoreVertical className="h-4 w-4" />
                                   <span className="sr-only">Actions</span>
                                 </Button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="w-40">
+                              <DropdownMenuContent align="end" className="w-40 rounded-xl">
                                 <DropdownMenuItem onClick={() => handleEditCategory(category.id)}>
                                   <Edit className="h-4 w-4 mr-2" />
                                   Edit
@@ -161,4 +170,7 @@ export const MenuSidePanel = () => {
       </ScrollArea>
     </div>
   );
-};
+}
+
+// Import cn helper at the top of the file
+import { cn } from "@/lib/utils";

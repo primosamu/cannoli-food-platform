@@ -17,6 +17,7 @@ import {
   X,
   ShoppingBag,
   Shield,
+  ChevronRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -30,7 +31,11 @@ export function Sidebar() {
   const menuItems = [
     { path: '/', label: translations.dashboard, icon: <BarChart3 className="h-5 w-5" /> },
     { path: '/menus', label: translations.menus, icon: <BookOpen className="h-5 w-5" /> },
-    { path: '/customers', label: translations.customers.charAt(0).toUpperCase() + translations.customers.slice(1), icon: <Users className="h-5 w-5" /> },
+    { 
+      path: '/customers', 
+      label: translations.customers.charAt(0).toUpperCase() + translations.customers.slice(1), 
+      icon: <Users className="h-5 w-5" /> 
+    },
     { path: '/campaigns', label: translations.campaigns, icon: <MessageSquare className="h-5 w-5" /> },
     { path: '/orders', label: translations.orders, icon: <ShoppingBag className="h-5 w-5" /> },
     { path: '/calendar', label: translations.calendar, icon: <Calendar className="h-5 w-5" /> },
@@ -55,76 +60,95 @@ export function Sidebar() {
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-64 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border-r border-gray-200 dark:border-gray-800 shadow-sm transform transition-transform duration-200 ease-in-out lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 w-64 bg-sidebar shadow-medium transform transition-transform duration-300 ease-in-out lg:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="flex flex-col h-full">
-          {/* Navigation */}
-          <nav className="flex-1 overflow-y-auto p-4 pt-8">
-            <div className="mb-6">
-              <h1 className="text-xl font-semibold text-cannoli-800 dark:text-white px-3">Cannoli Food Tech</h1>
+          {/* Logo area */}
+          <div className="p-4 border-b border-border">
+            <div className="flex items-center gap-2">
+              <div className="bg-gradient-to-r from-cannoli-400 to-cannoli-600 p-2 rounded-lg">
+                <ChefHat className="h-6 w-6 text-white" />
+              </div>
+              <h1 className="text-xl font-display font-semibold text-cannoli-800 dark:text-white">Cannoli</h1>
             </div>
-            <ul className="space-y-1">
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 overflow-y-auto py-4 px-3">
+            <ul className="space-y-0.5">
               {menuItems.map((item) => (
                 <li key={item.path}>
                   <Link
                     to={item.path}
                     className={cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+                      "sidebar-item group relative",
                       location.pathname === item.path
-                        ? "bg-cannoli-200 text-cannoli-800 font-medium shadow-sm"
-                        : "text-gray-600 hover:bg-cannoli-100 hover:text-cannoli-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                        ? "sidebar-item-active shadow-soft"
+                        : "text-foreground/70 hover:bg-secondary hover:text-foreground"
                     )}
                   >
                     <span className={cn(
-                      "p-1.5 rounded-md",
+                      "sidebar-item-icon",
                       location.pathname === item.path
                         ? "bg-cannoli-300 text-cannoli-800"
-                        : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+                        : "bg-secondary text-foreground/60"
                     )}>
                       {item.icon}
                     </span>
                     <span>{item.label}</span>
+                    <ChevronRight 
+                      className={cn(
+                        "h-4 w-4 ml-auto opacity-0 transition-opacity", 
+                        location.pathname === item.path ? "opacity-70" : "group-hover:opacity-50"
+                      )} 
+                    />
                   </Link>
                 </li>
               ))}
               
-              <Separator className="my-2" />
+              <Separator className="my-3 opacity-70" />
               
               <li>
                 <Link
                   to="/admin"
                   className={cn(
-                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+                    "sidebar-item group relative",
                     location.pathname === "/admin"
-                      ? "bg-cannoli-200 text-cannoli-800 font-medium shadow-sm"
-                      : "text-gray-600 hover:bg-cannoli-100 hover:text-cannoli-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                      ? "sidebar-item-active shadow-soft"
+                      : "text-foreground/70 hover:bg-secondary hover:text-foreground"
                   )}
                 >
                   <span className={cn(
-                    "p-1.5 rounded-md",
+                    "sidebar-item-icon",
                     location.pathname === "/admin"
                       ? "bg-cannoli-300 text-cannoli-800"
-                      : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+                      : "bg-secondary text-foreground/60"
                   )}>
                     <Shield className="h-5 w-5" />
                   </span>
                   <span>Painel Administrativo</span>
+                  <ChevronRight 
+                    className={cn(
+                      "h-4 w-4 ml-auto opacity-0 transition-opacity", 
+                      location.pathname === "/admin" ? "opacity-70" : "group-hover:opacity-50"
+                    )} 
+                  />
                 </Link>
               </li>
             </ul>
           </nav>
 
           {/* Footer */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+          <div className="p-4 border-t border-border">
             <div className="flex items-center gap-3">
               <div className="rounded-full bg-cannoli-100 p-1.5 dark:bg-gray-800">
                 <ChefHat className="h-5 w-5 text-cannoli-500" />
               </div>
               <div>
                 <p className="text-sm font-medium">Cannoli Food Tech</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{translations.system}</p>
+                <p className="text-xs text-foreground/70">{translations.system}</p>
               </div>
             </div>
           </div>
@@ -133,7 +157,7 @@ export function Sidebar() {
 
       {/* Overlay for mobile */}
       {isOpen && (
-        <div className="fixed inset-0 z-30 bg-black/50 lg:hidden" onClick={() => setIsOpen(false)} />
+        <div className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm lg:hidden" onClick={() => setIsOpen(false)} />
       )}
     </>
   );

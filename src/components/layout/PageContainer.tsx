@@ -10,7 +10,7 @@ export function PageContainer({ children, className, ...props }: PageContainerPr
   return (
     <main 
       className={cn(
-        "flex-1 overflow-auto p-4 lg:p-6 bg-gray-50 dark:bg-gray-900", 
+        "flex-1 overflow-auto p-5 lg:p-6 animate-fade-in", 
         className
       )} 
       {...props}

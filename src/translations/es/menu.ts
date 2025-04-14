@@ -1,4 +1,5 @@
 
+
 import { MenuTranslations } from "../../types/language/menu";
 
 export const menuTranslations: MenuTranslations = {
@@ -38,3 +39,4 @@ export const menuTranslations: MenuTranslations = {
   // Additional image options
   optimizeImage: 'Optimizar Imagen'
 };
+

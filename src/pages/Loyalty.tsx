@@ -1,9 +1,8 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Settings, CreditCard, Award, Users, Plus, Gift, Calendar, ArrowUpDown, UserPlus, Crown, Clock, Filter, PlusMinusIcon } from "lucide-react";
+import { Settings, CreditCard, Award, Users, Plus, Gift, Calendar, ArrowUpDown, UserPlus, Crown, Clock, Filter, PlusCircle, MinusCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -23,60 +22,10 @@ import { CreateRewardDialog } from "@/components/loyalty/CreateRewardDialog";
 import { TransactionFiltersDialog, TransactionFilters } from "@/components/loyalty/TransactionFiltersDialog";
 import { ManualAdjustmentDialog } from "@/components/loyalty/ManualAdjustmentDialog";
 
-// Helper function to get tier color
-const getTierColor = (tier: string) => {
-  switch(tier) {
-    case "platinum": return "bg-purple-100 text-purple-800";
-    case "gold": return "bg-amber-100 text-amber-800";
-    case "silver": return "bg-slate-100 text-slate-800";
-    default: return "bg-stone-100 text-stone-800";
-  }
-};
-
-// Helper function to get transaction type styling
-const getTransactionTypeStyle = (type: string) => {
-  switch(type) {
-    case "earn": return "text-green-600";
-    case "redeem": return "text-red-600";
-    case "expire": return "text-orange-600";
-    case "adjustment": return "text-blue-600";
-    case "referral": return "text-purple-600";
-    default: return "";
-  }
-};
-
-// Helper function to format points with sign
-const formatPoints = (points: number) => {
-  return points > 0 ? `+${points}` : points.toString();
-};
-
-// Helper function to translate tier names
-const translateTierName = (tier: string) => {
-  switch(tier) {
-    case "platinum": return "Platina";
-    case "gold": return "Ouro";
-    case "silver": return "Prata";
-    default: return "Bronze";
-  }
-};
-
-// Helper function to translate transaction types
-const translateTransactionType = (type: string) => {
-  switch(type) {
-    case "earn": return "Ganho";
-    case "redeem": return "Resgate";
-    case "expire": return "Expirado";
-    case "adjustment": return "Ajuste";
-    case "referral": return "Indicação";
-    default: return type;
-  }
-};
-
 const LoyaltyPage = () => {
   const [filterTier, setFilterTier] = useState<string | null>(null);
   const { translations } = useLanguage();
   
-  // Novos estados para os diálogos
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
   const [isAddMemberDialogOpen, setIsAddMemberDialogOpen] = useState(false);
   const [isCreateRewardDialogOpen, setIsCreateRewardDialogOpen] = useState(false);
@@ -84,12 +33,10 @@ const LoyaltyPage = () => {
   const [isManualAdjustmentDialogOpen, setIsManualAdjustmentDialogOpen] = useState(false);
   const [transactionFilters, setTransactionFilters] = useState<TransactionFilters>({});
   
-  // Filter members by tier if a filter is selected
   const filteredMembers = filterTier 
     ? sampleLoyaltyMembers.filter(member => member.tier === filterTier)
     : sampleLoyaltyMembers;
   
-  // Filter transactions based on applied filters
   const filteredTransactions = samplePointTransactions.filter(transaction => {
     let matchesType = true;
     let matchesDateRange = true;
@@ -378,7 +325,6 @@ const LoyaltyPage = () => {
                   </div>
                 ))}
                 
-                {/* Add new reward card - Agora clicável para abrir o diálogo */}
                 <div 
                   className="bg-white border rounded-lg overflow-hidden border-dashed cursor-pointer hover:bg-muted/20 transition-colors"
                   onClick={() => setIsCreateRewardDialogOpen(true)}
@@ -421,12 +367,15 @@ const LoyaltyPage = () => {
                   size="sm"
                   onClick={() => setIsManualAdjustmentDialogOpen(true)}
                 >
-                  <PlusMinusIcon className="h-4 w-4 mr-2" /> Ajuste Manual
+                  <div className="flex mr-2">
+                    <PlusCircle className="h-4 w-4 text-green-500" />
+                    <MinusCircle className="h-4 w-4 text-red-500 -ml-1" />
+                  </div>
+                  Ajuste Manual
                 </Button>
               </div>
             </CardHeader>
             <CardContent>
-              {/* Indicador de filtros ativos */}
               {(transactionFilters.dateRange || transactionFilters.transactionType) && (
                 <div className="mb-4 p-2 rounded-md bg-muted/30 border flex justify-between items-center">
                   <div className="flex items-center gap-1">
@@ -515,7 +464,6 @@ const LoyaltyPage = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Diálogos */}
       <InviteCustomersDialog 
         isOpen={isInviteDialogOpen} 
         onClose={() => setIsInviteDialogOpen(false)} 

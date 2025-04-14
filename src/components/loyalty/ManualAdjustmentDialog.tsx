@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { PlusMinusIcon, Save } from "lucide-react";
+import { Save, PlusCircle, MinusCircle } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { sampleLoyaltyMembers } from "@/data/sampleLoyaltyData";
@@ -73,7 +73,10 @@ export const ManualAdjustmentDialog: React.FC<ManualAdjustmentDialogProps> = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <PlusMinusIcon className="h-5 w-5" />
+            <div className="flex">
+              <PlusCircle className="h-5 w-5 text-green-500" />
+              <MinusCircle className="h-5 w-5 text-red-500 -ml-1" />
+            </div>
             Ajuste Manual de Pontos
           </DialogTitle>
         </DialogHeader>

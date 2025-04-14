@@ -27,4 +27,10 @@ export interface MenuTranslations {
   coffee: string;
   soda: string;
   water: string;
+  // Image management
+  image: string;
+  uploadImage: string;
+  currentImage: string;
+  changeImage: string;
+  removeImage: string;
 }

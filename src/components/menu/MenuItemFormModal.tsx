@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useState } from "react";
 import { useMenu } from "./MenuProvider";
 import {
   Dialog,
@@ -33,6 +34,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Image, ImagePlus, Wand2 } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { toast } from "sonner";
 
 // Basic form schema for demonstration
 const formSchema = z.object({
@@ -44,6 +48,7 @@ const formSchema = z.object({
   featured: z.boolean().optional(),
   prices: z.record(z.number().min(0)),
   platforms: z.record(z.boolean()),
+  imageUrl: z.string().optional(),
 });
 
 export const MenuItemFormModal = () => {
@@ -57,6 +62,12 @@ export const MenuItemFormModal = () => {
     menuItems,
     categories,
   } = useMenu();
+
+  const { translations } = useLanguage();
+  
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isOptimizing, setIsOptimizing] = useState(false);
 
   const selectedItem = selectedItemId
     ? menuItems.find(item => item.id === selectedItemId)
@@ -74,6 +85,7 @@ export const MenuItemFormModal = () => {
           featured: selectedItem.featured || false,
           prices: selectedItem.prices,
           platforms: selectedItem.platforms,
+          imageUrl: selectedItem.imageUrl || "",
         }
       : {
           name: "",
@@ -95,20 +107,27 @@ export const MenuItemFormModal = () => {
             anota_ai: false,
             internal: true,
           },
+          imageUrl: "",
         },
   });
 
   const handleClose = () => {
     setItemModalOpen(false);
     setSelectedItemId(null);
+    setImagePreview(null);
+    setImage(null);
     form.reset();
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    // For demo purposes, we'll simulate uploading the image and getting back a URL
+    const finalImageUrl = imagePreview || values.imageUrl;
+    
     if (selectedItem) {
       updateMenuItem({
         ...selectedItem,
         ...values,
+        imageUrl: finalImageUrl,
       });
     } else {
       addMenuItem({
@@ -120,6 +139,7 @@ export const MenuItemFormModal = () => {
         featured: values.featured || false,
         prices: values.prices,
         platforms: values.platforms,
+        imageUrl: finalImageUrl,
         allergens: [],
         tags: [],
       });
@@ -148,6 +168,33 @@ export const MenuItemFormModal = () => {
     { value: "coming_soon", label: "Coming Soon" },
   ];
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const selectedFile = e.target.files[0];
+      setImage(selectedFile);
+      
+      // Create a preview URL for the selected image
+      const previewUrl = URL.createObjectURL(selectedFile);
+      setImagePreview(previewUrl);
+    }
+  };
+
+  const handleOptimizeWithAI = () => {
+    if (!imagePreview) return;
+    
+    setIsOptimizing(true);
+    
+    // Simulate AI optimization with a timeout
+    setTimeout(() => {
+      // In a real application, we would send the image to an AI service
+      // and get back an optimized version. For now, we'll just pretend.
+      setIsOptimizing(false);
+      toast.success(translations.imageOptimizer.imageOptimized, {
+        description: translations.imageOptimizer.imageOptimizedDesc,
+      });
+    }, 2000);
+  };
+
   return (
     <Dialog open={isItemModalOpen} onOpenChange={setItemModalOpen}>
       <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh]">
@@ -163,10 +210,14 @@ export const MenuItemFormModal = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <Tabs defaultValue="details">
-              <TabsList className="grid grid-cols-3 mb-4">
+              <TabsList className="grid grid-cols-4 mb-4">
                 <TabsTrigger value="details">Details</TabsTrigger>
                 <TabsTrigger value="pricing">Pricing</TabsTrigger>
                 <TabsTrigger value="availability">Availability</TabsTrigger>
+                <TabsTrigger value="image">
+                  <Image className="mr-2 h-4 w-4" />
+                  Image
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="details" className="space-y-4">
@@ -349,6 +400,97 @@ export const MenuItemFormModal = () => {
                       />
                     ))}
                   </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="image" className="space-y-4">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-medium">{translations.imageOptimizer.imageOptimizer}</h3>
+                    {imagePreview && !isOptimizing && (
+                      <Button 
+                        type="button" 
+                        size="sm" 
+                        onClick={handleOptimizeWithAI}
+                        variant="outline"
+                      >
+                        <Wand2 className="h-4 w-4 mr-2" />
+                        {translations.imageOptimizer.optimizeWithAI}
+                      </Button>
+                    )}
+                    {isOptimizing && (
+                      <Button 
+                        type="button" 
+                        size="sm" 
+                        variant="outline" 
+                        disabled
+                      >
+                        <span className="animate-spin mr-2">⏳</span>
+                        {translations.imageOptimizer.optimizing}
+                      </Button>
+                    )}
+                  </div>
+                  
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                    {imagePreview ? (
+                      <div className="space-y-4">
+                        <div className="aspect-[4/3] relative overflow-hidden rounded-md">
+                          <img 
+                            src={imagePreview} 
+                            alt="Preview" 
+                            className="object-cover w-full h-full"
+                          />
+                        </div>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          onClick={() => {
+                            setImagePreview(null);
+                            setImage(null);
+                          }}
+                          className="w-full"
+                        >
+                          {translations.imageOptimizer.upload} {translations.general.other}
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <div className="flex flex-col items-center">
+                          <ImagePlus className="h-10 w-10 text-gray-400" />
+                          <p className="mt-2 text-sm text-gray-500">
+                            {translations.imageOptimizer.uploadImage}
+                          </p>
+                        </div>
+                        <div>
+                          <label htmlFor="image-upload" className="cursor-pointer">
+                            <Button type="button" variant="outline" className="w-full">
+                              {translations.imageOptimizer.upload}
+                            </Button>
+                            <Input
+                              id="image-upload"
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={handleImageChange}
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {(selectedItem?.imageUrl && !imagePreview) && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-medium mb-2">Current Image:</h4>
+                      <div className="aspect-[4/3] relative overflow-hidden rounded-md">
+                        <img 
+                          src={selectedItem.imageUrl} 
+                          alt="Current" 
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>

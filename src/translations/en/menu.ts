@@ -29,4 +29,10 @@ export const menuTranslations: MenuTranslations = {
   coffee: 'Coffee',
   soda: 'Soda',
   water: 'Water',
+  // Image management
+  image: 'Image',
+  uploadImage: 'Upload Image',
+  currentImage: 'Current Image',
+  changeImage: 'Change Image',
+  removeImage: 'Remove Image',
 };

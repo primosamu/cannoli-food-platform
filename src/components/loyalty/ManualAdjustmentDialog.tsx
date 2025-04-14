@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,11 +16,13 @@ import { toast } from "sonner";
 interface ManualAdjustmentDialogProps {
   isOpen: boolean;
   onClose: () => void;
+  selectedMember?: any; // Add the selectedMember prop
 }
 
 export const ManualAdjustmentDialog: React.FC<ManualAdjustmentDialogProps> = ({
   isOpen,
   onClose,
+  selectedMember, // Destructure the prop
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
@@ -28,12 +30,19 @@ export const ManualAdjustmentDialog: React.FC<ManualAdjustmentDialogProps> = ({
   const [points, setPoints] = useState(0);
   const [reason, setReason] = useState("");
   
+  // Initialize selected member ID if one is provided
+  useEffect(() => {
+    if (selectedMember) {
+      setSelectedMemberId(selectedMember.id);
+    }
+  }, [selectedMember]);
+  
   const filteredMembers = sampleLoyaltyMembers.filter(member => 
     member.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     member.customerEmail.toLowerCase().includes(searchQuery.toLowerCase())
   );
   
-  const selectedMember = sampleLoyaltyMembers.find(member => member.id === selectedMemberId);
+  const selectedMemberData = sampleLoyaltyMembers.find(member => member.id === selectedMemberId);
   
   const handleSubmit = () => {
     if (!selectedMemberId || points <= 0 || !reason) {
@@ -43,7 +52,7 @@ export const ManualAdjustmentDialog: React.FC<ManualAdjustmentDialogProps> = ({
     
     const adjustment = {
       memberId: selectedMemberId,
-      memberName: selectedMember?.customerName,
+      memberName: selectedMemberData?.customerName,
       adjustmentType,
       points,
       reason,
@@ -55,7 +64,7 @@ export const ManualAdjustmentDialog: React.FC<ManualAdjustmentDialogProps> = ({
     const pointsWithSign = adjustmentType === "add" ? points : -points;
     const action = adjustmentType === "add" ? "adicionados a" : "subtraídos de";
     
-    toast.success(`${points} pontos ${action} ${selectedMember?.customerName}`);
+    toast.success(`${points} pontos ${action} ${selectedMemberData?.customerName}`);
     onClose();
     resetForm();
   };

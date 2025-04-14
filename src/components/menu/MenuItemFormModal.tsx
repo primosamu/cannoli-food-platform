@@ -189,8 +189,8 @@ export const MenuItemFormModal = () => {
       // In a real application, we would send the image to an AI service
       // and get back an optimized version. For now, we'll just pretend.
       setIsOptimizing(false);
-      toast.success(translations.menu.imageOptimized, {
-        description: translations.menu.imageOptimizedDesc,
+      toast.success(translations.menuTranslations.imageOptimized, {
+        description: translations.menuTranslations.imageOptimizedDesc,
       });
     }, 2000);
   };
@@ -199,11 +199,11 @@ export const MenuItemFormModal = () => {
     <Dialog open={isItemModalOpen} onOpenChange={setItemModalOpen}>
       <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle>{selectedItem ? "Edit Menu Item" : "Add Menu Item"}</DialogTitle>
+          <DialogTitle>{selectedItem ? "Editar Item do Menu" : "Adicionar Item ao Menu"}</DialogTitle>
           <DialogDescription>
             {selectedItem
-              ? "Update the details of this menu item"
-              : "Create a new item for your menu"}
+              ? "Atualize os detalhes deste item do menu"
+              : "Crie um novo item para o seu cardápio"}
           </DialogDescription>
         </DialogHeader>
 
@@ -211,12 +211,12 @@ export const MenuItemFormModal = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <Tabs defaultValue="details">
               <TabsList className="grid grid-cols-4 mb-4">
-                <TabsTrigger value="details">Details</TabsTrigger>
-                <TabsTrigger value="pricing">Pricing</TabsTrigger>
-                <TabsTrigger value="availability">Availability</TabsTrigger>
+                <TabsTrigger value="details">Detalhes</TabsTrigger>
+                <TabsTrigger value="pricing">Preços</TabsTrigger>
+                <TabsTrigger value="availability">Disponibilidade</TabsTrigger>
                 <TabsTrigger value="image">
                   <Image className="mr-2 h-4 w-4" />
-                  {translations.menu.image}
+                  {translations.menuTranslations.image}
                 </TabsTrigger>
               </TabsList>
 
@@ -226,9 +226,9 @@ export const MenuItemFormModal = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel>Nome</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter menu item name" {...field} />
+                        <Input placeholder="Digite o nome do item" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -240,9 +240,9 @@ export const MenuItemFormModal = () => {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>Descrição</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Describe the menu item" {...field} />
+                        <Textarea placeholder="Descreva o item do menu" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -254,14 +254,14 @@ export const MenuItemFormModal = () => {
                   name="category"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Category</FormLabel>
+                      <FormLabel>Categoria</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a category" />
+                            <SelectValue placeholder="Selecione uma categoria" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -284,7 +284,7 @@ export const MenuItemFormModal = () => {
                     render={({ field }) => (
                       <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 w-1/2">
                         <div>
-                          <FormLabel>Active</FormLabel>
+                          <FormLabel>Ativo</FormLabel>
                         </div>
                         <FormControl>
                           <Switch
@@ -302,7 +302,7 @@ export const MenuItemFormModal = () => {
                     render={({ field }) => (
                       <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 w-1/2">
                         <div>
-                          <FormLabel>Featured</FormLabel>
+                          <FormLabel>Destaque</FormLabel>
                         </div>
                         <FormControl>
                           <Switch
@@ -325,7 +325,7 @@ export const MenuItemFormModal = () => {
                       name={`prices.${menuType.id}`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{menuType.label} Price</FormLabel>
+                          <FormLabel>Preço {menuType.label}</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <span className="absolute left-3 top-2.5">R$</span>
@@ -360,7 +360,7 @@ export const MenuItemFormModal = () => {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select status" />
+                            <SelectValue placeholder="Selecione o status" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -377,7 +377,7 @@ export const MenuItemFormModal = () => {
                 />
 
                 <div>
-                  <h3 className="text-sm font-medium mb-3">Available on Platforms</h3>
+                  <h3 className="text-sm font-medium mb-3">Disponível nas Plataformas</h3>
                   <div className="space-y-3">
                     {platforms.map((platform) => (
                       <FormField
@@ -406,7 +406,7 @@ export const MenuItemFormModal = () => {
               <TabsContent value="image" className="space-y-4">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium">{translations.menu.image}</h3>
+                    <h3 className="text-sm font-medium">{translations.menuTranslations.image}</h3>
                     {imagePreview && !isOptimizing && (
                       <Button 
                         type="button" 
@@ -415,7 +415,7 @@ export const MenuItemFormModal = () => {
                         variant="outline"
                       >
                         <Wand2 className="h-4 w-4 mr-2" />
-                        {translations.menu.optimizeWithAI}
+                        {translations.menuTranslations.optimizeWithAI}
                       </Button>
                     )}
                     {isOptimizing && (
@@ -426,7 +426,7 @@ export const MenuItemFormModal = () => {
                         disabled
                       >
                         <span className="animate-spin mr-2">⏳</span>
-                        {translations.menu.optimizing}
+                        {translations.menuTranslations.optimizing}
                       </Button>
                     )}
                   </div>
@@ -450,7 +450,7 @@ export const MenuItemFormModal = () => {
                           }}
                           className="w-full"
                         >
-                          {translations.menu.upload}
+                          {translations.menuTranslations.upload}
                         </Button>
                       </div>
                     ) : (
@@ -458,13 +458,13 @@ export const MenuItemFormModal = () => {
                         <div className="flex flex-col items-center">
                           <ImagePlus className="h-10 w-10 text-gray-400" />
                           <p className="mt-2 text-sm text-gray-500">
-                            {translations.menu.uploadImage}
+                            {translations.menuTranslations.uploadImage}
                           </p>
                         </div>
                         <div>
                           <label htmlFor="image-upload" className="cursor-pointer">
                             <Button type="button" variant="outline" className="w-full">
-                              {translations.menu.upload}
+                              {translations.menuTranslations.upload}
                             </Button>
                             <Input
                               id="image-upload"
@@ -481,7 +481,7 @@ export const MenuItemFormModal = () => {
 
                   {(selectedItem?.imageUrl && !imagePreview) && (
                     <div className="mt-4">
-                      <h4 className="text-sm font-medium mb-2">{translations.menu.currentImage}:</h4>
+                      <h4 className="text-sm font-medium mb-2">{translations.menuTranslations.currentImage}:</h4>
                       <div className="aspect-[4/3] relative overflow-hidden rounded-md">
                         <img 
                           src={selectedItem.imageUrl} 
@@ -497,10 +497,10 @@ export const MenuItemFormModal = () => {
 
             <DialogFooter>
               <Button variant="outline" type="button" onClick={handleClose}>
-                Cancel
+                Cancelar
               </Button>
               <Button type="submit">
-                {selectedItem ? "Update Item" : "Add Item"}
+                {selectedItem ? "Atualizar Item" : "Adicionar Item"}
               </Button>
             </DialogFooter>
           </form>

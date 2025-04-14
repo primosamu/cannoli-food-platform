@@ -2,9 +2,12 @@
 import React, { createContext, useContext } from 'react';
 import { Translations } from '../types/language';
 import ptTranslations from '../translations/pt';
+import { menuTranslations } from '../translations/pt/menu';
 
 interface LanguageContextProps {
-  translations: Translations;
+  translations: {
+    menuTranslations: typeof menuTranslations;
+  };
 }
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
@@ -18,8 +21,10 @@ export const useLanguage = () => {
 };
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Fixed to Portuguese
-  const translations = ptTranslations;
+  // Fixed to Portuguese translations
+  const translations = {
+    menuTranslations: menuTranslations,
+  };
 
   const value = {
     translations,

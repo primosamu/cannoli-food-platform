@@ -1,3 +1,4 @@
+
 import { CampaignTranslations } from "../../types/language/campaign";
 
 export const campaignTranslations: CampaignTranslations = {
@@ -69,5 +70,49 @@ export const campaignTranslations: CampaignTranslations = {
   filter: 'Filter',
   validity: 'Validity',
   expiryDefault: 'Default validity: 30 days from today',
-  createNewCouponInstead: 'Create new coupon instead'
-};
+  createNewCouponInstead: 'Create new coupon instead',
+
+  // Campaign Settings page
+  audienceTargeting: 'Audience Targeting',
+  chooseAudience: 'Choose which customers will receive this campaign',
+  channelSelection: 'Channel Selection',
+  chooseChannels: 'Choose which channels to use for this campaign',
+  incentivesOffers: 'Incentives & Offers',
+  addIncentives: 'Add promotional incentives to your campaign',
+  scheduling: 'Scheduling',
+  setDeliveryTime: 'Set when your campaign should be delivered',
+  allCustomers: 'All customers',
+  customerSegment: 'Customer segment',
+  customCriteria: 'Custom criteria',
+  selectSegment: 'Select a customer segment',
+  inactiveCustomers: 'Inactive Customers',
+  loyalCustomers: 'Loyal Customers (5+ orders)',
+  newCustomers: 'New Customers (1-2 orders)',
+  highValueCustomers: 'High-Value Customers ($100+)',
+  inactiveDays: 'Inactive for at least:',
+  orderCount: 'Order Count',
+  lastOrder: 'Last Order Date',
+  totalSpent: 'Total Amount Spent',
+  foodPreference: 'Food Preference',
+  estimatedAudience: 'Estimated audience',
+  customers: 'customers',
+  noIncentive: 'No incentive',
+  addCoupon: 'Add coupon',
+  selectCoupon: 'Select existing coupon',
+  addLoyaltyPoints: 'Add loyalty points',
+  pointsToAward: 'Points to award:',
+  sendImmediately: 'Send immediately',
+  scheduleForLater: 'Schedule for later',
+  date: 'Date',
+  time: 'Time',
+  optimizeDelivery: 'Optimize delivery time',
+  optimizeDescription: 'Send at best time for each customer based on their past engagement',
+  continueToCampaign: 'Continue to Campaign Editor',
+  backToTemplates: 'Back to Templates',
+  campaignPreview: 'Preview',
+  previewDescription: 'See how your campaign will be displayed',
+  directMessaging: 'Direct messaging with 98% open rates',
+  textMessaging: 'Text messaging for important updates',
+  detailedMessaging: 'Detailed messaging with images and formatting',
+  paidAds: 'Paid ads on social media platforms',
+}

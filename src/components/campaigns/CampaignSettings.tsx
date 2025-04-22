@@ -145,10 +145,10 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
           <p className="text-muted-foreground mt-1">{template.description}</p>
           {template.category && (
             <Badge variant="outline" className="mt-2">
-              {template.category === 'customer-recovery' && 'Customer Recovery'}
-              {template.category === 'loyalty' && 'Customer Loyalty'}
-              {template.category === 'consumption-pattern' && 'Consumption Pattern'}
-              {template.category === 'channel-migration' && 'Channel Migration'}
+              {template.category === 'customer-recovery' && translations['customer-recovery']}
+              {template.category === 'loyalty' && translations['loyalty']}
+              {template.category === 'consumption-pattern' && translations['consumption-pattern']}
+              {template.category === 'channel-migration' && translations['channel-migration']}
             </Badge>
           )}
         </div>
@@ -160,10 +160,10 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5" />
-              Audience Targeting
+              {translations.audienceTargeting || "Audience Targeting"}
             </CardTitle>
             <CardDescription>
-              Choose which customers will receive this campaign
+              {translations.chooseAudience || "Choose which customers will receive this campaign"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -174,12 +174,12 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="all" id="all" />
-                <Label htmlFor="all" className="cursor-pointer">All customers</Label>
+                <Label htmlFor="all" className="cursor-pointer">{translations.allCustomers || "All customers"}</Label>
               </div>
               
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="segment" id="segment" />
-                <Label htmlFor="segment" className="cursor-pointer">Customer segment</Label>
+                <Label htmlFor="segment" className="cursor-pointer">{translations.customerSegment || "Customer segment"}</Label>
               </div>
               
               {audienceType === "segment" && (
@@ -189,21 +189,21 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
                     onValueChange={setSelectedSegment}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a customer segment" />
+                      <SelectValue placeholder={translations.selectSegment || "Select a customer segment"} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="inactive">Inactive Customers ({inactiveDays} days)</SelectItem>
-                        <SelectItem value="loyal">Loyal Customers (5+ orders)</SelectItem>
-                        <SelectItem value="new">New Customers (1-2 orders)</SelectItem>
-                        <SelectItem value="high-value">High-Value Customers ($100+)</SelectItem>
+                        <SelectItem value="inactive">{translations.inactiveCustomers || "Inactive Customers"} ({inactiveDays} {translations.inactiveDays ? translations.inactiveDays.split(':')[0].toLowerCase() : "days"})</SelectItem>
+                        <SelectItem value="loyal">{translations.loyalCustomers || "Loyal Customers (5+ orders)"}</SelectItem>
+                        <SelectItem value="new">{translations.newCustomers || "New Customers (1-2 orders)"}</SelectItem>
+                        <SelectItem value="high-value">{translations.highValueCustomers || "High-Value Customers ($100+)"}</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
                   
                   {(selectedSegment === "inactive" || template?.category === 'customer-recovery') && (
                     <div className="flex items-center gap-2 mt-2">
-                      <Label htmlFor="inactive-days">Inactive for at least:</Label>
+                      <Label htmlFor="inactive-days">{translations.inactiveDays || "Inactive for at least:"}</Label>
                       <Input 
                         id="inactive-days" 
                         type="number" 
@@ -211,7 +211,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
                         value={inactiveDays}
                         onChange={(e) => setInactiveDays(e.target.value)}
                       />
-                      <span className="text-sm">days</span>
+                      <span className="text-sm">{translations.inactiveDays ? translations.inactiveDays.split(':')[0].toLowerCase() : "days"}</span>
                     </div>
                   )}
                 </div>
@@ -219,21 +219,21 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
               
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="custom" id="custom" />
-                <Label htmlFor="custom" className="cursor-pointer">Custom criteria</Label>
+                <Label htmlFor="custom" className="cursor-pointer">{translations.customCriteria || "Custom criteria"}</Label>
               </div>
               
               {audienceType === "custom" && (
                 <div className="pl-6 space-y-3">
                   <Select value={selectedSegment} onValueChange={setSelectedSegment}>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select criteria type" />
+                      <SelectValue placeholder={translations.selectSegment || "Select criteria type"} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="order-count">Order Count</SelectItem>
-                        <SelectItem value="last-order">Last Order Date</SelectItem>
-                        <SelectItem value="total-spent">Total Amount Spent</SelectItem>
-                        <SelectItem value="food-preference">Food Preference</SelectItem>
+                        <SelectItem value="order-count">{translations.orderCount || "Order Count"}</SelectItem>
+                        <SelectItem value="last-order">{translations.lastOrder || "Last Order Date"}</SelectItem>
+                        <SelectItem value="total-spent">{translations.totalSpent || "Total Amount Spent"}</SelectItem>
+                        <SelectItem value="food-preference">{translations.foodPreference || "Food Preference"}</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -243,7 +243,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
             
             <div className="mt-4">
               <Badge variant="secondary" className="bg-muted/60 hover:bg-muted text-muted-foreground">
-                Estimated audience: {getEstimatedAudience()} customers
+                {translations.estimatedAudience || "Estimated audience"}: {getEstimatedAudience()} {translations.customers || "customers"}
               </Badge>
             </div>
           </CardContent>
@@ -254,10 +254,10 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Target className="h-5 w-5" />
-              Channel Selection
+              {translations.channelSelection || "Channel Selection"}
             </CardTitle>
             <CardDescription>
-              Choose which channels to use for this campaign
+              {translations.chooseChannels || "Choose which channels to use for this campaign"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -275,7 +275,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
                     WhatsApp
                   </Label>
                   <p className="text-sm text-muted-foreground">
-                    Direct messaging with 98% open rates
+                    {translations.directMessaging || "Direct messaging with 98% open rates"}
                   </p>
                 </div>
               </div>
@@ -293,7 +293,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
                     SMS
                   </Label>
                   <p className="text-sm text-muted-foreground">
-                    Text messaging for important updates
+                    {translations.textMessaging || "Text messaging for important updates"}
                   </p>
                 </div>
               </div>
@@ -311,28 +311,12 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
                     Email
                   </Label>
                   <p className="text-sm text-muted-foreground">
-                    Detailed messaging with images and formatting
+                    {translations.detailedMessaging || "Detailed messaging with images and formatting"}
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-start space-x-3">
-                <Checkbox 
-                  id="channel-paid" 
-                  checked={selectedChannels.includes("paid")}
-                  onCheckedChange={() => handleChannelToggle("paid")}
-                  className="mt-1"
-                />
-                <div className="grid gap-1.5">
-                  <Label htmlFor="channel-paid" className="font-medium flex items-center">
-                    <Target className="h-4 w-4 mr-2 text-purple-600" />
-                    Paid Advertising
-                  </Label>
-                  <p className="text-sm text-muted-foreground">
-                    Paid ads on social media platforms
-                  </p>
-                </div>
-              </div>
+              {/* Removed the Paid Traffic option as per requirements */}
             </div>
           </CardContent>
         </Card>
@@ -342,10 +326,10 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Tags className="h-5 w-5" />
-              Incentives & Offers
+              {translations.incentivesOffers || "Incentives & Offers"}
             </CardTitle>
             <CardDescription>
-              Add promotional incentives to your campaign
+              {translations.addIncentives || "Add promotional incentives to your campaign"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -356,19 +340,19 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="none" id="no-incentive" />
-                <Label htmlFor="no-incentive">No incentive</Label>
+                <Label htmlFor="no-incentive">{translations.noIncentive || "No incentive"}</Label>
               </div>
               
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="coupon" id="coupon" />
-                <Label htmlFor="coupon">Add coupon</Label>
+                <Label htmlFor="coupon">{translations.addCoupon || "Add coupon"}</Label>
               </div>
               
               {incentiveType === "coupon" && (
                 <div className="pl-6 space-y-3">
                   <Select defaultValue={template?.category === 'customer-recovery' ? "welcome-back-10" : undefined}>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select existing coupon" />
+                      <SelectValue placeholder={translations.selectCoupon || "Select existing coupon"} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
@@ -395,13 +379,13 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
               
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="loyalty" id="loyalty" />
-                <Label htmlFor="loyalty">Add loyalty points</Label>
+                <Label htmlFor="loyalty">{translations.addLoyaltyPoints || "Add loyalty points"}</Label>
               </div>
               
               {incentiveType === "loyalty" && (
                 <div className="pl-6 space-y-3">
                   <div className="flex items-center gap-2">
-                    <Label htmlFor="points-amount">Points to award:</Label>
+                    <Label htmlFor="points-amount">{translations.pointsToAward || "Points to award:"}</Label>
                     <Input 
                       type="number" 
                       id="points-amount"
@@ -420,10 +404,10 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
-              Scheduling
+              {translations.scheduling || "Scheduling"}
             </CardTitle>
             <CardDescription>
-              Set when your campaign should be delivered
+              {translations.setDeliveryTime || "Set when your campaign should be delivered"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -431,17 +415,17 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
               <RadioGroup defaultValue="now" className="space-y-4">
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="now" id="send-now" />
-                  <Label htmlFor="send-now">Send immediately</Label>
+                  <Label htmlFor="send-now">{translations.sendImmediately || "Send immediately"}</Label>
                 </div>
                 
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="scheduled" id="scheduled" />
-                  <Label htmlFor="scheduled">Schedule for later</Label>
+                  <Label htmlFor="scheduled">{translations.scheduleForLater || "Schedule for later"}</Label>
                 </div>
                 
                 <div className="pl-6 grid grid-cols-2 gap-3">
                   <div className="space-y-2">
-                    <Label htmlFor="date">Date</Label>
+                    <Label htmlFor="date">{translations.date || "Date"}</Label>
                     <Input 
                       type="date" 
                       id="date"
@@ -450,7 +434,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="time">Time</Label>
+                    <Label htmlFor="time">{translations.time || "Time"}</Label>
                     <Input 
                       type="time" 
                       id="time"
@@ -466,10 +450,10 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
                   <Checkbox id="optimize-time" />
                   <div className="grid gap-1.5">
                     <Label htmlFor="optimize-time" className="font-medium">
-                      Optimize delivery time
+                      {translations.optimizeDelivery || "Optimize delivery time"}
                     </Label>
                     <p className="text-sm text-muted-foreground">
-                      Send at best time for each customer based on their past engagement
+                      {translations.optimizeDescription || "Send at best time for each customer based on their past engagement"}
                     </p>
                   </div>
                 </div>
@@ -483,7 +467,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       
       <div className="flex justify-end">
         <Button onClick={handleContinue} className="flex items-center gap-2">
-          Continue to Campaign Editor
+          {translations.continueToCampaign || "Continue to Campaign Editor"}
           <ArrowRightCircle className="h-4 w-4" />
         </Button>
       </div>
@@ -492,7 +476,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       <Dialog open={newCouponDialogOpen} onOpenChange={setNewCouponDialogOpen}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{translations.createNewCoupon || "Create New Coupon"}</DialogTitle>
+            <DialogTitle>{translations.createNewCouponInstead || "Create New Coupon"}</DialogTitle>
             <DialogDescription>
               {translations.fillOutCouponForm || "Fill out the form to create a new promotional coupon."}
             </DialogDescription>

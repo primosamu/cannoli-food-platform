@@ -1,3 +1,4 @@
+
 export interface CampaignTranslations {
   // Campaign related
   presetCampaigns: string;
@@ -68,4 +69,48 @@ export interface CampaignTranslations {
   validity: string;
   expiryDefault: string;
   createNewCouponInstead?: string;
+
+  // Campaign Settings page
+  audienceTargeting: string;
+  chooseAudience: string;
+  channelSelection: string;
+  chooseChannels: string;
+  incentivesOffers: string;
+  addIncentives: string;
+  scheduling: string;
+  setDeliveryTime: string;
+  allCustomers: string;
+  customerSegment: string;
+  customCriteria: string;
+  selectSegment: string;
+  inactiveCustomers: string;
+  loyalCustomers: string;
+  newCustomers: string;
+  highValueCustomers: string;
+  inactiveDays: string;
+  orderCount: string;
+  lastOrder: string;
+  totalSpent: string;
+  foodPreference: string;
+  estimatedAudience: string;
+  customers: string;
+  noIncentive: string;
+  addCoupon: string;
+  selectCoupon: string;
+  addLoyaltyPoints: string;
+  pointsToAward: string;
+  sendImmediately: string;
+  scheduleForLater: string;
+  date: string;
+  time: string;
+  optimizeDelivery: string;
+  optimizeDescription: string;
+  continueToCampaign: string;
+  backToTemplates: string;
+  campaignPreview: string;
+  previewDescription: string;
+  directMessaging: string;
+  textMessaging: string;
+  detailedMessaging: string;
+  paidAds: string;
 }

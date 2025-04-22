@@ -1,4 +1,3 @@
-
 export interface CampaignTranslations {
   // Campaign related
   presetCampaigns: string;
@@ -35,5 +34,38 @@ export interface CampaignTranslations {
   'customer-recovery': string;
   'consumption-pattern': string;
   'channel-migration': string;
+  'loyalty': string;
+  
+  // Message types
+  messaging: string;
+  paidTraffic: string;
+  messagingDescription: string;
+  paidTrafficDescription: string;
+  
+  // Audience information
+  audienceSize: string;
+  audienceSegment: string;
+  audienceType: string;
+  contacts: string;
+  
+  // Template types
+  whatsappTemplates: string;
+  smsTemplates: string;
+  emailTemplates: string;
+  rcsTemplates: string;
+  paidTemplates: string;
+  
+  // Other required properties
   allStores: string;
+  use: string;
+  edit: string;
+  view: string;
+  send: string;
+  cancel: string;
+  save: string;
+  delete: string;
+  filter: string;
+  validity: string;
+  expiryDefault: string;
+  createNewCouponInstead?: string;
 }

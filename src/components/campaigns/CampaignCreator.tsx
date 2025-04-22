@@ -41,7 +41,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { CampaignTemplate } from "@/types/campaign";
+import { CampaignTemplate, CampaignType } from "@/types/campaign";
 import AudienceInfo from "./AudienceInfo";
 
 const formSchema = z.object({
@@ -91,7 +91,7 @@ interface CampaignCreatorProps {
 
 const CampaignCreator: React.FC<CampaignCreatorProps> = ({ initialTemplate, segmentName, segmentType }) => {
   const [campaignName, setCampaignName] = useState(initialTemplate?.name || "");
-  const [campaignType, setCampaignType] = useState(initialTemplate?.type || "email");
+  const [campaignType, setCampaignType] = useState<CampaignType>(initialTemplate?.type || "email");
   const [campaignSubject, setCampaignSubject] = useState(initialTemplate?.subject || "");
   const [campaignContent, setCampaignContent] = useState(initialTemplate?.content || "");
   const [isScheduled, setIsScheduled] = useState(false);
@@ -100,7 +100,6 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({ initialTemplate, segm
   const { toast } = useToast();
   const { translations } = useLanguage();
 
-  // Initialize React Hook Form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -138,7 +137,7 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({ initialTemplate, segm
     setCampaignName(e.target.value);
   };
 
-  const handleTypeChange = (value: string) => {
+  const handleTypeChange = (value: CampaignType) => {
     setCampaignType(value);
   };
 
@@ -198,7 +197,10 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({ initialTemplate, segm
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Tipo de Campanha</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={(value: CampaignType) => {
+                        field.onChange(value);
+                        handleTypeChange(value);
+                      }} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione o tipo" />
@@ -281,9 +283,9 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({ initialTemplate, segm
                   audienceSize={initialTemplate.audienceSize}
                   audienceSegmentId={initialTemplate.audienceSegmentId}
                   translations={{
-                    audienceSize: translations.audienceSize,
-                    contacts: translations.contacts,
-                    audienceSegment: translations.audienceSegment,
+                    audienceSize: "Tamanho da audiência",
+                    contacts: "contatos",
+                    audienceSegment: "Segmento"
                   }}
                 />
               )}

@@ -33,4 +33,3 @@ const AudienceInfo: React.FC<AudienceInfoProps> = ({
 };
 
 export default AudienceInfo;
-

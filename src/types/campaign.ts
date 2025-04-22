@@ -9,9 +9,20 @@ export type CampaignTemplate = {
   content: string;
   description: string;
   imageUrl?: string;
-  platform?: string; // For paid traffic (meta, google, etc)
-  category?: string; // Added category field
-  inactiveDays?: string; // New field: for customer recovery campaigns
+  platform?: string; // Para tráfego pago (meta, google, etc)
+  category?: string;
+  inactiveDays?: string;
+  audienceType?: 'all' | 'segment' | 'custom'; // Tipo de audiência
+  audienceSegmentId?: string; // ID do segmento de audiência
+  audienceSize?: number; // Tamanho estimado da audiência
+  targetAudience?: {
+    age?: string;
+    location?: string;
+    interests?: string[];
+    keywords?: string[];
+    remarketing?: boolean;
+    daysVisited?: number;
+  }; // Configuração específica para tráfego pago
 };
 
 export type CampaignData = {
@@ -26,22 +37,30 @@ export type CampaignData = {
   audienceSize?: number;
   createdAt: Date;
   updatedAt: Date;
-  menuIds?: string[];  // Associated menu IDs for this campaign
-  deliveryPlatforms?: string[];  // Associated delivery platforms
-  platform?: string; // For paid traffic (meta, google, etc)
+  menuIds?: string[];  // IDs dos menus associados a esta campanha
+  deliveryPlatforms?: string[];  // Plataformas de entrega associadas
+  platform?: string; // Para tráfego pago (meta, google, etc)
   incentiveType?: 'coupon' | 'loyalty' | 'none';
   couponId?: string;
   loyaltyPoints?: number;
   audienceType?: 'all' | 'segment' | 'custom';
   audienceSegmentId?: string;
   channels: CampaignType[];
-  inactiveDays?: string; // New field: for customer recovery campaigns
-  // Added fields for tracking campaign performance
+  inactiveDays?: string; // Campo para campanhas de recuperação de clientes
+  // Campos para rastreamento de desempenho da campanha
   deliveredCount?: number;
   openedCount?: number;
   clickedCount?: number;
   failedCount?: number;
   reportData?: CampaignReportData;
+  targetAudience?: {
+    age?: string;
+    location?: string;
+    interests?: string[];
+    keywords?: string[];
+    remarketing?: boolean;
+    daysVisited?: number;
+  }; // Configuração específica para tráfego pago
 };
 
 export interface CampaignEvent {
@@ -54,7 +73,7 @@ export interface CampaignEvent {
   type: CampaignType;
 }
 
-// New interfaces for campaign reporting
+// Interfaces para relatórios de campanha
 export interface CampaignReportData {
   totalRecipients: number;
   deliveredCount: number;

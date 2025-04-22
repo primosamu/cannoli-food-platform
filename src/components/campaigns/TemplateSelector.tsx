@@ -1,17 +1,20 @@
+
 import React, { useState, useEffect } from "react";
-import { campaignTemplates } from "@/data/campaignTemplates";
+import { campaignTemplates, getTemplatesByType, getMessagingTemplates, getPaidTrafficTemplates } from "@/data/campaignTemplates";
 import { CampaignTemplate, CampaignType } from "@/types/campaign";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Mail, PercentCircle, MessageCircle } from "lucide-react";
+import { MessageSquare, Mail, PercentCircle, MessageCircle, Users, Tag } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getAllCategories } from "@/data/campaignTemplates";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Badge } from "@/components/ui/badge";
 
 interface TemplateSelectorProps {
   campaignType: CampaignType;
   categoryFilter?: string;
-  onSelect: (content: string, subject?: string, imageUrl?: string) => void;
+  onSelect: (template: CampaignTemplate) => void;
 }
 
 const TemplateSelector: React.FC<TemplateSelectorProps> = ({ 
@@ -21,6 +24,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [filteredTemplates, setFilteredTemplates] = useState<CampaignTemplate[]>([]);
+  const { translations } = useLanguage();
   
   useEffect(() => {
     let templates = campaignTemplates.filter(template => template.type === campaignType);
@@ -57,32 +61,28 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   const getTemplateTypeName = (type: CampaignType) => {
     switch (type) {
       case "whatsapp":
-        return "WhatsApp";
+        return translations.whatsappTemplates || "Templates de WhatsApp";
       case "sms":
-        return "SMS";
+        return translations.smsTemplates || "Templates de SMS";
       case "rcs":
-        return "RCS";
+        return translations.rcsTemplates || "Templates de RCS";
       case "email":
-        return "Email";
+        return translations.emailTemplates || "Templates de Email";
       case "paid":
-        return "Tráfego Pago";
+        return translations.paidTemplates || "Templates de Tráfego Pago";
       default:
-        return "Desconhecido";
+        return "Desconhecidos";
     }
   };
 
   const handleSelectTemplate = (template: CampaignTemplate) => {
-    onSelect(template.content, template.subject, template.imageUrl);
+    onSelect(template);
   };
 
   const getCategoryDisplayName = (category: string): string => {
-    switch(category) {
-      case 'customer-recovery': return 'Recuperação de Clientes';
-      case 'loyalty': return 'Fidelização de Clientes';
-      case 'channel-migration': return 'Migração de Canal';
-      case 'consumption-pattern': return 'Padrão de Consumo';
-      default: return category.charAt(0).toUpperCase() + category.slice(1);
-    }
+    const categoryKey = category as keyof typeof translations;
+    return translations[categoryKey] || 
+           category.charAt(0).toUpperCase() + category.slice(1);
   };
 
   return (
@@ -108,7 +108,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       <ScrollArea className="h-80 rounded-md border">
         <div className="p-4">
           <h3 className="mb-4 text-sm font-medium">
-            Templates de {getTemplateTypeName(campaignType)}
+            {getTemplateTypeName(campaignType)}
             {selectedCategory && ` - ${getCategoryDisplayName(selectedCategory)}`}
             {categoryFilter && ` - ${getCategoryDisplayName(categoryFilter)}`}
           </h3>
@@ -127,10 +127,32 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                         variant="outline"
                         onClick={() => handleSelectTemplate(template)}
                       >
-                        Usar
+                        {translations.use || "Usar"}
                       </Button>
                     </div>
                     <CardDescription>{template.description}</CardDescription>
+                    
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {template.audienceSize && (
+                        <Badge variant="outline" className="flex items-center gap-1 text-xs">
+                          <Users className="h-3 w-3" />
+                          {template.audienceSize} {translations.contacts || "contatos"}
+                        </Badge>
+                      )}
+                      
+                      {template.audienceSegmentId && (
+                        <Badge variant="outline" className="flex items-center gap-1 text-xs">
+                          <Tag className="h-3 w-3" />
+                          {template.audienceSegmentId}
+                        </Badge>
+                      )}
+                      
+                      {template.platform && (
+                        <Badge variant="outline" className="text-xs">
+                          {template.platform}
+                        </Badge>
+                      )}
+                    </div>
                   </CardHeader>
                   <CardContent className="p-4 pt-2">
                     <p className="text-xs text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis">

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -26,12 +27,13 @@ import {
 import { CampaignTemplate, CampaignType } from "@/types/campaign";
 import CampaignPreview from "./CampaignPreview";
 import TemplateSelector from "./TemplateSelector";
-import { Wand2, Tag, Clock } from "lucide-react";
+import { Wand2, Tag, Clock, Users } from "lucide-react";
 import { 
-  getTemplatesByCategory, 
+  getTemplatesByCategory,
   getAllCategories 
 } from "@/data/campaignTemplates";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Nome da campanha é obrigatório" }),
@@ -40,6 +42,8 @@ const formSchema = z.object({
   content: z.string().min(5, { message: "Conteúdo é obrigatório" }),
   imageUrl: z.string().optional(),
   category: z.string().optional(),
+  audienceType: z.enum(["all", "segment", "custom"] as const).optional(),
+  audienceSegmentId: z.string().optional(),
 });
 
 interface CampaignCreatorProps {
@@ -67,16 +71,18 @@ const CampaignCreator = ({
   const [recommendedTemplates, setRecommendedTemplates] = useState<CampaignTemplate[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [campaignName, setCampaignName] = useState<string>("");
+  const { translations } = useLanguage();
   
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: segmentName ? `Campaign for ${segmentName}` : "",
+      name: segmentName ? `Campanha para ${segmentName}` : "",
       type: "whatsapp",
       content: "",
       category: "",
+      audienceType: "all",
     },
   });
 
@@ -108,8 +114,8 @@ const CampaignCreator = ({
   useEffect(() => {
     if (initialTemplate) {
       const suggestedName = initialTemplate.name ? 
-        `${initialTemplate.name} Campaign` : 
-        "New Campaign";
+        `Campanha: ${initialTemplate.name}` : 
+        "Nova Campanha";
       
       setCampaignName(suggestedName);
       form.setValue("name", suggestedName);
@@ -127,6 +133,14 @@ const CampaignCreator = ({
       if (initialTemplate.category) {
         form.setValue("category", initialTemplate.category);
         setSelectedCategory(initialTemplate.category);
+      }
+
+      if (initialTemplate.audienceType) {
+        form.setValue("audienceType", initialTemplate.audienceType);
+      }
+
+      if (initialTemplate.audienceSegmentId) {
+        form.setValue("audienceSegmentId", initialTemplate.audienceSegmentId);
       }
       
       setPreviewData({
@@ -156,6 +170,7 @@ const CampaignCreator = ({
   }, [initialTemplate, form]);
 
   const campaignType = form.watch("type");
+  const audienceType = form.watch("audienceType");
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     toast({
@@ -165,17 +180,38 @@ const CampaignCreator = ({
     console.log(values);
   };
 
-  const handleTemplateSelect = (content: string, subject?: string, imageUrl?: string) => {
-    form.setValue("content", content);
-    if (subject) form.setValue("subject", subject);
-    if (imageUrl) form.setValue("imageUrl", imageUrl);
+  const handleTemplateSelect = (template: CampaignTemplate) => {
+    form.setValue("content", template.content);
+    form.setValue("type", template.type);
+    
+    if (template.subject) form.setValue("subject", template.subject);
+    if (template.imageUrl) form.setValue("imageUrl", template.imageUrl);
+    if (template.audienceType) form.setValue("audienceType", template.audienceType);
+    if (template.audienceSegmentId) form.setValue("audienceSegmentId", template.audienceSegmentId);
     
     setPreviewData({
-      content,
-      subject,
-      imageUrl,
-      type: form.getValues("type"),
+      content: template.content,
+      subject: template.subject,
+      imageUrl: template.imageUrl,
+      type: template.type,
     });
+
+    // Personalize o conteúdo com datas padrão
+    const today = new Date();
+    const expiryDate = new Date(today);
+    expiryDate.setDate(today.getDate() + 30);
+    const expiryDateStr = expiryDate.toLocaleDateString('pt-BR');
+    
+    let personalizedContent = template.content
+      .replace(/{{date}}/g, expiryDateStr)
+      .replace(/{{discount}}/g, "15")
+      .replace(/{{code}}/g, "WELCOME15");
+    
+    form.setValue("content", personalizedContent);
+    setPreviewData(prev => ({
+      ...prev,
+      content: personalizedContent
+    }));
   };
 
   const handleOptimizeWithAI = () => {
@@ -216,14 +252,6 @@ const CampaignCreator = ({
     });
   };
 
-  const handleTypeChange = (value: CampaignType) => {
-    form.setValue("type", value);
-    setPreviewData({
-      ...previewData,
-      type: value,
-    });
-  };
-  
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
     form.setValue("category", category);
@@ -232,6 +260,20 @@ const CampaignCreator = ({
   };
 
   const allCategories = getAllCategories();
+
+  const getAudienceInfo = () => {
+    if (!initialTemplate) return null;
+    
+    return (
+      <div className="flex items-center gap-2 mt-2">
+        <Users className="h-3 w-3 text-muted-foreground" />
+        <span className="text-xs text-muted-foreground">
+          {initialTemplate.audienceSize ? `${translations.audienceSize || 'Tamanho da audiência'}: ${initialTemplate.audienceSize} ${translations.contacts || 'contatos'}` : ''}
+          {initialTemplate.audienceSegmentId ? ` | ${translations.audienceSegment || 'Segmento'}: ${initialTemplate.audienceSegmentId}` : ''}
+        </span>
+      </div>
+    );
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -260,51 +302,26 @@ const CampaignCreator = ({
                     <span className="font-medium">Template: {initialTemplate.name}</span>
                   </div>
                   <Badge variant="outline" className="text-xs">
-                    {initialTemplate.type}
+                    {initialTemplate.type === "whatsapp" ? "WhatsApp" : 
+                     initialTemplate.type === "sms" ? "SMS" : 
+                     initialTemplate.type === "email" ? "Email" : 
+                     initialTemplate.type === "paid" ? "Tráfego Pago" : 
+                     initialTemplate.type === "rcs" ? "RCS" : 
+                     initialTemplate.type}
                   </Badge>
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">{initialTemplate.description}</p>
                 <div className="flex items-center gap-1 mt-2">
                   <Clock className="h-3 w-3 text-muted-foreground" />
                   <span className="text-xs text-muted-foreground">
-                    Default expiry: 30 days from today
+                    {translations.expiryDefault || "Validade padrão: 30 dias a partir de hoje"}
                   </span>
                 </div>
+                {getAudienceInfo()}
               </div>
             )}
 
             <div className="flex flex-col md:flex-row gap-4">
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Tipo de Campanha</FormLabel>
-                    <Select 
-                      onValueChange={(value) => handleTypeChange(value as CampaignType)} 
-                      defaultValue={field.value}
-                      value={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o tipo de campanha" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                          <SelectItem value="sms">SMS</SelectItem>
-                          <SelectItem value="email">Email</SelectItem>
-                          <SelectItem value="paid">Tráfego Pago</SelectItem>
-                          <SelectItem value="rcs">RCS</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
               <FormField
                 control={form.control}
                 name="category"
@@ -324,10 +341,7 @@ const CampaignCreator = ({
                         <SelectItem value="all">Todas as categorias</SelectItem>
                         {allCategories.map((category) => (
                           <SelectItem key={category} value={category}>
-                            {category === 'customer-recovery' && 'Recuperação de Clientes'}
-                            {category === 'loyalty' && 'Fidelização de Clientes'}
-                            {category === 'channel-migration' && 'Migração de Canal'}
-                            {category === 'consumption-pattern' && 'Padrão de Consumo'}
+                            {translations[category as keyof typeof translations] || category}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -336,7 +350,66 @@ const CampaignCreator = ({
                   </FormItem>
                 )}
               />
+              
+              <FormField
+                control={form.control}
+                name="audienceType"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>{translations.audienceType || "Tipo de audiência"}</FormLabel>
+                    <Select 
+                      onValueChange={field.onChange}
+                      value={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o tipo de audiência" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="all">Todos os clientes</SelectItem>
+                        <SelectItem value="segment">Segmento</SelectItem>
+                        <SelectItem value="custom">Personalizado</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
+
+            {audienceType === "segment" && (
+              <FormField
+                control={form.control}
+                name="audienceSegmentId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Segmento de audiência</FormLabel>
+                    <Select 
+                      onValueChange={field.onChange}
+                      value={field.value || ""}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione um segmento" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="inactive-60-days">Clientes inativos > 60 dias</SelectItem>
+                        <SelectItem value="recovery-nonresponders">Não respondentes (7 dias)</SelectItem>
+                        <SelectItem value="recovery-nonresponders-2w">Não respondentes (15 dias)</SelectItem>
+                        <SelectItem value="recovery-nonresponders-1m">Não respondentes (30 dias)</SelectItem>
+                        <SelectItem value="first-order-3d">Primeiro pedido (3 dias)</SelectItem>
+                        <SelectItem value="second-order-7d">Segundo pedido (7 dias)</SelectItem>
+                        <SelectItem value="third-order-14d">Terceiro pedido (14 dias)</SelectItem>
+                        <SelectItem value="fourth-plus-order">4+ pedidos</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             {segmentName && (
               <div className="bg-muted/50 p-3 rounded-md">
@@ -436,7 +509,7 @@ const CampaignCreator = ({
                       <h3 className="font-medium text-sm mb-2">Templates Recomendados</h3>
                       <div className="bg-muted/50 p-2 rounded-md">
                         {recommendedTemplates.map((template) => (
-                          <div key={template.id} className="mb-2 last:mb-0 bg-background rounded p-2 cursor-pointer hover:bg-muted/20" onClick={() => handleTemplateSelect(template.content, template.subject, template.imageUrl)}>
+                          <div key={template.id} className="mb-2 last:mb-0 bg-background rounded p-2 cursor-pointer hover:bg-muted/20" onClick={() => handleTemplateSelect(template)}>
                             <div className="flex justify-between items-start mb-1">
                               <span className="font-medium text-sm">{template.name}</span>
                               <Button 
@@ -445,13 +518,21 @@ const CampaignCreator = ({
                                 className="h-6 px-2"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleTemplateSelect(template.content, template.subject, template.imageUrl);
+                                  handleTemplateSelect(template);
                                 }}
                               >
-                                Usar
+                                {translations.use || "Usar"}
                               </Button>
                             </div>
                             <p className="text-xs text-muted-foreground">{template.description}</p>
+                            {template.audienceSize && (
+                              <div className="flex items-center gap-1 mt-1">
+                                <Users className="h-3 w-3 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground">
+                                  {template.audienceSize} {translations.contacts || "contatos"}
+                                </span>
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>

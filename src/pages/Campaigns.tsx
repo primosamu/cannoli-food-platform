@@ -10,7 +10,8 @@ import {
   BarChart, 
   Calendar, 
   Filter,
-  Sparkles
+  Sparkles,
+  PercentCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -32,7 +33,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
-import { getTemplatesByCategory } from "@/data/campaignTemplates";
+import { getTemplatesByCategory, getMessagingTemplates, getPaidTrafficTemplates } from "@/data/campaignTemplates";
 import { CampaignTemplate, CampaignEvent } from "@/types/campaign";
 import { useToast } from "@/components/ui/use-toast";
 import CampaignSettings from "@/components/campaigns/CampaignSettings";
@@ -43,6 +44,7 @@ import { CampaignReports } from "@/components/campaigns/CampaignReports";
 const CampaignsPage = () => {
   const [activeTab, setActiveTab] = useState("active");
   const [activeView, setActiveView] = useState("list");
+  const [campaignType, setCampaignType] = useState<"messaging" | "paid">("messaging");
   const [showCreator, setShowCreator] = useState(false);
   const [showPresets, setShowPresets] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
@@ -85,12 +87,13 @@ const CampaignsPage = () => {
     setShowReports(false);
     
     toast({
-      title: "Template selected",
-      description: `${template.name} template loaded successfully.`,
+      title: "Template selecionado",
+      description: `Template ${template.name} carregado com sucesso.`,
     });
   };
 
-  const handleCreateCampaign = () => {
+  const handleCreateCampaign = (type: "messaging" | "paid" = "messaging") => {
+    setCampaignType(type);
     setShowCreator(true);
     setShowPresets(false);
     setShowSettings(false);
@@ -122,16 +125,16 @@ const CampaignsPage = () => {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Campaign Reports</CardTitle>
+                <CardTitle>Relatórios de Campanha</CardTitle>
                 <CardDescription>
-                  View detailed analytics and performance for your campaigns
+                  Visualize análises detalhadas e desempenho de suas campanhas
                 </CardDescription>
               </div>
               <Button variant="outline" onClick={() => {
                 setShowReports(false);
                 setActiveView("list");
               }}>
-                Back to Campaigns
+                Voltar para Campanhas
               </Button>
             </div>
           </CardHeader>
@@ -148,23 +151,36 @@ const CampaignsPage = () => {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>{translations.presetCampaigns || "Preset Campaigns"}</CardTitle>
+                <CardTitle>{campaignType === "messaging" ? 
+                  (translations.messaging || "Mensageria") : 
+                  (translations.paidTraffic || "Tráfego Pago")}
+                </CardTitle>
                 <CardDescription>
-                  {translations.chooseTemplates || "Choose from ready-to-use campaign templates"}
+                  {campaignType === "messaging" ? 
+                    (translations.messagingDescription || "Envie mensagens por WhatsApp, SMS ou Email para seus clientes") : 
+                    (translations.paidTrafficDescription || "Crie anúncios para Meta, Google e outras plataformas")}
                 </CardDescription>
               </div>
-              <Button variant="outline" onClick={() => {
-                setShowPresets(false);
-                setShowCreator(false);
-                setShowSettings(false);
-                setShowReports(false);
-              }}>
-                {translations.viewAllCampaigns || "View All Campaigns"}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant={campaignType === "messaging" ? "default" : "outline"} 
+                  onClick={() => setCampaignType("messaging")}
+                >
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  Mensageria
+                </Button>
+                <Button 
+                  variant={campaignType === "paid" ? "default" : "outline"} 
+                  onClick={() => setCampaignType("paid")}
+                >
+                  <PercentCircle className="mr-2 h-4 w-4" />
+                  Tráfego Pago
+                </Button>
+              </div>
             </div>
           </CardHeader>
           <CardContent>
-            <PresetCampaigns onSelect={handlePresetSelect} />
+            <PresetCampaigns onSelect={handlePresetSelect} campaignType={campaignType} />
           </CardContent>
         </Card>
       );
@@ -176,16 +192,16 @@ const CampaignsPage = () => {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>{selectedTemplate ? `Campaign Settings: ${selectedTemplate.name}` : 'Campaign Settings'}</CardTitle>
+                <CardTitle>{selectedTemplate ? `Configurações de Campanha: ${selectedTemplate.name}` : 'Configurações de Campanha'}</CardTitle>
                 <CardDescription>
-                  Configure your campaign audience, channels and delivery options
+                  Configure a audiência, canais e opções de entrega da sua campanha
                 </CardDescription>
               </div>
               <Button variant="outline" onClick={() => {
                 setShowSettings(false);
                 setShowPresets(true);
               }}>
-                Back to Templates
+                Voltar para Templates
               </Button>
             </div>
           </CardHeader>
@@ -209,10 +225,12 @@ const CampaignsPage = () => {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>
-                  {selectedTemplate ? `Create Campaign: ${selectedTemplate.name}` : 'Create New Campaign'}
+                  {selectedTemplate ? `Criar Campanha: ${selectedTemplate.name}` : 'Criar Nova Campanha'}
                 </CardTitle>
                 <CardDescription>
-                  Design your marketing campaign for WhatsApp, SMS, Email or Paid Traffic
+                  {campaignType === "messaging" ? 
+                    "Crie sua campanha de marketing por WhatsApp, SMS ou Email" : 
+                    "Crie sua campanha de anúncios pagos para Meta, Google ou outras plataformas"}
                 </CardDescription>
               </div>
               <Button variant="outline" onClick={() => {
@@ -224,7 +242,7 @@ const CampaignsPage = () => {
                   setShowPresets(true);
                 }
               }}>
-                {selectedTemplate ? 'Back to Settings' : 'Back to Templates'}
+                {selectedTemplate ? 'Voltar para Configurações' : 'Voltar para Templates'}
               </Button>
             </div>
           </CardHeader>
@@ -233,11 +251,11 @@ const CampaignsPage = () => {
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="content">
                   <MessageSquare className="mr-2 h-4 w-4" /> 
-                  Content
+                  Conteúdo
                 </TabsTrigger>
                 <TabsTrigger value="images">
                   <Image className="mr-2 h-4 w-4" /> 
-                  Images
+                  Imagens
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="content" className="pt-6">
@@ -252,9 +270,9 @@ const CampaignsPage = () => {
                   <ImageOptimizer />
                   <Card>
                     <CardHeader>
-                      <CardTitle>Image Gallery</CardTitle>
+                      <CardTitle>Galeria de Imagens</CardTitle>
                       <CardDescription>
-                        Select from your previous images or upload new ones
+                        Selecione imagens anteriores ou faça upload de novas
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -264,7 +282,7 @@ const CampaignsPage = () => {
                             key={item} 
                             className="aspect-video bg-gray-100 rounded flex items-center justify-center"
                           >
-                            <span className="text-muted-foreground">Image {item}</span>
+                            <span className="text-muted-foreground">Imagem {item}</span>
                           </div>
                         ))}
                       </div>
@@ -291,7 +309,7 @@ const CampaignsPage = () => {
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle>{translations.allCampaigns || "All Campaigns"}</CardTitle>
+            <CardTitle>{translations.allCampaigns || "Todas as Campanhas"}</CardTitle>
             <div className="flex items-center gap-2">
               <Button 
                 variant="outline" 
@@ -300,7 +318,7 @@ const CampaignsPage = () => {
                 onClick={() => setActiveView("calendar")}
               >
                 <Calendar className="h-4 w-4" />
-                {translations.schedule || "Schedule"}
+                {translations.schedule || "Agenda"}
               </Button>
               <Button 
                 variant="outline" 
@@ -312,7 +330,7 @@ const CampaignsPage = () => {
                 }}
               >
                 <BarChart className="h-4 w-4" />
-                {translations.analytics || "Analytics"}
+                {translations.analytics || "Análises"}
               </Button>
             </div>
           </div>
@@ -324,25 +342,25 @@ const CampaignsPage = () => {
                 value="active" 
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
               >
-                {translations.active || "Active"}
+                {translations.active || "Ativas"}
               </TabsTrigger>
               <TabsTrigger 
                 value="scheduled" 
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
               >
-                {translations.scheduled || "Scheduled"}
+                {translations.scheduled || "Agendadas"}
               </TabsTrigger>
               <TabsTrigger 
                 value="completed" 
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
               >
-                {translations.completed || "Completed"}
+                {translations.completed || "Concluídas"}
               </TabsTrigger>
               <TabsTrigger 
                 value="drafts" 
                 className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none"
               >
-                {translations.drafts || "Drafts"}
+                {translations.drafts || "Rascunhos"}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="active" className="p-6">
@@ -387,9 +405,9 @@ const CampaignsPage = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">{translations.marketingCampaigns || "Marketing Campaigns"}</h2>
+          <h2 className="text-3xl font-bold tracking-tight">{translations.marketingCampaigns || "Campanhas de Marketing"}</h2>
           <p className="text-muted-foreground">
-            {translations.createManageCampaigns || "Create and manage marketing campaigns for your restaurant."}
+            {translations.createManageCampaigns || "Crie e gerencie campanhas de marketing para seu restaurante."}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -405,8 +423,8 @@ const CampaignsPage = () => {
               }}
             >
               <Sparkles className="h-4 w-4" />
-              <span className="hidden md:inline">{translations.presetCampaigns || "Preset Campaigns"}</span>
-              <span className="inline md:hidden">{translations.presets || "Presets"}</span>
+              <span className="hidden md:inline">{translations.presetCampaigns || "Campanhas Predefinidas"}</span>
+              <span className="inline md:hidden">{translations.presets || "Predefinidas"}</span>
             </Button>
           )}
           {!showReports && activeView !== "calendar" && (
@@ -426,7 +444,7 @@ const CampaignsPage = () => {
               ) : (
                 <BarChart className="h-4 w-4 mr-2" />
               )}
-              {activeView === "list" ? "Calendar" : "List View"}
+              {activeView === "list" ? "Calendário" : "Lista"}
             </Button>
           )}
           <Button 
@@ -434,11 +452,16 @@ const CampaignsPage = () => {
             className="hidden md:flex items-center gap-2"
           >
             <Filter className="h-4 w-4" />
-            {translations.filter || "Filter"}
+            {translations.filter || "Filtrar"}
           </Button>
-          <Button onClick={handleCreateCampaign}>
-            <PlusCircle className="mr-2 h-4 w-4" /> {translations.createCampaign || "Create Campaign"}
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={() => handleCreateCampaign("messaging")}>
+              <MessageSquare className="mr-2 h-4 w-4" /> Mensageria
+            </Button>
+            <Button onClick={() => handleCreateCampaign("paid")}>
+              <PercentCircle className="mr-2 h-4 w-4" /> Tráfego Pago
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -455,35 +478,35 @@ const CampaignsPage = () => {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Campaign Templates</DialogTitle>
+            <DialogTitle>Templates de Campanha</DialogTitle>
             <DialogDescription>
-              Use our ready-made templates to create effective marketing campaigns.
+              Use nossos templates prontos para criar campanhas de marketing eficazes.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <h4 className="font-medium text-sm">Available Template Types:</h4>
+              <h4 className="font-medium text-sm">Tipos de Templates Disponíveis:</h4>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center">
                   <MessageSquare className="h-4 w-4 text-green-600 mr-2" />
-                  WhatsApp Templates
+                  Templates de WhatsApp
                 </li>
                 <li className="flex items-center">
                   <MessageSquare className="h-4 w-4 text-blue-600 mr-2" />
-                  SMS Templates
+                  Templates de SMS
                 </li>
                 <li className="flex items-center">
                   <Mail className="h-4 w-4 text-orange-600 mr-2" />
-                  Email Templates
+                  Templates de Email
                 </li>
                 <li className="flex items-center">
                   <Image className="h-4 w-4 text-purple-600 mr-2" />
-                  Paid Traffic Templates
+                  Templates de Tráfego Pago
                 </li>
               </ul>
             </div>
             <p className="text-sm text-muted-foreground">
-              Click on "Preset Campaigns" to quickly select a pre-configured campaign for common marketing needs.
+              Clique em "Campanhas Predefinidas" para selecionar rapidamente uma campanha pré-configurada para necessidades comuns de marketing.
             </p>
           </div>
         </DialogContent>

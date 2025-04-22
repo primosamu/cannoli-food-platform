@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -66,7 +65,8 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
   
   const { toast } = useToast();
   
-  // Set default audience type and segment based on template category
+  const isPaidCampaign = template?.type === "paid";
+
   useEffect(() => {
     if (template?.category) {
       if (template.category === 'customer-recovery') {
@@ -83,7 +83,6 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
         setAudienceType('all');
       }
       
-      // Set incentive type based on template
       if (template.category === 'customer-recovery') {
         setIncentiveType('coupon');
       } else if (template.category === 'loyalty') {
@@ -137,6 +136,78 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
     setNewCouponDialogOpen(false);
   };
 
+  if (isPaidCampaign) {
+    return (
+      <div className="space-y-6">
+        <div className="bg-muted/50 p-4 rounded-lg mb-6">
+          <h3 className="text-xl font-semibold">{template?.name}</h3>
+          <p className="text-muted-foreground mt-1">{template?.description}</p>
+          <div className="mt-2">
+            <span className="inline-block rounded px-3 py-1 bg-yellow-100 text-yellow-900 text-xs font-bold">
+              Tráfego Pago
+            </span>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Plataforma</label>
+              <div className="flex gap-4">
+                <span className="inline-flex items-center px-4 py-2 bg-gray-200 rounded">
+                  {template?.platform?.toUpperCase() || "META"}
+                </span>
+              </div>
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Orçamento estimado (R$)</label>
+              <input
+                type="number"
+                min={10}
+                step={1}
+                placeholder="200"
+                className="border rounded px-3 py-2 w-full"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Duração da campanha (dias)</label>
+              <input
+                type="number"
+                min={1}
+                max={365}
+                placeholder="7"
+                className="border rounded px-3 py-2 w-full"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Interesses/Palavras-chave</label>
+              <input
+                type="text"
+                placeholder="Ex: pizza, delivery, comida saudável"
+                className="border rounded px-3 py-2 w-full"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Região de exibição</label>
+              <input
+                type="text"
+                placeholder="Ex: São Paulo, SP"
+                className="border rounded px-3 py-2 w-full"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-end">
+          <button
+            onClick={onContinue}
+            className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90"
+          >
+            Continuar para criação do anúncio
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {template && (
@@ -155,7 +226,6 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       )}
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Audience Selection Card */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -249,7 +319,6 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
           </CardContent>
         </Card>
 
-        {/* Channel Selection Card */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -315,13 +384,10 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
                   </p>
                 </div>
               </div>
-              
-              {/* Removed the Paid Traffic option as per requirements */}
             </div>
           </CardContent>
         </Card>
         
-        {/* Incentives Card */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -399,7 +465,6 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
           </CardContent>
         </Card>
 
-        {/* Scheduling Card */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -472,7 +537,6 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
         </Button>
       </div>
 
-      {/* New Coupon Dialog */}
       <Dialog open={newCouponDialogOpen} onOpenChange={setNewCouponDialogOpen}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>

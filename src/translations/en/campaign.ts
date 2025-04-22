@@ -1,4 +1,3 @@
-
 import { CampaignTranslations } from "../../types/language/campaign";
 
 export const campaignTranslations: CampaignTranslations = {
@@ -31,11 +30,44 @@ export const campaignTranslations: CampaignTranslations = {
   'customer-recovery': 'Customer Recovery',
   'consumption-pattern': 'Consumption Patterns',
   'channel-migration': 'Channel Migration',
+  'loyalty': 'Customer Loyalty',
 
   // Campaign category descriptions
   'customer-recoveryDescription': 'Win back customers who haven\'t ordered in a while',
   'loyaltyDescription': 'Reward and engage your loyal customers',
   'consumption-patternDescription': 'Encourage new consumption behaviors',
   'channel-migrationDescription': 'Move customers from marketplaces to direct ordering',
+  
+  // Message types
+  messaging: 'Messaging',
+  paidTraffic: 'Paid Traffic',
+  messagingDescription: 'Send messages via WhatsApp, SMS or Email to your customers',
+  paidTrafficDescription: 'Create ads for Meta, Google and other platforms',
+  
+  // Audience information
+  audienceSize: 'Audience size',
+  audienceSegment: 'Segment',
+  audienceType: 'Audience type',
+  contacts: 'contacts',
+  
+  // Template types
+  whatsappTemplates: 'WhatsApp Templates',
+  smsTemplates: 'SMS Templates',
+  emailTemplates: 'Email Templates',
+  rcsTemplates: 'RCS Templates',
+  paidTemplates: 'Paid Traffic Templates',
+  
+  // Other required properties
   allStores: 'All Stores',
+  use: 'Use',
+  edit: 'Edit',
+  view: 'View',
+  send: 'Send',
+  cancel: 'Cancel',
+  save: 'Save',
+  delete: 'Delete',
+  filter: 'Filter',
+  validity: 'Validity',
+  expiryDefault: 'Default validity: 30 days from today',
+  createNewCouponInstead: 'Create new coupon instead'
 };

@@ -454,14 +454,14 @@ const CampaignsPage = () => {
             <Filter className="h-4 w-4" />
             {translations.filter || "Filtrar"}
           </Button>
-          <div className="flex gap-2">
-            <Button onClick={() => handleCreateCampaign("messaging")}>
-              <MessageSquare className="mr-2 h-4 w-4" /> Mensageria
-            </Button>
-            <Button onClick={() => handleCreateCampaign("paid")}>
-              <PercentCircle className="mr-2 h-4 w-4" /> Tráfego Pago
-            </Button>
-          </div>
+          <Button 
+            variant="secondary" 
+            onClick={() => handleCreateCampaign("messaging")}
+            className="flex items-center gap-2"
+          >
+            <PlusCircle className="mr-2 h-4 w-4" /> 
+            {translations.createCampaign || "Criar Campanha"}
+          </Button>
         </div>
       </div>
 

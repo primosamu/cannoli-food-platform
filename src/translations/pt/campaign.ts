@@ -49,25 +49,28 @@ export const campaignTranslations: CampaignTranslations = {
   'audienceSize': 'Tamanho da audiência',
   'audienceSegment': 'Segmento',
   'audienceType': 'Tipo de audiência',
+  'contacts': 'contatos',
   
   // Informações de validade
   'validity': 'Validade',
   'expiryDefault': 'Validade padrão: 30 dias a partir de hoje',
+  'createNewCouponInstead': 'Criar novo cupom',
   
   // Outras traduções
-  allStores: 'Todas as Lojas',
-  use: 'Usar',
-  edit: 'Editar',
-  view: 'Visualizar',
-  send: 'Enviar',
-  cancel: 'Cancelar',
-  save: 'Salvar',
-  delete: 'Excluir',
+  'allStores': 'Todas as Lojas',
+  'use': 'Usar',
+  'edit': 'Editar',
+  'view': 'Visualizar',
+  'send': 'Enviar',
+  'cancel': 'Cancelar',
+  'save': 'Salvar',
+  'delete': 'Excluir',
+  'filter': 'Filtrar',
   
   // Templates e tipos
-  whatsappTemplates: 'Templates de WhatsApp',
-  smsTemplates: 'Templates de SMS',
-  emailTemplates: 'Templates de Email',
-  rcsTemplates: 'Templates de RCS',
-  paidTemplates: 'Templates de Tráfego Pago',
+  'whatsappTemplates': 'Templates de WhatsApp',
+  'smsTemplates': 'Templates de SMS',
+  'emailTemplates': 'Templates de Email',
+  'rcsTemplates': 'Templates de RCS',
+  'paidTemplates': 'Templates de Tráfego Pago',
 };

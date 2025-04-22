@@ -90,7 +90,7 @@ const CampaignCreator = ({
     if (segmentType) {
       let category = "";
       
-      if (segmentType.includes('recency') && segmentName?.includes('&gt;60 days')) {
+      if (segmentType.includes('recency') && segmentName?.includes('>60 days')) {
         category = "customer-recovery";
       } else if (segmentType === 'rfm-segments' && (segmentName?.includes('Lost') || segmentName?.includes('At Risk'))) {
         category = "customer-recovery";

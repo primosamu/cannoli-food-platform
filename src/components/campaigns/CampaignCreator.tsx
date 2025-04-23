@@ -121,12 +121,10 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
     imageOptimizedDesc: "Your image has been optimized successfully"
   };
 
-  const translationsObj = typeof translations === "object" && translations !== null ? translations : {};
+  const translationsObj = translations || {};
   const imageOptimizerTranslations: ImageOptimizerTranslations = {
     ...defaultImageOptimizerTranslations,
-    ...((translationsObj.imageOptimizer && typeof translationsObj.imageOptimizer === "object")
-      ? translationsObj.imageOptimizer as Partial<ImageOptimizerTranslations>
-      : {})
+    ...((translationsObj as any).imageOptimizer || {})
   };
 
   const form = useForm<z.infer<typeof formSchema>>({

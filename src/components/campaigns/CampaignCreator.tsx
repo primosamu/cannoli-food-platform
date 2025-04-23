@@ -39,6 +39,7 @@ import CampaignFullPreviewDialog from "./preview/CampaignFullPreviewDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
+import { ImageOptimizerTranslations } from "@/types/language/image-optimizer";
 
 // Form schema definition
 const formSchema = z.object({
@@ -100,24 +101,30 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
   const { toast } = useToast();
   const { translations } = useLanguage();
 
-  // Ensure imageOptimizer translations fallbacks
+  // Create a default image optimizer translations object
+  const defaultImageOptimizerTranslations: ImageOptimizerTranslations = {
+    imageOptimizer: "Image Optimizer",
+    upload: "Upload",
+    uploadImage: "Upload an image to start",
+    basic: "Basic",
+    filters: "Filters",
+    brightness: "Brightness",
+    contrast: "Contrast",
+    saturation: "Saturation",
+    sharpness: "Sharpness",
+    reset: "Reset",
+    optimizeWithAI: "Optimize with AI",
+    optimizing: "Optimizing...",
+    apply: "Apply",
+    normal: "Normal",
+    imageOptimized: "Image optimized",
+    imageOptimizedDesc: "Your image has been optimized successfully"
+  };
+
+  // Safely access image optimizer translations with fallbacks
   const imageOptimizerTranslations = {
-    imageOptimizer: translations?.imageOptimizer?.imageOptimizer || "Image Optimizer",
-    upload: translations?.imageOptimizer?.upload || "Upload",
-    uploadImage: translations?.imageOptimizer?.uploadImage || "Upload an image to start",
-    basic: translations?.imageOptimizer?.basic || "Basic",
-    filters: translations?.imageOptimizer?.filters || "Filters",
-    brightness: translations?.imageOptimizer?.brightness || "Brightness",
-    contrast: translations?.imageOptimizer?.contrast || "Contrast",
-    saturation: translations?.imageOptimizer?.saturation || "Saturation",
-    sharpness: translations?.imageOptimizer?.sharpness || "Sharpness",
-    reset: translations?.imageOptimizer?.reset || "Reset",
-    optimizeWithAI: translations?.imageOptimizer?.optimizeWithAI || "Optimize with AI",
-    optimizing: translations?.imageOptimizer?.optimizing || "Optimizing...",
-    apply: translations?.imageOptimizer?.apply || "Apply",
-    normal: translations?.imageOptimizer?.normal || "Normal",
-    imageOptimized: translations?.imageOptimizer?.imageOptimized || "Image optimized",
-    imageOptimizedDesc: translations?.imageOptimizer?.imageOptimizedDesc || "Your image has been optimized successfully"
+    ...defaultImageOptimizerTranslations,
+    ...(translations?.imageOptimizer || {})
   };
 
   const form = useForm<z.infer<typeof formSchema>>({

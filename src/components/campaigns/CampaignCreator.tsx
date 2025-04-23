@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   Card,
@@ -8,12 +7,8 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { Editor } from "@/components/ui/editor";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -40,6 +35,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { ImageOptimizerTranslations } from "@/types/language/image-optimizer";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Editor } from "@/components/ui/editor";
+
+import CampaignDetailsSection from "./CampaignDetailsSection";
+import CampaignChannelsSection from "./CampaignChannelsSection";
+import CampaignContentSection from "./CampaignContentSection";
 
 // Form schema definition
 const formSchema = z.object({
@@ -68,7 +71,7 @@ interface CampaignCreatorProps {
   };
 }
 
-const CampaignCreator: React.FC<CampaignCreatorProps> = ({ 
+const CampaignCreator: React.FC<CampaignCreatorProps> = ({
   initialTemplate, 
   segmentName, 
   segmentType,
@@ -282,147 +285,35 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-6">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Nome da Campanha</Label>
-                <Input 
-                  id="name"
-                  placeholder="Ex: Promoção de Verão" 
-                  value={campaignName}
-                  onChange={handleNameChange}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Audiência</Label>
-                <Select value={settings?.audienceType || "all"}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o tipo de audiência" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todos os clientes</SelectItem>
-                    <SelectItem value="segment">Segmento específico</SelectItem>
-                    <SelectItem value="custom">Critérios personalizados</SelectItem>
-                  </SelectContent>
-                </Select>
-                <p className="text-sm text-muted-foreground">
-                  Tamanho estimado da audiência: <span className="font-medium">235</span> clientes
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Agendamento</Label>
-                <div className="grid grid-cols-2 gap-2">
-                  <Input 
-                    type="date" 
-                    value={settings?.scheduledDate || new Date().toISOString().split('T')[0]}
-                  />
-                  <Input 
-                    type="time" 
-                    value={settings?.scheduledTime || "12:00"}
-                  />
-                </div>
-              </div>
-            </div>
-            
+            <CampaignDetailsSection
+              campaignName={campaignName}
+              handleNameChange={handleNameChange}
+              settings={settings}
+            />
             <div className="space-y-4 border-t border-border pt-4">
-              <Label>Conteúdo da Campanha</Label>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
-                  <div className="space-y-2">
-                    <Label>Canais de Envio</Label>
-                    <div className="flex flex-wrap gap-2">
-                      <Button 
-                        variant={selectedChannels.includes("whatsapp") ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => handleChannelToggle("whatsapp")}
-                        className="flex items-center gap-2"
-                      >
-                        <MessageSquareDashed className="h-4 w-4 text-green-600" />
-                        WhatsApp
-                      </Button>
-                      <Button 
-                        variant={selectedChannels.includes("sms") ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => handleChannelToggle("sms")}
-                        className="flex items-center gap-2"
-                      >
-                        <MessageSquareDashed className="h-4 w-4 text-blue-600" />
-                        SMS
-                      </Button>
-                      <Button 
-                        variant={selectedChannels.includes("email") ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => handleChannelToggle("email")}
-                        className="flex items-center gap-2"
-                      >
-                        <Mail className="h-4 w-4 text-orange-600" />
-                        Email
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  {/* Tipo principal (apenas se houver mais de um canal selecionado) */}
-                  {selectedChannels.length > 1 && (
-                    <div className="space-y-2">
-                      <Label>Canal Principal</Label>
-                      <Select 
-                        value={campaignType} 
-                        onValueChange={handleTypeChange}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o canal principal" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {selectedChannels.includes("email") && (
-                            <SelectItem value="email">Email</SelectItem>
-                          )}
-                          {selectedChannels.includes("sms") && (
-                            <SelectItem value="sms">SMS</SelectItem>
-                          )}
-                          {selectedChannels.includes("whatsapp") && (
-                            <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                          )}
-                        </SelectContent>
-                      </Select>
-                      <p className="text-sm text-muted-foreground">
-                        O canal principal determina o formato de edição e pré-visualização
-                      </p>
-                    </div>
-                  )}
-
-                  {campaignType === 'email' && (
-                    <div className="space-y-2">
-                      <Label htmlFor="subject">Assunto</Label>
-                      <Input 
-                        id="subject"
-                        placeholder="Assunto do Email" 
-                        value={campaignSubject}
-                        onChange={handleSubjectChange}
-                      />
-                    </div>
-                  )}
-
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="content">Conteúdo</Label>
-                      <div className="flex items-center gap-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => setShowOptimizer(!showOptimizer)}
-                        >
-                          <ImageIcon className="h-4 w-4 mr-2" />
-                          {showOptimizer ? "Ocultar Otimizador" : "Otimizador de Imagem"}
-                        </Button>
-                      </div>
-                    </div>
-                    <Editor
-                      value={campaignContent}
-                      onChange={handleContentChange}
-                    />
-                  </div>
-
+                  <CampaignChannelsSection
+                    selectedChannels={selectedChannels}
+                    handleChannelToggle={handleChannelToggle}
+                    campaignType={campaignType}
+                    handleTypeChange={handleTypeChange}
+                  />
+                  <CampaignContentSection
+                    campaignType={campaignType}
+                    campaignSubject={campaignSubject}
+                    handleSubjectChange={handleSubjectChange}
+                    campaignContent={campaignContent}
+                    handleContentChange={handleContentChange}
+                    showOptimizer={showOptimizer}
+                    setShowOptimizer={setShowOptimizer}
+                    translations={translations}
+                    previewContent={previewContent}
+                    showFullPreview={showFullPreview}
+                    setShowFullPreview={setShowFullPreview}
+                    selectedChannels={selectedChannels}
+                    initialTemplate={initialTemplate}
+                  />
                   {/* Otimizador de imagens integrado (Expansível) */}
                   {showOptimizer && (
                     <div className="border border-border rounded-md p-4 space-y-4">
@@ -578,54 +469,7 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
                     </div>
                   )}
                 </div>
-
-                <div>
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>{translations.campaignPreview || "Preview"}</CardTitle>
-                      <CardDescription>
-                        {translations.previewDescription || "See how your campaign will be displayed"}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <CampaignPreview 
-                        content={previewContent}
-                        type={campaignType}
-                        subject={campaignSubject}
-                        platform={initialTemplate?.platform}
-                      />
-                    </CardContent>
-                    <CardFooter className="flex justify-between border-t pt-4">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => setShowFullPreview(true)}
-                        className="flex items-center gap-2"
-                      >
-                        <Eye className="w-4 h-4" />
-                        Visualizar Completo
-                      </Button>
-                      <Button 
-                        variant="secondary" 
-                        size="sm" 
-                        className="flex items-center gap-2"
-                      >
-                        <Play className="w-4 h-4" />
-                        Enviar Teste
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                  
-                  <CampaignFullPreviewDialog
-                    open={showFullPreview}
-                    onOpenChange={setShowFullPreview}
-                    content={previewContent}
-                    type={campaignType}
-                    subject={campaignSubject}
-                    platform={initialTemplate?.platform}
-                    channels={selectedChannels as CampaignType[]}
-                  />
-                </div>
+                
               </div>
             </div>
           </div>

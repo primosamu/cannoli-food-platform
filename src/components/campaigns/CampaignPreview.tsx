@@ -52,7 +52,9 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
   const handleActivateTest = () => {
     toast({
       title: "Teste enviado",
-      description: "A campanha de teste foi enviada para o seu contato de teste.",
+      description: type === "paid" 
+        ? "A campanha de teste foi publicada no modo de teste na plataforma selecionada."
+        : "A campanha de teste foi enviada para o seu contato de teste.",
       duration: 4000,
     });
   };
@@ -82,7 +84,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
           className="flex items-center gap-2"
         >
           <Eye className="w-4 h-4" />
-          Visualizar Completo
+          {type === "paid" ? "Visualizar Anúncio" : "Visualizar Completo"}
         </Button>
         <Button
           variant="secondary"
@@ -91,7 +93,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
           className="flex items-center gap-2"
         >
           <Play className="w-4 h-4" />
-          Ativar Teste
+          {type === "paid" ? "Testar Anúncio" : "Ativar Teste"}
         </Button>
       </CardFooter>
       <CampaignFullPreviewDialog

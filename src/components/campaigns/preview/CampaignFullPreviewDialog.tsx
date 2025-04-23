@@ -33,6 +33,7 @@ const CampaignFullPreviewDialog: React.FC<CampaignFullPreviewDialogProps> = ({
           type={type}
           subject={subject}
           imageUrl={imageUrl}
+          isFull={true} // Always pass true here for full preview
         />
       </div>
     </DialogContent>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -51,6 +50,16 @@ const CampaignsPage = () => {
   const [showReports, setShowReports] = useState(false);
   const [selectedCampaignId, setSelectedCampaignId] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<CampaignTemplate | null>(null);
+  const [campaignSettings, setCampaignSettings] = useState<{
+    selectedChannels: string[];
+    audienceType: string;
+    incentiveType: string;
+    scheduledDate: string;
+    scheduledTime: string;
+    inactiveDays: string;
+    selectedSegment: string;
+  } | null>(null);
+  
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -116,6 +125,20 @@ const CampaignsPage = () => {
     setShowPresets(false);
     setShowSettings(false);
     setShowReports(false);
+  };
+
+  const handleContinueFromSettings = (settings: {
+    selectedChannels: string[];
+    audienceType: string;
+    incentiveType: string;
+    scheduledDate: string;
+    scheduledTime: string;
+    inactiveDays: string;
+    selectedSegment: string;
+  }) => {
+    setCampaignSettings(settings);
+    setShowSettings(false);
+    setShowCreator(true);
   };
 
   const renderContent = () => {
@@ -208,10 +231,7 @@ const CampaignsPage = () => {
           <CardContent>
             <CampaignSettings 
               template={selectedTemplate}
-              onContinue={() => {
-                setShowSettings(false);
-                setShowCreator(true);
-              }}
+              onContinue={handleContinueFromSettings}
             />
           </CardContent>
         </Card>
@@ -263,6 +283,7 @@ const CampaignsPage = () => {
                   initialTemplate={selectedTemplate}
                   segmentName={location.state?.segmentName}
                   segmentType={location.state?.segmentType}
+                  settings={campaignSettings || undefined}
                 />
               </TabsContent>
               <TabsContent value="images" className="pt-6">

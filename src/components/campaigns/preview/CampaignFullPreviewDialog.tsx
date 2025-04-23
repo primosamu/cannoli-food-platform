@@ -12,6 +12,7 @@ interface CampaignFullPreviewDialogProps {
   subject?: string;
   imageUrl?: string;
   platform?: string;
+  channels?: CampaignType[];
 }
 
 const CampaignFullPreviewDialog: React.FC<CampaignFullPreviewDialogProps> = ({
@@ -21,7 +22,8 @@ const CampaignFullPreviewDialog: React.FC<CampaignFullPreviewDialogProps> = ({
   type,
   subject,
   imageUrl,
-  platform
+  platform,
+  channels
 }) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -34,6 +36,7 @@ const CampaignFullPreviewDialog: React.FC<CampaignFullPreviewDialogProps> = ({
             imageUrl={imageUrl}
             isFull={true}
             platform={platform}
+            channels={channels}
           />
         </div>
       </DialogContent>

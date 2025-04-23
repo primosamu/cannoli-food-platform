@@ -22,6 +22,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { CampaignTemplate, CampaignType } from "@/types/campaign";
 import AudienceInfo from "./AudienceInfo";
 import { CalendarIcon, MessageSquare, MailOpen, MessageSquareDashed } from "lucide-react";
+import CampaignPreview from "./CampaignPreview";
+import CampaignFullPreviewDialog from "./preview/CampaignFullPreviewDialog";
 
 // Form schema definition
 const formSchema = z.object({
@@ -39,21 +41,42 @@ interface CampaignCreatorProps {
   initialTemplate?: CampaignTemplate;
   segmentName?: string;
   segmentType?: string;
+  settings?: {
+    selectedChannels: string[];
+    audienceType: string;
+    incentiveType: string;
+    scheduledDate: string;
+    scheduledTime: string;
+    inactiveDays: string;
+    selectedSegment: string;
+  };
 }
 
-const CampaignCreator: React.FC<CampaignCreatorProps> = ({ initialTemplate, segmentName, segmentType }) => {
+const CampaignCreator: React.FC<CampaignCreatorProps> = ({ 
+  initialTemplate, 
+  segmentName, 
+  segmentType,
+  settings
+}) => {
   const [campaignName, setCampaignName] = useState(initialTemplate?.name || "");
-  const [campaignType, setCampaignType] = useState<CampaignType>(initialTemplate?.type || "email");
+  const [campaignType, setCampaignType] = useState<CampaignType>(
+    settings?.selectedChannels && settings.selectedChannels.length > 0
+      ? settings.selectedChannels[0] as CampaignType
+      : initialTemplate?.type || "email"
+  );
   const [campaignSubject, setCampaignSubject] = useState(initialTemplate?.subject || "");
   const [campaignContent, setCampaignContent] = useState(initialTemplate?.content || "");
+  const [showFullPreview, setShowFullPreview] = useState(false);
   const { toast } = useToast();
   const { translations } = useLanguage();
+
+  const selectedChannels = settings?.selectedChannels || [campaignType];
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: initialTemplate?.name || "",
-      type: initialTemplate?.type || "email",
+      type: campaignType,
       subject: initialTemplate?.subject || "",
       content: initialTemplate?.content || "",
     },
@@ -63,15 +86,23 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({ initialTemplate, segm
     if (initialTemplate) {
       form.reset({
         name: initialTemplate.name,
-        type: initialTemplate.type,
+        type: campaignType,
         subject: initialTemplate.subject || "",
         content: initialTemplate.content,
       });
     }
-  }, [initialTemplate, form]);
+  }, [initialTemplate, campaignType, form]);
+  
+  useEffect(() => {
+    if (settings?.selectedChannels && settings.selectedChannels.length > 0) {
+      setCampaignType(settings.selectedChannels[0] as CampaignType);
+    }
+  }, [settings]);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.log(values);
+    console.log("Selected Channels:", selectedChannels);
+    console.log("Campaign Settings:", settings);
     toast({
       title: "You submitted the following values:",
       description: (
@@ -112,6 +143,20 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({ initialTemplate, segm
     }
   };
 
+  const previewContent = campaignContent
+    .replace(/\{\{name\}\}/g, "Cliente")
+    .replace(/\{\{restaurant\}\}/g, "Seu Restaurante")
+    .replace(/\{\{discount\}\}/g, "10%")
+    .replace(/\{\{code\}\}/g, "PROMO10")
+    .replace(/\{\{date\}\}/g, "30/04/2025")
+    .replace(/\{\{time\}\}/g, "19h")
+    .replace(/\{\{event\}\}/g, "Jazz")
+    .replace(/\{\{dish\}\}/g, "Risoto de Camarão")
+    .replace(/\{\{phone\}\}/g, "(11) 98765-4321")
+    .replace(/\{\{promotion\}\}/g, "Final de Semana")
+    .replace(/\{\{items\}\}/g, "pratos italianos")
+    .replace(/\{\{month\}\}/g, "Maio");
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2">
@@ -139,23 +184,49 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({ initialTemplate, segm
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="type">Tipo de Campanha</Label>
+                <Label htmlFor="type">Canal Principal</Label>
                 <Select 
                   value={campaignType} 
                   onValueChange={handleTypeChange}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Selecione o tipo" />
+                    <SelectValue placeholder="Selecione o canal principal" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="email">Email</SelectItem>
-                    <SelectItem value="sms">SMS</SelectItem>
-                    <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                    <SelectItem value="rcs">RCS</SelectItem>
+                    {selectedChannels.includes("email") && (
+                      <SelectItem value="email">Email</SelectItem>
+                    )}
+                    {selectedChannels.includes("sms") && (
+                      <SelectItem value="sms">SMS</SelectItem>
+                    )}
+                    {selectedChannels.includes("whatsapp") && (
+                      <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                    )}
+                    {selectedChannels.includes("rcs") && (
+                      <SelectItem value="rcs">RCS</SelectItem>
+                    )}
+                    {selectedChannels.length === 0 && (
+                      <>
+                        <SelectItem value="email">Email</SelectItem>
+                        <SelectItem value="sms">SMS</SelectItem>
+                        <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                        <SelectItem value="rcs">RCS</SelectItem>
+                      </>
+                    )}
                   </SelectContent>
                 </Select>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {selectedChannels.map((channel) => (
+                    <Badge key={channel} variant="outline">
+                      {channel === "email" && "Email"}
+                      {channel === "sms" && "SMS"}
+                      {channel === "whatsapp" && "WhatsApp"}
+                      {channel === "rcs" && "RCS"}
+                    </Badge>
+                  ))}
+                </div>
                 <p className="text-sm text-muted-foreground">
-                  Escolha o tipo de campanha que você deseja criar.
+                  Canais selecionados na configuração da campanha. O canal principal será usado para pré-visualização.
                 </p>
               </div>
 
@@ -201,51 +272,28 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({ initialTemplate, segm
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="bg-muted/30 rounded-md p-4 border">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="flex items-center gap-1 text-muted-foreground text-sm mb-1">
-                    {getChannelIcon()}
-                    <span>{campaignType.toUpperCase()}</span>
-                  </div>
-                  <h3 className="text-lg font-semibold">{campaignName || "Nome da Campanha"}</h3>
-                  
-                  {campaignType === 'email' && campaignSubject && (
-                    <div className="text-sm text-muted-foreground mt-1 mb-2">
-                      <span className="font-medium">Assunto:</span> {campaignSubject}
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <Badge variant="outline" className="text-xs flex items-center gap-1">
-                    <CalendarIcon className="h-3 w-3" />
-                    Hoje
-                  </Badge>
-                </div>
-              </div>
-              
-              <div className="mt-3 border-t pt-3">
-                <div className="text-sm prose-sm max-w-full overflow-hidden break-words">
-                  {campaignContent || "Conteúdo da Campanha"}
-                </div>
-              </div>
-              
-              {initialTemplate && (
-                <div className="mt-3 pt-3 border-t">
-                  <AudienceInfo
-                    audienceSize={initialTemplate.audienceSize}
-                    audienceSegmentId={initialTemplate.audienceSegmentId}
-                    translations={translations}
-                  />
-                </div>
-              )}
-            </div>
+            <CampaignPreview 
+              content={previewContent}
+              type={campaignType}
+              subject={campaignSubject}
+              platform={initialTemplate?.platform}
+            />
           </CardContent>
           <CardFooter className="flex justify-between border-t pt-4">
-            <Button variant="outline" size="sm">Visualizar Completo</Button>
+            <Button variant="outline" size="sm" onClick={() => setShowFullPreview(true)}>Visualizar Completo</Button>
             <Button variant="secondary" size="sm">Enviar Teste</Button>
           </CardFooter>
         </Card>
+        
+        <CampaignFullPreviewDialog
+          open={showFullPreview}
+          onOpenChange={setShowFullPreview}
+          content={previewContent}
+          type={campaignType}
+          subject={campaignSubject}
+          platform={initialTemplate?.platform}
+          channels={selectedChannels as CampaignType[]}
+        />
       </div>
     </div>
   );

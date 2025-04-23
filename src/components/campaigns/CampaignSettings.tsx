@@ -5,7 +5,7 @@ import AudienceSettings from "./settings/AudienceSettings";
 import ChannelSettings from "./settings/ChannelSettings";
 import IncentiveSettings from "./settings/IncentiveSettings";
 import ScheduleSettings from "./settings/ScheduleSettings";
-import { CampaignTemplate } from "@/types/campaign";
+import { CampaignTemplate, CampaignType } from "@/types/campaign";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCampaignSettingsState } from "./settings/CampaignSettingsParts/useCampaignSettingsState";
 import TemplateInfoSection from "./settings/CampaignSettingsParts/TemplateInfoSection";
@@ -14,7 +14,15 @@ import { NewCouponDialogSection } from "./settings/CampaignSettingsParts/NewCoup
 
 interface CampaignSettingsProps {
   template: CampaignTemplate | null;
-  onContinue: () => void;
+  onContinue: (settings: {
+    selectedChannels: string[];
+    audienceType: string;
+    incentiveType: string;
+    scheduledDate: string;
+    scheduledTime: string;
+    inactiveDays: string;
+    selectedSegment: string;
+  }) => void;
 }
 
 const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinue }) => {
@@ -64,7 +72,15 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       title: "Campaign settings saved",
       description: "You can now customize your campaign content"
     });
-    onContinue();
+    onContinue({
+      selectedChannels,
+      audienceType,
+      incentiveType,
+      scheduledDate,
+      scheduledTime,
+      inactiveDays,
+      selectedSegment,
+    });
   };
 
   const getEstimatedAudience = () => {

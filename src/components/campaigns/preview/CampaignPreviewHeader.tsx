@@ -3,15 +3,17 @@ import React from "react";
 import { MessageSquare, Mail, MessageCircle, Image } from "lucide-react";
 import { CampaignType } from "@/types/campaign";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 interface CampaignPreviewHeaderProps {
   type: CampaignType;
   platform?: string;
+  channels?: CampaignType[];
 }
 
-const CampaignPreviewHeader: React.FC<CampaignPreviewHeaderProps> = ({ type, platform }) => {
-  const getChannelIcon = () => {
-    switch (type) {
+const CampaignPreviewHeader: React.FC<CampaignPreviewHeaderProps> = ({ type, platform, channels = [] }) => {
+  const getChannelIcon = (channelType: CampaignType) => {
+    switch (channelType) {
       case "whatsapp":
         return <MessageSquare className="w-4 h-4" />;
       case "email":
@@ -27,8 +29,8 @@ const CampaignPreviewHeader: React.FC<CampaignPreviewHeaderProps> = ({ type, pla
     }
   };
 
-  const getChannelName = () => {
-    switch (type) {
+  const getChannelName = (channelType: CampaignType) => {
+    switch (channelType) {
       case "whatsapp":
         return "WhatsApp";
       case "email":
@@ -49,8 +51,8 @@ const CampaignPreviewHeader: React.FC<CampaignPreviewHeaderProps> = ({ type, pla
     }
   };
 
-  const getChannelColor = () => {
-    switch (type) {
+  const getChannelColor = (channelType: CampaignType) => {
+    switch (channelType) {
       case "whatsapp":
         return "bg-green-100 text-green-800";
       case "email":
@@ -68,16 +70,24 @@ const CampaignPreviewHeader: React.FC<CampaignPreviewHeaderProps> = ({ type, pla
     }
   };
 
+  // Show selected channels if available, otherwise just show the main type
+  const channelsToShow = channels && channels.length > 0 ? channels : [type];
+
   return (
     <div className="flex items-center p-2 border-b">
-      <div
-        className={cn(
-          "flex items-center px-2 py-1 rounded text-xs font-medium",
-          getChannelColor()
-        )}
-      >
-        {getChannelIcon()}
-        <span className="ml-1">{getChannelName()}</span>
+      <div className="flex flex-wrap gap-1">
+        {channelsToShow.map((channel, index) => (
+          <div
+            key={`${channel}-${index}`}
+            className={cn(
+              "flex items-center px-2 py-1 rounded text-xs font-medium",
+              getChannelColor(channel)
+            )}
+          >
+            {getChannelIcon(channel)}
+            <span className="ml-1">{getChannelName(channel)}</span>
+          </div>
+        ))}
       </div>
       <div className="ml-auto text-xs text-gray-500">
         Pré-visualização

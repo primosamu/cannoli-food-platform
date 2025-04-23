@@ -44,24 +44,42 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
     .replace(/\{\{discount\}\}/g, "10%")
     .replace(/\{\{code\}\}/g, "PROMO10")
     .replace(/\{\{date\}\}/g, "30/04/2025")
-    .replace(/\{\{time\}\}/g, "19h");
+    .replace(/\{\{time\}\}/g, "19h")
+    .replace(/\{\{event\}\}/g, "Jazz")
+    .replace(/\{\{dish\}\}/g, "Risoto de Camarão")
+    .replace(/\{\{phone\}\}/g, "(11) 98765-4321")
+    .replace(/\{\{promotion\}\}/g, "Final de Semana")
+    .replace(/\{\{items\}\}/g, "pratos italianos")
+    .replace(/\{\{month\}\}/g, "Maio");
 
   // Use imagem fictícia se não fornecida
   const imgToShow = imageUrl || fallbackImages[type];
 
   const handleActivateTest = () => {
+    let message = "";
+    
+    if (type === "paid") {
+      if (platform === "gmb") {
+        message = "Post de teste publicado no Google Meu Negócio (modo teste).";
+      } else if (platform === "google") {
+        message = "Anúncio de teste criado no Google Ads (modo rascunho).";
+      } else {
+        message = "Anúncio de teste publicado no modo de teste na plataforma Meta.";
+      }
+    } else {
+      message = "A campanha de teste foi enviada para o seu contato de teste.";
+    }
+    
     toast({
       title: "Teste enviado",
-      description: type === "paid" 
-        ? "A campanha de teste foi publicada no modo de teste na plataforma selecionada."
-        : "A campanha de teste foi enviada para o seu contato de teste.",
+      description: message,
       duration: 4000,
     });
   };
 
   return (
     <Card>
-      <CampaignPreviewHeader type={type} />
+      <CampaignPreviewHeader type={type} platform={platform} />
       <CardContent className={cn("p-4 overflow-auto max-h-[600px] bg-white")}>
         {content ? (
           <CampaignPreviewBody
@@ -69,6 +87,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
             type={type}
             subject={subject}
             imageUrl={imgToShow}
+            platform={platform}
           />
         ) : (
           <div className="text-center p-8 text-muted-foreground">
@@ -93,7 +112,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
           className="flex items-center gap-2"
         >
           <Play className="w-4 h-4" />
-          {type === "paid" ? "Testar Anúncio" : "Ativar Teste"}
+          {type === "paid" ? (platform === "gmb" ? "Testar Post" : "Testar Anúncio") : "Ativar Teste"}
         </Button>
       </CardFooter>
       <CampaignFullPreviewDialog
@@ -103,6 +122,7 @@ const CampaignPreview: React.FC<CampaignPreviewProps> = ({
         type={type}
         subject={subject}
         imageUrl={imgToShow}
+        platform={platform}
       />
     </Card>
   );

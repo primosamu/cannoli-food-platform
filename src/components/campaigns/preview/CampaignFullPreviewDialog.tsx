@@ -1,8 +1,8 @@
 
 import React from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import CampaignPreviewBody from "./CampaignPreviewBody";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { CampaignType } from "@/types/campaign";
+import CampaignPreviewBody from "./CampaignPreviewBody";
 
 interface CampaignFullPreviewDialogProps {
   open: boolean;
@@ -11,6 +11,7 @@ interface CampaignFullPreviewDialogProps {
   type: CampaignType;
   subject?: string;
   imageUrl?: string;
+  platform?: string;
 }
 
 const CampaignFullPreviewDialog: React.FC<CampaignFullPreviewDialogProps> = ({
@@ -20,24 +21,24 @@ const CampaignFullPreviewDialog: React.FC<CampaignFullPreviewDialogProps> = ({
   type,
   subject,
   imageUrl,
-}) => (
-  <Dialog open={open} onOpenChange={onOpenChange}>
-    <DialogContent className="max-w-2xl w-full">
-      <DialogHeader>
-        <DialogTitle>Pré-visualização Completa</DialogTitle>
-        <DialogDescription>Veja como seu cliente receberá esta campanha.</DialogDescription>
-      </DialogHeader>
-      <div className="py-4 px-2 max-h-[75vh] overflow-auto">
-        <CampaignPreviewBody
-          content={content}
-          type={type}
-          subject={subject}
-          imageUrl={imageUrl}
-          isFull={true}
-        />
-      </div>
-    </DialogContent>
-  </Dialog>
-);
+  platform
+}) => {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[700px] max-h-screen overflow-y-auto">
+        <div className="py-4">
+          <CampaignPreviewBody
+            content={content}
+            type={type}
+            subject={subject}
+            imageUrl={imageUrl}
+            isFull={true}
+            platform={platform}
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 export default CampaignFullPreviewDialog;

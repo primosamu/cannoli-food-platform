@@ -1,11 +1,11 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { TranslationsType } from "@/types/language";
+import { Translations } from "@/types/language";
 
 interface ContinueButtonProps {
   onClick: () => void;
-  translations: TranslationsType;
+  translations: Translations;
 }
 
 const ContinueButton: React.FC<ContinueButtonProps> = ({ onClick, translations }) => {

@@ -1,4 +1,3 @@
-
 export interface CampaignTranslations {
   // Campaign related
   presetCampaigns: string;
@@ -25,17 +24,23 @@ export interface CampaignTranslations {
   loyaltyReward: string;
   weekendPromo: string;
 
-  // Campaign category descriptions
-  'customer-recoveryDescription': string;
-  'loyaltyDescription': string;
-  'consumption-patternDescription': string;
-  'channel-migrationDescription': string;
-
   // Campaign categories
   'customer-recovery': string;
   'consumption-pattern': string;
   'channel-migration': string;
   'loyalty': string;
+  'meta'?: string;
+  'google'?: string;
+  'gmb'?: string;
+
+  // Campaign category descriptions
+  'customer-recoveryDescription': string;
+  'loyaltyDescription': string;
+  'consumption-patternDescription': string;
+  'channel-migrationDescription': string;
+  'metaDescription'?: string;
+  'googleDescription'?: string;
+  'gmbDescription'?: string;
   
   // Message types
   messaging: string;
@@ -55,6 +60,7 @@ export interface CampaignTranslations {
   emailTemplates: string;
   rcsTemplates: string;
   paidTemplates: string;
+  gmbTemplates?: string;
   
   // Other required properties
   allStores: string;

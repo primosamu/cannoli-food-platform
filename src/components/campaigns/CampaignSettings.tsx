@@ -59,15 +59,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
     });
   };
 
-  const handleContinue = (settings: {
-    selectedChannels: string[];
-    audienceType: string;
-    incentiveType: string;
-    scheduledDate: string;
-    scheduledTime: string;
-    inactiveDays: string;
-    selectedSegment: string;
-  }) => {
+  const handleContinue = () => {
     if (selectedChannels.length === 0) {
       toast({
         title: "No channel selected",
@@ -80,7 +72,15 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       title: "Campaign settings saved",
       description: "You can now customize your campaign content"
     });
-    onContinue(settings);
+    onContinue({
+      selectedChannels,
+      audienceType,
+      incentiveType,
+      scheduledDate,
+      scheduledTime,
+      inactiveDays,
+      selectedSegment,
+    });
   };
 
   const getEstimatedAudience = () => {
@@ -104,17 +104,6 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       <PaidCampaignSettings template={template} onContinue={onContinue} />
     );
   }
-
-  // Create a settings object to pass to ContinueButton
-  const settingsObject = {
-    selectedChannels,
-    audienceType,
-    incentiveType,
-    scheduledDate,
-    scheduledTime,
-    inactiveDays,
-    selectedSegment,
-  };
 
   return (
     <div className="space-y-6">
@@ -159,7 +148,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       <hr className="my-2 border-border" />
 
       <ContinueButton 
-        onClick={() => handleContinue(settingsObject)} 
+        onClick={handleContinue}
         translations={translations}
       />
 

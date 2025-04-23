@@ -1,4 +1,3 @@
-
 import { CampaignTranslations } from "../../types/language/campaign";
 
 export const campaignTranslations: CampaignTranslations = {
@@ -32,12 +31,18 @@ export const campaignTranslations: CampaignTranslations = {
   'consumption-pattern': 'Consumption Patterns',
   'channel-migration': 'Channel Migration',
   'loyalty': 'Customer Loyalty',
+  'meta': 'Meta Ads',
+  'google': 'Google Ads',
+  'gmb': 'Google My Business',
 
   // Campaign category descriptions
   'customer-recoveryDescription': 'Win back customers who haven\'t ordered in a while',
   'loyaltyDescription': 'Reward and engage your loyal customers',
   'consumption-patternDescription': 'Encourage new consumption behaviors',
   'channel-migrationDescription': 'Move customers from marketplaces to direct ordering',
+  'metaDescription': 'Facebook and Instagram ad campaigns',
+  'googleDescription': 'Search and display ads on Google',
+  'gmbDescription': 'Local campaigns and posts for Google My Business',
   
   // Message types
   messaging: 'Messaging',
@@ -57,6 +62,7 @@ export const campaignTranslations: CampaignTranslations = {
   emailTemplates: 'Email Templates',
   rcsTemplates: 'RCS Templates',
   paidTemplates: 'Paid Traffic Templates',
+  gmbTemplates: 'Google My Business Templates',
   
   // Other required properties
   allStores: 'All Stores',

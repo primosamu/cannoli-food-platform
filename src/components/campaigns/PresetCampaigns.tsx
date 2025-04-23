@@ -59,6 +59,12 @@ const paidCategories = [
     name: "Google Ads",
     description: "Search and display ads on Google",
     color: "bg-green-100 text-green-700 border-green-200"
+  },
+  {
+    id: "gmb",
+    name: "Google Meu Negócio",
+    description: "Local campaigns and posts for Google My Business",
+    color: "bg-yellow-100 text-yellow-700 border-yellow-200"
   }
 ];
 

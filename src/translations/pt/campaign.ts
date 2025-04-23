@@ -32,12 +32,18 @@ export const campaignTranslations: CampaignTranslations = {
   'consumption-pattern': 'Padrões de Consumo',
   'channel-migration': 'Migração de Canal',
   'loyalty': 'Fidelização de Clientes',
+  'meta': 'Meta Ads',
+  'google': 'Google Ads',
+  'gmb': 'Google Meu Negócio',
 
   // Descrições de categorias de campanha
   'customer-recoveryDescription': 'Recupere clientes que não fazem pedidos há algum tempo',
   'loyaltyDescription': 'Recompense e engaje seus clientes fiéis',
   'consumption-patternDescription': 'Incentive novos comportamentos de consumo',
   'channel-migrationDescription': 'Mova clientes de marketplaces para pedidos diretos',
+  'metaDescription': 'Campanhas para Facebook e Instagram',
+  'googleDescription': 'Anúncios de pesquisa e display no Google',
+  'gmbDescription': 'Campanhas locais e posts para Google Meu Negócio',
   
   // Tipos de campanha
   'messaging': 'Mensageria',
@@ -73,6 +79,7 @@ export const campaignTranslations: CampaignTranslations = {
   'emailTemplates': 'Templates de Email',
   'rcsTemplates': 'Templates de RCS',
   'paidTemplates': 'Templates de Tráfego Pago',
+  'gmbTemplates': 'Templates do Google Meu Negócio',
 
   // Página de configurações de campanha
   'audienceTargeting': 'Segmentação de Audiência',

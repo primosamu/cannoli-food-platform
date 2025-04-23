@@ -1,4 +1,3 @@
-
 import { CampaignTemplate } from "../types/campaign";
 
 export const campaignTemplates: CampaignTemplate[] = [
@@ -366,6 +365,72 @@ export const campaignTemplates: CampaignTemplate[] = [
     targetAudience: {
       remarketing: true,
       daysVisited: 30
+    }
+  },
+
+  // Google My Business Templates
+  {
+    id: "gmb-profile-update",
+    name: "Atualização de Perfil do GMB",
+    type: "paid",
+    content: "🏆 DESTAQUE SEU RESTAURANTE NO GOOGLE 🏆\n\nAumente sua presença no Google Meu Negócio com fotos profissionais, informações atualizadas e promoções em tempo real.\n\nGaranta mais visibilidade e clientes para {{restaurant}}.",
+    description: "Campanha para otimizar o perfil do Google Meu Negócio",
+    imageUrl: "gmb-profile.jpg",
+    platform: "gmb",
+    targetAudience: {
+      location: "5km",
+      interests: ["gastronomia local", "restaurantes próximos"]
+    }
+  },
+  {
+    id: "gmb-reviews",
+    name: "Campanha de Avaliações GMB",
+    type: "paid",
+    content: "⭐⭐⭐⭐⭐ VALORIZE SUA OPINIÃO!\n\nSua experiência no {{restaurant}} foi especial? Compartilhe sua avaliação no Google e ganhe 10% de desconto em sua próxima visita!\n\nAvalie-nos: [LINK]",
+    description: "Campanha para incentivar avaliações no Google Meu Negócio",
+    imageUrl: "gmb-reviews.jpg",
+    platform: "gmb",
+    targetAudience: {
+      remarketing: true,
+      daysVisited: 7
+    }
+  },
+  {
+    id: "gmb-local-post",
+    name: "Post Local no GMB",
+    type: "paid",
+    content: "🍽️ NOVIDADE NO CARDÁPIO! 🍽️\n\nApresenta com exclusividade no {{restaurant}} nosso novo prato sensação: {{dish}}!\n\nDisponível por tempo limitado. Reserve já!",
+    description: "Post local destacando novidades do restaurante",
+    imageUrl: "gmb-local-post.jpg",
+    platform: "gmb",
+    targetAudience: {
+      location: "3km",
+      interests: ["gastronomia", "novidades culinárias"]
+    }
+  },
+  {
+    id: "gmb-evento",
+    name: "Evento no GMB",
+    type: "paid",
+    content: "🎵 NOITE ESPECIAL DE {{event}} 🎵\n\nO {{restaurant}} convida você para uma experiência gastronômica com música ao vivo!\n\nData: {{date}} às {{time}}. Reserve sua mesa: {{phone}}",
+    description: "Divulgação de evento no Google Meu Negócio",
+    imageUrl: "gmb-evento.jpg",
+    platform: "gmb",
+    targetAudience: {
+      location: "7km",
+      interests: ["eventos gastronômicos", "música ao vivo", "experiências culinárias"]
+    }
+  },
+  {
+    id: "gmb-promocao",
+    name: "Promoção no GMB",
+    type: "paid",
+    content: "🔥 PROMOÇÃO DE {{promotion}} 🔥\n\nApenas esta semana no {{restaurant}}!\n\nTodos os {{items}} com {{discount}}% de desconto de segunda a quinta.\n\nReserve: {{phone}}",
+    description: "Anúncio de promoção no Google Meu Negócio",
+    imageUrl: "gmb-promocao.jpg",
+    platform: "gmb",
+    targetAudience: {
+      location: "5km"
     }
   },
 

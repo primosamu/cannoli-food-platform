@@ -1,15 +1,27 @@
 
 import React, { useState } from "react";
+import GmbCampaignSettings from "./GmbCampaignSettings";
+
 interface PaidCampaignSettingsProps {
   template: any;
   onContinue: () => void;
 }
+
 const PaidCampaignSettings: React.FC<PaidCampaignSettingsProps> = ({ template, onContinue }) => {
   const [budget, setBudget] = useState("");
   const [duration, setDuration] = useState("");
   const [keywords, setKeywords] = useState("");
   const [region, setRegion] = useState("");
+  
+  // Check if this is a Google My Business template
+  const isGmbTemplate = template?.platform === "gmb";
+  
+  if (isGmbTemplate) {
+    return <GmbCampaignSettings template={template} onContinue={onContinue} />;
+  }
+  
   const platformUpper = template?.platform?.toUpperCase() || "META";
+  
   return (
     <div className="space-y-6">
       <div className="bg-muted/50 p-4 rounded-lg mb-6">
@@ -88,4 +100,5 @@ const PaidCampaignSettings: React.FC<PaidCampaignSettingsProps> = ({ template, o
     </div>
   );
 };
+
 export default PaidCampaignSettings;

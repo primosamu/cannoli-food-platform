@@ -18,12 +18,12 @@ const EmailPreview: React.FC<EmailPreviewProps> = ({ content, subject, imageUrl 
     {/* Corpo do Email */}
     <div className="p-6">
       {imageUrl && (
-        <div className="w-full h-40 bg-gray-100 flex items-center justify-center mb-6 rounded">
+        <div className="w-full mb-6 rounded overflow-hidden">
           <img 
             src={imageUrl}
             alt="Imagem da campanha"
-            className="h-full object-contain rounded"
-            style={{ maxHeight: 180, maxWidth: "100%" }}
+            className="w-full object-contain"
+            style={{ maxHeight: 200 }}
             onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
           />
         </div>

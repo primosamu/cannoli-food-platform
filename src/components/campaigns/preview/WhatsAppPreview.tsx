@@ -43,7 +43,7 @@ const WhatsAppPreview: React.FC<WhatsAppPreviewProps> = ({ content, imageUrl }) 
           <div className="text-[#777] text-[10px] text-right mt-1">15:22</div>
         </div>
         {/* Mensagem da campanha */}
-        <div className="bg-[#DCF8C6] rounded-lg p-3 ml-auto mt-6 mb-2 shadow max-w-[85%]">
+        <div className="bg-white rounded-lg p-3 mb-2 shadow max-w-[85%]">
           <div className="font-medium text-[#128C7E] text-xs mb-1">Seu Restaurante</div>
           <div className="text-sm whitespace-pre-line">{content}</div>
           {imageUrl && (

@@ -4,17 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Translations } from "@/types/language";
 
 interface ContinueButtonProps {
-  onClick: (settings?: any) => void;  // Accept optional settings parameter
+  onClick: () => void;  // Simplified to a simple function with no parameters
   translations: Translations;
-  settings?: any; // Optional settings object to pass to onClick
 }
 
-const ContinueButton: React.FC<ContinueButtonProps> = ({ onClick, translations, settings }) => {
+const ContinueButton: React.FC<ContinueButtonProps> = ({ onClick, translations }) => {
   return (
     <div className="flex justify-end">
       <Button 
         size="lg"
-        onClick={() => onClick(settings)}  // Pass settings to onClick function
+        onClick={onClick}  // Direct function call with no parameters
       >
         {translations.continueToCampaign || "Continue to Campaign Creation"}
       </Button>

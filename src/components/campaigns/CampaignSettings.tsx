@@ -59,7 +59,15 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
     });
   };
 
-  const handleContinue = () => {
+  const handleContinue = (settings: {
+    selectedChannels: string[];
+    audienceType: string;
+    incentiveType: string;
+    scheduledDate: string;
+    scheduledTime: string;
+    inactiveDays: string;
+    selectedSegment: string;
+  }) => {
     if (selectedChannels.length === 0) {
       toast({
         title: "No channel selected",
@@ -72,15 +80,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       title: "Campaign settings saved",
       description: "You can now customize your campaign content"
     });
-    onContinue({
-      selectedChannels,
-      audienceType,
-      incentiveType,
-      scheduledDate,
-      scheduledTime,
-      inactiveDays,
-      selectedSegment,
-    });
+    onContinue(settings);
   };
 
   const getEstimatedAudience = () => {
@@ -159,9 +159,8 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       <hr className="my-2 border-border" />
 
       <ContinueButton 
-        onClick={handleContinue} 
+        onClick={() => handleContinue(settingsObject)} 
         translations={translations}
-        settings={settingsObject}  // Pass the settings object
       />
 
       <NewCouponDialogSection

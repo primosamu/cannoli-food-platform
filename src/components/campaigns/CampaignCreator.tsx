@@ -39,12 +39,11 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Editor } from "@/components/ui/editor";
-
 import CampaignDetailsSection from "./CampaignDetailsSection";
 import CampaignChannelsSection from "./CampaignChannelsSection";
 import CampaignContentSection from "./CampaignContentSection";
+import CampaignImageOptimizerSection from "./CampaignImageOptimizerSection";
 
-// Form schema definition
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Campaign name must be at least 2 characters.",
@@ -90,7 +89,6 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
     settings?.selectedChannels || [campaignType]
   );
   
-  // Image optimizer state
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [brightness, setBrightness] = useState([100]);
   const [contrast, setContrast] = useState([100]);
@@ -104,7 +102,6 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
   const { toast } = useToast();
   const { translations } = useLanguage();
 
-  // Create a default image optimizer translations object
   const defaultImageOptimizerTranslations: ImageOptimizerTranslations = {
     imageOptimizer: "Image Optimizer",
     upload: "Upload",
@@ -124,10 +121,12 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
     imageOptimizedDesc: "Your image has been optimized successfully"
   };
 
-  // Safely access image optimizer translations with fallbacks
-  const imageOptimizerTranslations = {
+  const translationsObj = typeof translations === "object" && translations !== null ? translations : {};
+  const imageOptimizerTranslations: ImageOptimizerTranslations = {
     ...defaultImageOptimizerTranslations,
-    ...(translations?.imageOptimizer || {})
+    ...(translationsObj.imageOptimizer && typeof translationsObj.imageOptimizer === "object"
+      ? translationsObj.imageOptimizer
+      : {})
   };
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -188,19 +187,16 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
   const handleChannelToggle = (channelId: string) => {
     setSelectedChannels(prevChannels => {
       if (prevChannels.includes(channelId)) {
-        // Don't remove if it's the last channel
         if (prevChannels.length === 1) {
           return prevChannels;
         }
         const newChannels = prevChannels.filter(ch => ch !== channelId);
-        // Update campaign type if we're removing the current type
         if (channelId === campaignType && newChannels.length > 0) {
           setCampaignType(newChannels[0] as CampaignType);
         }
         return newChannels;
       } else {
         const newChannels = [...prevChannels, channelId];
-        // If this is the first channel, set it as the campaign type
         if (newChannels.length === 1) {
           setCampaignType(channelId as CampaignType);
         }
@@ -217,9 +213,7 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
       description: "Your image is being optimized with AI...",
     });
     
-    // Simulate AI processing
     setTimeout(() => {
-      // Set some "optimized" values based on food photography best practices
       setBrightness([110]);
       setContrast([115]);
       setSaturation([120]);
@@ -237,7 +231,6 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
   };
 
   const handleUploadClick = () => {
-    // Simulate file upload
     toast({
       title: "Upload complete",
       description: "Your image was uploaded successfully",
@@ -254,12 +247,10 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
     { id: "vintage", name: "Vintage", className: "sepia-50 contrast-75 brightness-90" }
   ];
 
-  // Function to combine class names
   const cn = (...classes: (string | undefined)[]) => {
     return classes.filter(Boolean).join(' ');
   };
 
-  // Substituição para prévia
   const previewContent = campaignContent
     .replace(/\{\{name\}\}/g, "Cliente")
     .replace(/\{\{restaurant\}\}/g, "Seu Restaurante")
@@ -314,162 +305,29 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
                     selectedChannels={selectedChannels}
                     initialTemplate={initialTemplate}
                   />
-                  {/* Otimizador de imagens integrado (Expansível) */}
-                  {showOptimizer && (
-                    <div className="border border-border rounded-md p-4 space-y-4">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-medium">{imageOptimizerTranslations.imageOptimizer}</h3>
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm" onClick={handleUploadClick}>
-                            <Upload className="h-4 w-4 mr-1" /> {imageOptimizerTranslations.upload}
-                          </Button>
-                        </div>
-                      </div>
-                      
-                      {/* Preview area with filter class applied */}
-                      <div className={cn(
-                        "relative w-full h-48 rounded-md overflow-hidden bg-gray-100 flex items-center justify-center transition-all",
-                        hasImage ? filters.find(f => f.id === currentFilter)?.className : ""
-                      )}>
-                        {hasImage ? (
-                          <div className="absolute inset-0 bg-gradient-to-r from-amber-100/30 to-orange-200/30 flex items-center justify-center">
-                            <div className="w-full h-full bg-[url('/placeholder.svg')] bg-cover bg-center opacity-90" />
-                          </div>
-                        ) : (
-                          <div className="flex flex-col items-center text-muted-foreground">
-                            <ImageIcon className="h-8 w-8 mb-2" />
-                            <p>{imageOptimizerTranslations.uploadImage}</p>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {hasImage && (
-                        <Tabs value={activeImageTab} onValueChange={setActiveImageTab} className="w-full">
-                          <TabsList className="w-full grid grid-cols-2">
-                            <TabsTrigger value="basic">
-                              <SunMedium className="h-4 w-4 mr-2" />
-                              {imageOptimizerTranslations.basic}
-                            </TabsTrigger>
-                            <TabsTrigger value="filters">
-                              <Palette className="h-4 w-4 mr-2" />
-                              {imageOptimizerTranslations.filters}
-                            </TabsTrigger>
-                          </TabsList>
-                          
-                          <TabsContent value="basic" className="space-y-4 mt-4">
-                            <div className="space-y-3">
-                              <div className="space-y-2">
-                                <div className="flex justify-between items-center">
-                                  <div className="flex items-center gap-2">
-                                    <SunMedium className="h-4 w-4 text-primary" />
-                                    <Label htmlFor="brightness">{imageOptimizerTranslations.brightness}</Label>
-                                  </div>
-                                  <span className="text-sm">{brightness[0]}%</span>
-                                </div>
-                                <Slider 
-                                  id="brightness" 
-                                  min={0} 
-                                  max={200} 
-                                  step={1} 
-                                  value={brightness} 
-                                  onValueChange={setBrightness} 
-                                />
-                              </div>
-                              
-                              <div className="space-y-2">
-                                <div className="flex justify-between items-center">
-                                  <div className="flex items-center gap-2">
-                                    <Contrast className="h-4 w-4 text-primary" />
-                                    <Label htmlFor="contrast">{imageOptimizerTranslations.contrast}</Label>
-                                  </div>
-                                  <span className="text-sm">{contrast[0]}%</span>
-                                </div>
-                                <Slider 
-                                  id="contrast" 
-                                  min={0} 
-                                  max={200} 
-                                  step={1} 
-                                  value={contrast} 
-                                  onValueChange={setContrast} 
-                                />
-                              </div>
-                              
-                              <div className="space-y-2">
-                                <div className="flex justify-between items-center">
-                                  <div className="flex items-center gap-2">
-                                    <Palette className="h-4 w-4 text-primary" />
-                                    <Label htmlFor="saturation">{imageOptimizerTranslations.saturation}</Label>
-                                  </div>
-                                  <span className="text-sm">{saturation[0]}%</span>
-                                </div>
-                                <Slider 
-                                  id="saturation" 
-                                  min={0} 
-                                  max={200} 
-                                  step={1} 
-                                  value={saturation} 
-                                  onValueChange={setSaturation} 
-                                />
-                              </div>
-                            </div>
-                          </TabsContent>
-                          
-                          <TabsContent value="filters" className="space-y-4 mt-4">
-                            <div className="grid grid-cols-3 gap-2">
-                              {filters.map(filter => (
-                                <div 
-                                  key={filter.id}
-                                  onClick={() => setCurrentFilter(filter.id)}
-                                  className={cn(
-                                    "relative cursor-pointer h-20 rounded-md overflow-hidden bg-muted flex items-center justify-center border-2",
-                                    currentFilter === filter.id ? "border-primary" : "border-transparent",
-                                    filter.className
-                                  )}
-                                >
-                                  <div className="absolute inset-0 bg-[url('/placeholder.svg')] bg-cover bg-center opacity-60" />
-                                  <span className="relative z-10 text-xs font-medium bg-background/60 px-2 py-1 rounded">
-                                    {filter.name}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          </TabsContent>
-                        </Tabs>
-                      )}
-                      
-                      <div className="flex justify-between">
-                        <Button 
-                          variant="outline" 
-                          onClick={() => {
-                            setBrightness([100]);
-                            setContrast([100]);
-                            setSaturation([100]);
-                            setSharpness([0]);
-                            setCurrentFilter("none");
-                          }}
-                          disabled={!hasImage}
-                        >
-                          <RotateCw className="mr-2 h-4 w-4" /> {imageOptimizerTranslations.reset}
-                        </Button>
-                        <Button 
-                          onClick={handleOptimizeWithAI} 
-                          disabled={isOptimizing}
-                        >
-                          {isOptimizing ? (
-                            <>
-                              <span className="animate-spin mr-2">⌛</span> {imageOptimizerTranslations.optimizing}
-                            </>
-                          ) : (
-                            <>
-                              <Wand2 className="mr-2 h-4 w-4" /> {imageOptimizerTranslations.optimizeWithAI}
-                            </>
-                          )}
-                        </Button>
-                      </div>
-                    </div>
-                  )}
+                  <CampaignImageOptimizerSection
+                    show={showOptimizer}
+                    onClose={() => setShowOptimizer(false)}
+                    translations={imageOptimizerTranslations}
+                    hasImage={hasImage}
+                    setHasImage={setHasImage}
+                    brightness={brightness}
+                    setBrightness={setBrightness}
+                    contrast={contrast}
+                    setContrast={setContrast}
+                    saturation={saturation}
+                    setSaturation={setSaturation}
+                    sharpness={sharpness}
+                    setSharpness={setSharpness}
+                    currentFilter={currentFilter}
+                    setCurrentFilter={setCurrentFilter}
+                    activeImageTab={activeImageTab}
+                    setActiveImageTab={setActiveImageTab}
+                    isOptimizing={isOptimizing}
+                    handleOptimizeWithAI={handleOptimizeWithAI}
+                    handleUploadClick={handleUploadClick}
+                  />
                 </div>
-                
               </div>
             </div>
           </div>

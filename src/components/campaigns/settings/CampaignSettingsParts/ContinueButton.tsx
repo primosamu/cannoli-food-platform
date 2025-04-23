@@ -1,20 +1,24 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRightCircle } from "lucide-react";
+import { TranslationsType } from "@/types/language";
 
 interface ContinueButtonProps {
   onClick: () => void;
-  translations: any;
+  translations: TranslationsType;
 }
 
-const ContinueButton: React.FC<ContinueButtonProps> = ({ onClick, translations }) => (
-  <div className="flex justify-end">
-    <Button onClick={onClick} className="flex items-center gap-2">
-      {translations.continueToCampaign || "Continue to Campaign Editor"}
-      <ArrowRightCircle className="h-4 w-4" />
-    </Button>
-  </div>
-);
+const ContinueButton: React.FC<ContinueButtonProps> = ({ onClick, translations }) => {
+  return (
+    <div className="flex justify-end">
+      <Button 
+        size="lg"
+        onClick={onClick}
+      >
+        {translations.continue || "Continue to Campaign Creation"}
+      </Button>
+    </div>
+  );
+};
 
 export default ContinueButton;

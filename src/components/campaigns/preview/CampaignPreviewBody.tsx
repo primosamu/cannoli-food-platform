@@ -10,13 +10,15 @@ interface CampaignPreviewBodyProps {
   type: CampaignType;
   subject?: string;
   imageUrl?: string;
+  isFull?: boolean;
 }
 
 const CampaignPreviewBody: React.FC<CampaignPreviewBodyProps> = ({
   content,
   type,
   subject,
-  imageUrl
+  imageUrl,
+  isFull
 }) => {
   switch (type) {
     case "whatsapp":

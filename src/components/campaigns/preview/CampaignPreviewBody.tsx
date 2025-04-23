@@ -13,6 +13,7 @@ interface CampaignPreviewBodyProps {
   imageUrl?: string;
   isFull?: boolean;
   platform?: string;
+  channels?: CampaignType[];
 }
 
 const CampaignPreviewBody: React.FC<CampaignPreviewBodyProps> = ({
@@ -21,7 +22,8 @@ const CampaignPreviewBody: React.FC<CampaignPreviewBodyProps> = ({
   subject,
   imageUrl,
   isFull = false,
-  platform = "facebook"
+  platform = "facebook",
+  channels
 }) => {
   let previewComponent;
 

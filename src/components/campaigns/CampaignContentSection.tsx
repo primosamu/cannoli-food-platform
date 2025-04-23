@@ -8,9 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Eye, Image as ImageIcon } from "lucide-react";
 import CampaignPreview from "./CampaignPreview";
 import CampaignFullPreviewDialog from "./preview/CampaignFullPreviewDialog";
+import { CampaignType } from "@/types/campaign";
 
 interface CampaignContentSectionProps {
-  campaignType: string;
+  campaignType: CampaignType;
   campaignSubject: string;
   handleSubjectChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   campaignContent: string;
@@ -21,7 +22,7 @@ interface CampaignContentSectionProps {
   previewContent: string;
   showFullPreview: boolean;
   setShowFullPreview: (open: boolean) => void;
-  selectedChannels: string[];
+  selectedChannels: CampaignType[];
   initialTemplate?: any;
 }
 

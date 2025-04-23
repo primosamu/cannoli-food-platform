@@ -13,7 +13,7 @@ const ContinueButton: React.FC<ContinueButtonProps> = ({ onClick, translations }
     <div className="flex justify-end">
       <Button 
         size="lg"
-        onClick={() => onClick()}
+        onClick={() => onClick()} // Pass empty object if no settings are provided
       >
         {translations.continueToCampaign || "Continue to Campaign Creation"}
       </Button>

@@ -6,7 +6,7 @@ import { MessageSquare, Mail } from "lucide-react";
 import { CampaignType } from "@/types/campaign";
 
 interface CampaignChannelsSectionProps {
-  selectedChannels: string[];
+  selectedChannels: CampaignType[];
   handleChannelToggle: (channelId: string) => void;
   campaignType: CampaignType;
   handleTypeChange: (type: string) => void;

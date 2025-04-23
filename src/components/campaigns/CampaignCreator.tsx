@@ -85,8 +85,8 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
   const [campaignSubject, setCampaignSubject] = useState(initialTemplate?.subject || "");
   const [campaignContent, setCampaignContent] = useState(initialTemplate?.content || "");
   const [showFullPreview, setShowFullPreview] = useState(false);
-  const [selectedChannels, setSelectedChannels] = useState<string[]>(
-    settings?.selectedChannels || [campaignType]
+  const [selectedChannels, setSelectedChannels] = useState<CampaignType[]>(
+    settings?.selectedChannels?.map(ch => ch as CampaignType) || [campaignType]
   );
   
   const [isOptimizing, setIsOptimizing] = useState(false);
@@ -124,8 +124,8 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
   const translationsObj = typeof translations === "object" && translations !== null ? translations : {};
   const imageOptimizerTranslations: ImageOptimizerTranslations = {
     ...defaultImageOptimizerTranslations,
-    ...(translationsObj.imageOptimizer && typeof translationsObj.imageOptimizer === "object"
-      ? translationsObj.imageOptimizer
+    ...((translationsObj.imageOptimizer && typeof translationsObj.imageOptimizer === "object")
+      ? translationsObj.imageOptimizer as Partial<ImageOptimizerTranslations>
       : {})
   };
 
@@ -152,7 +152,7 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
   
   useEffect(() => {
     if (settings?.selectedChannels && settings.selectedChannels.length > 0) {
-      setSelectedChannels(settings.selectedChannels);
+      setSelectedChannels(settings.selectedChannels.map(ch => ch as CampaignType));
       setCampaignType(settings.selectedChannels[0] as CampaignType);
     }
   }, [settings]);
@@ -186,19 +186,20 @@ const CampaignCreator: React.FC<CampaignCreatorProps> = ({
 
   const handleChannelToggle = (channelId: string) => {
     setSelectedChannels(prevChannels => {
-      if (prevChannels.includes(channelId)) {
+      const channel = channelId as CampaignType;
+      if (prevChannels.includes(channel)) {
         if (prevChannels.length === 1) {
           return prevChannels;
         }
-        const newChannels = prevChannels.filter(ch => ch !== channelId);
-        if (channelId === campaignType && newChannels.length > 0) {
-          setCampaignType(newChannels[0] as CampaignType);
+        const newChannels = prevChannels.filter(ch => ch !== channel);
+        if (channel === campaignType && newChannels.length > 0) {
+          setCampaignType(newChannels[0]);
         }
         return newChannels;
       } else {
-        const newChannels = [...prevChannels, channelId];
+        const newChannels = [...prevChannels, channel];
         if (newChannels.length === 1) {
-          setCampaignType(channelId as CampaignType);
+          setCampaignType(channel);
         }
         return newChannels;
       }

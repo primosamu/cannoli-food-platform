@@ -1,3 +1,4 @@
+
 import React from "react";
 import PaidCampaignSettings from "./settings/PaidCampaignSettings";
 import AudienceSettings from "./settings/AudienceSettings";
@@ -107,16 +108,6 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
     );
   }
 
-  const settingsToPass = {
-    selectedChannels,
-    audienceType,
-    incentiveType,
-    scheduledDate,
-    scheduledTime,
-    inactiveDays,
-    selectedSegment,
-  };
-
   return (
     <div className="space-y-6">
       <TemplateInfoSection template={template} translations={translations} />
@@ -162,7 +153,6 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       <ContinueButton 
         onClick={handleContinue}
         translations={translations}
-        settings={settingsToPass}
       />
 
       <NewCouponDialogSection

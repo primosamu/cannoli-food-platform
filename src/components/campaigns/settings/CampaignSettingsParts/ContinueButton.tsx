@@ -4,17 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Translations } from "@/types/language";
 
 interface ContinueButtonProps {
-  onClick: (settings: any) => void;
+  onClick: () => void; // Changed this to not expect any parameters
   translations: Translations;
-  settings?: any; // Add a settings prop to receive from parent
 }
 
-const ContinueButton: React.FC<ContinueButtonProps> = ({ onClick, translations, settings = {} }) => {
+const ContinueButton: React.FC<ContinueButtonProps> = ({ onClick, translations }) => {
   return (
     <div className="flex justify-end">
       <Button 
         size="lg"
-        onClick={() => onClick(settings)} // Pass the settings to the onClick handler
+        onClick={onClick} // Direct function reference, no wrapper
       >
         {translations.continueToCampaign || "Continue to Campaign Creation"}
       </Button>

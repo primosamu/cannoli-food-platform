@@ -68,11 +68,8 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       });
       return;
     }
-    toast({
-      title: "Campaign settings saved",
-      description: "You can now customize your campaign content"
-    });
-    onContinue({
+    
+    const settings = {
       selectedChannels,
       audienceType,
       incentiveType,
@@ -80,7 +77,13 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       scheduledTime,
       inactiveDays,
       selectedSegment,
+    };
+    
+    toast({
+      title: "Campaign settings saved",
+      description: "You can now customize your campaign content"
     });
+    onContinue(settings);
   };
 
   const getEstimatedAudience = () => {

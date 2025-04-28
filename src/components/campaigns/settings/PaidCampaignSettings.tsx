@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import GmbCampaignSettings from "./GmbCampaignSettings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,10 +9,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Target, DollarSign, Tags, MapPin } from "lucide-react";
+import { CampaignTemplate } from "@/types/campaign";
 
 interface PaidCampaignSettingsProps {
-  template: any;
-  onContinue: () => void;
+  template: CampaignTemplate | null;
+  onContinue: (settings: {
+    selectedChannels: string[];
+    audienceType: string;
+    incentiveType: string;
+    scheduledDate: string;
+    scheduledTime: string;
+    inactiveDays: string;
+    selectedSegment: string;
+  }) => void;
 }
 
 const PaidCampaignSettings: React.FC<PaidCampaignSettingsProps> = ({ template, onContinue }) => {
@@ -36,6 +44,21 @@ const PaidCampaignSettings: React.FC<PaidCampaignSettingsProps> = ({ template, o
   const isGoogleAds = template?.platform === "google";
   const platformUpper = isGoogleAds ? "GOOGLE ADS" : "META ADS";
   const platformColor = isGoogleAds ? "bg-blue-100 text-blue-900" : "bg-blue-100 text-blue-900";
+
+  const handleContinue = () => {
+    // Create default settings object for paid campaigns
+    const settings = {
+      selectedChannels: ["paid"],
+      audienceType: "custom",
+      incentiveType: "none",
+      scheduledDate: "",
+      scheduledTime: "",
+      inactiveDays: "",
+      selectedSegment: "",
+    };
+    
+    onContinue(settings);
+  };
   
   return (
     <div className="space-y-6">
@@ -403,7 +426,7 @@ const PaidCampaignSettings: React.FC<PaidCampaignSettingsProps> = ({ template, o
       
       <div className="flex justify-end">
         <Button
-          onClick={onContinue}
+          onClick={handleContinue}
           className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90"
         >
           Continuar para criação do anúncio

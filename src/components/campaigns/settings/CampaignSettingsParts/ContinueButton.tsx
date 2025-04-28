@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Translations } from "@/types/language";
 
 interface ContinueButtonProps {
-  onClick: () => void; // Using a simple callback with no parameters
+  onClick: () => void; // A function with no parameters
   translations: Translations;
 }
 

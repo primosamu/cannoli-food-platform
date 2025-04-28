@@ -59,7 +59,8 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
     });
   };
 
-  const handleContinue = () => {
+  // This function will be called by the ContinueButton without parameters
+  const handleContinueButtonClick = () => {
     if (selectedChannels.length === 0) {
       toast({
         title: "No channel selected",
@@ -151,7 +152,7 @@ const CampaignSettings: React.FC<CampaignSettingsProps> = ({ template, onContinu
       <hr className="my-2 border-border" />
 
       <ContinueButton 
-        onClick={handleContinue}
+        onClick={handleContinueButtonClick}
         translations={translations}
       />
 

@@ -33,20 +33,17 @@ const PaidCampaignSettings: React.FC<PaidCampaignSettingsProps> = ({ template, o
   const [ageRange, setAgeRange] = useState("25-54");
   const [gender, setGender] = useState("all");
   
-  // Check if this is a Google My Business template
   const isGmbTemplate = template?.platform === "gmb";
   
   if (isGmbTemplate) {
     return <GmbCampaignSettings template={template} onContinue={onContinue} />;
   }
   
-  // Identify if it's a Google or Meta campaign
   const isGoogleAds = template?.platform === "google";
   const platformUpper = isGoogleAds ? "GOOGLE ADS" : "META ADS";
   const platformColor = isGoogleAds ? "bg-blue-100 text-blue-900" : "bg-blue-100 text-blue-900";
 
   const handleContinue = () => {
-    // Create default settings object for paid campaigns
     const settings = {
       selectedChannels: ["paid"],
       audienceType: "custom",

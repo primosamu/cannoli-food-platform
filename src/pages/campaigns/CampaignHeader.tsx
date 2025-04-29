@@ -1,8 +1,9 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Sparkles, Calendar, BarChart, Filter } from "lucide-react";
+import { MessageSquare, Calendar, PercentCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface CampaignHeaderProps {
   handleCreateCampaign: (type: "messaging" | "paid") => void;
@@ -14,6 +15,8 @@ interface CampaignHeaderProps {
   showReports: boolean;
   activeView: string;
   setActiveView: (view: string) => void;
+  campaignType: "messaging" | "paid";
+  setCampaignType: (type: "messaging" | "paid") => void;
 }
 
 const CampaignHeader: React.FC<CampaignHeaderProps> = ({
@@ -25,70 +28,91 @@ const CampaignHeader: React.FC<CampaignHeaderProps> = ({
   showPresets,
   showReports,
   activeView,
-  setActiveView
+  setActiveView,
+  campaignType,
+  setCampaignType
 }) => {
   const { translations } = useLanguage();
+  
+  const handleCampaignTypeChange = (type: "messaging" | "paid") => {
+    setCampaignType(type);
+    if (!showReports && !showCreator && !showSettings) {
+      setShowPresets(true);
+    }
+  };
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight">{translations.marketingCampaigns || "Campanhas de Marketing"}</h2>
+        <h1 className="text-3xl font-bold tracking-tight">
+          {translations.marketingCampaigns || "Campanhas de Marketing"}
+        </h1>
         <p className="text-muted-foreground">
           {translations.createManageCampaigns || "Crie e gerencie campanhas de marketing para seu restaurante."}
         </p>
       </div>
-      <div className="flex items-center gap-2">
-        {!showPresets && !showReports && activeView !== "calendar" && (
+
+      <div className="flex flex-col items-end gap-2 w-full md:w-auto">
+        <div className="flex gap-2">
           <Button 
-            variant="outline" 
-            className="items-center gap-2"
             onClick={() => {
               setShowPresets(true);
               setShowCreator(false);
               setShowSettings(false);
               setShowReports(false);
             }}
+            variant="outline"
+            className="hidden md:flex"
           >
-            <Sparkles className="h-4 w-4" />
-            <span className="hidden md:inline">{translations.presetCampaigns || "Campanhas Predefinidas"}</span>
-            <span className="inline md:hidden">{translations.presets || "Predefinidas"}</span>
+            {translations.presets || "Templates"}
           </Button>
-        )}
-        {!showReports && activeView !== "calendar" && (
+          
           <Button 
-            variant="outline" 
-            className="items-center gap-2"
-            onClick={() => {
-              setActiveView(activeView === "list" ? "calendar" : "list");
-              setShowReports(false);
-              setShowPresets(false);
-              setShowCreator(false);
-              setShowSettings(false);
-            }}
+            onClick={() => handleCreateCampaign(campaignType)}
+            className="flex-1 md:flex-none"
           >
-            {activeView === "list" ? (
-              <Calendar className="h-4 w-4 mr-2" />
-            ) : (
-              <BarChart className="h-4 w-4 mr-2" />
-            )}
-            {activeView === "list" ? "Calendário" : "Lista"}
+            {translations.createCampaign || "Criar Campanha"}
           </Button>
+        </div>
+        
+        {!showPresets && !showReports && (
+          <Tabs 
+            value={activeView} 
+            onValueChange={setActiveView as (value: string) => void}
+            className="w-full md:w-auto"
+          >
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="list">
+                {translations.allCampaigns || "Todas as Campanhas"}
+              </TabsTrigger>
+              <TabsTrigger value="calendar">
+                <Calendar className="mr-2 h-4 w-4" />
+                {translations.schedule || "Calendário"}
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
         )}
-        <Button 
-          variant="outline" 
-          className="hidden md:flex items-center gap-2"
-        >
-          <Filter className="h-4 w-4" />
-          {translations.filter || "Filtrar"}
-        </Button>
-        <Button 
-          variant="secondary" 
-          onClick={() => handleCreateCampaign("messaging")}
-          className="flex items-center gap-2"
-        >
-          <PlusCircle className="mr-2 h-4 w-4" /> 
-          {translations.createCampaign || "Criar Campanha"}
-        </Button>
+        
+        <div className="flex gap-2 mt-1">
+          <Button 
+            variant={campaignType === "messaging" ? "default" : "outline"} 
+            size="sm"
+            onClick={() => handleCampaignTypeChange("messaging")}
+            className="text-xs"
+          >
+            <MessageSquare className="mr-1 h-3 w-3" />
+            {translations.messaging || "Mensageria"}
+          </Button>
+          <Button 
+            variant={campaignType === "paid" ? "default" : "outline"} 
+            size="sm"
+            onClick={() => handleCampaignTypeChange("paid")}
+            className="text-xs"
+          >
+            <PercentCircle className="mr-1 h-3 w-3" />
+            {translations.paidTraffic || "Tráfego Pago"}
+          </Button>
+        </div>
       </div>
     </div>
   );

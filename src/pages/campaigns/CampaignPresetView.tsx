@@ -41,14 +41,14 @@ const CampaignPresetView: React.FC<CampaignPresetViewProps> = ({
               onClick={() => setCampaignType("messaging")}
             >
               <MessageSquare className="mr-2 h-4 w-4" />
-              Mensageria
+              {translations.messaging || "Mensageria"}
             </Button>
             <Button 
               variant={campaignType === "paid" ? "default" : "outline"} 
               onClick={() => setCampaignType("paid")}
             >
               <PercentCircle className="mr-2 h-4 w-4" />
-              Tráfego Pago
+              {translations.paidTraffic || "Tráfego Pago"}
             </Button>
           </div>
         </div>

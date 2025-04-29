@@ -44,6 +44,11 @@ export const useCampaignsState = () => {
           handlePresetSelect(templates[0]);
         }
       }
+      
+      // Set campaign type if provided
+      if (location.state.campaignType) {
+        setCampaignType(location.state.campaignType);
+      }
     }
   }, [location]);
 
@@ -53,6 +58,13 @@ export const useCampaignsState = () => {
     setShowPresets(false);
     setShowSettings(true);
     setShowReports(false);
+    
+    // Determine if this is a paid campaign based on the template type
+    if (template.type === 'paid' || template.platform === 'google' || template.platform === 'meta' || template.platform === 'gmb' || template.platform === 'facebook' || template.platform === 'instagram') {
+      setCampaignType('paid');
+    } else {
+      setCampaignType('messaging');
+    }
     
     toast({
       title: "Template selecionado",

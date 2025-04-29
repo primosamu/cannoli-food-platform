@@ -44,6 +44,8 @@ const CampaignsPage = () => {
         showReports={showReports}
         activeView={activeView}
         setActiveView={setActiveView}
+        campaignType={campaignType}
+        setCampaignType={setCampaignType}
       />
 
       <CampaignContentRenderer

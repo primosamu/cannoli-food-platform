@@ -83,7 +83,7 @@ const CampaignContentRenderer: React.FC<CampaignContentRendererProps> = ({
     return (
       <CampaignPresetView
         campaignType={campaignType}
-        setCampaignType={() => {}} // This is unused in CampaignPresetView
+        setCampaignType={() => {}} // This is handled in useCampaignsState now
         onSelect={handlePresetSelect}
       />
     );

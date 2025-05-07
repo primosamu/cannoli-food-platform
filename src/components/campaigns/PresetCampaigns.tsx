@@ -105,8 +105,8 @@ const PresetCampaigns: React.FC<PresetCampaignsProps> = ({ onSelect, campaignTyp
             <CardHeader className={`pb-3 ${campaignType === "paid" ? "bg-muted/30" : ""}`}>
               <Badge variant="outline" className={category.color}>
                 {campaignType === "paid" && 
-                  // Fix here: Check if category has icon property before using it
-                  'icon' in category && category.icon
+                  // Type-safe icon rendering with proper TypeScript check
+                  ('icon' in category && category.icon ? category.icon : null)
                 }
                 <span className="ml-1">
                   {translations[category.id as keyof typeof translations] || category.name}

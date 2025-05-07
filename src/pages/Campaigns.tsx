@@ -45,6 +45,8 @@ const CampaignsPage = () => {
         setShowReports={setShowReports}
         showPresets={showPresets}
         showReports={showReports}
+        showCreator={showCreator} // Added missing prop
+        showSettings={showSettings} // Added missing prop
         activeView={activeView}
         setActiveView={setActiveView}
         campaignType={campaignType}

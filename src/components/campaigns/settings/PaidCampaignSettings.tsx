@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import GmbCampaignSettings from "./GmbCampaignSettings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -44,6 +45,7 @@ const PaidCampaignSettings: React.FC<PaidCampaignSettingsProps> = ({ template, o
   const platformColor = isGoogleAds ? "bg-blue-100 text-blue-900" : "bg-blue-100 text-blue-900";
 
   const handleContinue = () => {
+    // Fixed: Ensuring we pass the required parameter to onContinue
     const settings = {
       selectedChannels: ["paid"],
       audienceType: "custom",

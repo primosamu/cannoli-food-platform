@@ -13,6 +13,7 @@ import {
 } from "@/data/campaignTemplates";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Users, PercentCircle, Search, Smartphone, Store } from "lucide-react";
+import { ReactNode } from "react";
 
 interface PresetCampaignsProps {
   onSelect: (template: CampaignTemplate) => void;
@@ -47,7 +48,15 @@ const messagingCategories = [
   }
 ];
 
-const paidCategories = [
+interface PaidCategory {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  icon: ReactNode;
+}
+
+const paidCategories: PaidCategory[] = [
   {
     id: "meta",
     name: "Meta Ads",
@@ -105,8 +114,7 @@ const PresetCampaigns: React.FC<PresetCampaignsProps> = ({ onSelect, campaignTyp
             <CardHeader className={`pb-3 ${campaignType === "paid" ? "bg-muted/30" : ""}`}>
               <Badge variant="outline" className={category.color}>
                 {campaignType === "paid" && 
-                  // Type-safe icon rendering with proper TypeScript check
-                  ('icon' in category && category.icon ? category.icon : null)
+                  (category as PaidCategory).icon
                 }
                 <span className="ml-1">
                   {translations[category.id as keyof typeof translations] || category.name}

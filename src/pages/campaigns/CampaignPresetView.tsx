@@ -25,9 +25,10 @@ const CampaignPresetView: React.FC<CampaignPresetViewProps> = ({
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>{campaignType === "messaging" ? 
-              (translations.messaging || "Mensageria") : 
-              (translations.paidTraffic || "Tráfego Pago")}
+            <CardTitle className={campaignType === "paid" ? "text-primary" : ""}>
+              {campaignType === "messaging" ? 
+                (translations.messaging || "Mensageria") : 
+                (translations.paidTraffic || "Tráfego Pago")}
             </CardTitle>
             <CardDescription>
               {campaignType === "messaging" ? 
@@ -39,6 +40,7 @@ const CampaignPresetView: React.FC<CampaignPresetViewProps> = ({
             <Button 
               variant={campaignType === "messaging" ? "default" : "outline"} 
               onClick={() => setCampaignType("messaging")}
+              className={campaignType === "messaging" ? "bg-blue-600 hover:bg-blue-700" : ""}
             >
               <MessageSquare className="mr-2 h-4 w-4" />
               {translations.messaging || "Mensageria"}
@@ -46,6 +48,7 @@ const CampaignPresetView: React.FC<CampaignPresetViewProps> = ({
             <Button 
               variant={campaignType === "paid" ? "default" : "outline"} 
               onClick={() => setCampaignType("paid")}
+              className={campaignType === "paid" ? "bg-violet-600 hover:bg-violet-700" : ""}
             >
               <PercentCircle className="mr-2 h-4 w-4" />
               {translations.paidTraffic || "Tráfego Pago"}
@@ -53,7 +56,7 @@ const CampaignPresetView: React.FC<CampaignPresetViewProps> = ({
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className={campaignType === "paid" ? "bg-gradient-to-b from-violet-50 to-transparent" : ""}>
         <PresetCampaigns onSelect={onSelect} campaignType={campaignType} />
       </CardContent>
     </Card>

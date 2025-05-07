@@ -12,7 +12,7 @@ import {
   getPaidTrafficTemplates 
 } from "@/data/campaignTemplates";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Users } from "lucide-react";
+import { Users, PercentCircle, Search, Smartphone, Store } from "lucide-react";
 
 interface PresetCampaignsProps {
   onSelect: (template: CampaignTemplate) => void;
@@ -52,19 +52,22 @@ const paidCategories = [
     id: "meta",
     name: "Meta Ads",
     description: "Facebook and Instagram ad campaigns",
-    color: "bg-blue-100 text-blue-700 border-blue-200"
+    color: "bg-blue-100 text-blue-700 border-blue-200",
+    icon: <PercentCircle className="h-4 w-4" />
   },
   {
     id: "google",
     name: "Google Ads",
     description: "Search and display ads on Google",
-    color: "bg-green-100 text-green-700 border-green-200"
+    color: "bg-green-100 text-green-700 border-green-200",
+    icon: <Search className="h-4 w-4" />
   },
   {
     id: "gmb",
     name: "Google Meu Negócio",
     description: "Local campaigns and posts for Google My Business",
-    color: "bg-yellow-100 text-yellow-700 border-yellow-200"
+    color: "bg-yellow-100 text-yellow-700 border-yellow-200",
+    icon: <Store className="h-4 w-4" />
   }
 ];
 
@@ -98,10 +101,13 @@ const PresetCampaigns: React.FC<PresetCampaignsProps> = ({ onSelect, campaignTyp
         if (categoryTemplates.length === 0) return null;
         
         return (
-          <Card key={category.id} className="overflow-hidden">
-            <CardHeader className="pb-3">
+          <Card key={category.id} className={`overflow-hidden ${campaignType === "paid" ? "border-l-4" : ""} ${campaignType === "paid" ? category.color.replace("bg-", "border-l-") : ""}`}>
+            <CardHeader className={`pb-3 ${campaignType === "paid" ? "bg-muted/30" : ""}`}>
               <Badge variant="outline" className={category.color}>
-                {translations[category.id as keyof typeof translations] || category.name}
+                {campaignType === "paid" && "category" in category && category.icon}
+                <span className="ml-1">
+                  {translations[category.id as keyof typeof translations] || category.name}
+                </span>
               </Badge>
               <CardDescription className="mt-2">
                 {translations[`${category.id}Description` as keyof typeof translations] || category.description}
@@ -109,11 +115,11 @@ const PresetCampaigns: React.FC<PresetCampaignsProps> = ({ onSelect, campaignTyp
             </CardHeader>
             <CardContent className="p-0">
               <ScrollArea className="h-64 px-6">
-                <div className="space-y-3 pb-6">
+                <div className="space-y-3 pb-6 pt-3">
                   {categoryTemplates.map((template) => (
                     <div 
                       key={template.id}
-                      className="border rounded-md p-3 hover:bg-muted/50 cursor-pointer"
+                      className="border rounded-md p-3 hover:bg-muted/50 cursor-pointer transition-colors"
                       onClick={() => onSelect(template)}
                     >
                       <div className="flex items-center justify-between mb-2">

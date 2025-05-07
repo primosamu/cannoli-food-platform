@@ -32,8 +32,11 @@ const CampaignsPage = () => {
     handleContinueFromSettings
   } = useCampaignsState();
 
+  // Custom class based on campaign type
+  const containerClass = campaignType === "paid" ? "space-y-6 paid-campaign-container" : "space-y-6";
+
   return (
-    <div className="space-y-6">
+    <div className={containerClass}>
       <CampaignHeader
         handleCreateCampaign={handleCreateCampaign}
         setShowPresets={setShowPresets}

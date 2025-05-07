@@ -13,6 +13,8 @@ interface CampaignHeaderProps {
   setShowReports: (show: boolean) => void;
   showPresets: boolean;
   showReports: boolean;
+  showCreator: boolean;  // Added missing prop
+  showSettings: boolean; // Added missing prop
   activeView: string;
   setActiveView: (view: string) => void;
   campaignType: "messaging" | "paid";
@@ -27,6 +29,8 @@ const CampaignHeader: React.FC<CampaignHeaderProps> = ({
   setShowReports,
   showPresets,
   showReports,
+  showCreator,  // Added missing prop
+  showSettings,  // Added missing prop
   activeView,
   setActiveView,
   campaignType,

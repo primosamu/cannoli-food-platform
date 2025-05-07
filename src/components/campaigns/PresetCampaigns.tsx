@@ -104,7 +104,10 @@ const PresetCampaigns: React.FC<PresetCampaignsProps> = ({ onSelect, campaignTyp
           <Card key={category.id} className={`overflow-hidden ${campaignType === "paid" ? "border-l-4" : ""} ${campaignType === "paid" ? category.color.replace("bg-", "border-l-") : ""}`}>
             <CardHeader className={`pb-3 ${campaignType === "paid" ? "bg-muted/30" : ""}`}>
               <Badge variant="outline" className={category.color}>
-                {campaignType === "paid" && "category" in category && category.icon}
+                {campaignType === "paid" && 
+                  // Fix here: Check if category has icon property before using it
+                  'icon' in category && category.icon
+                }
                 <span className="ml-1">
                   {translations[category.id as keyof typeof translations] || category.name}
                 </span>
